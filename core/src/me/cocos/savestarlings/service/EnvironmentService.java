@@ -52,7 +52,7 @@ public class EnvironmentService {
 
         DirectionalLightEx light = new DirectionalLightEx();
         light.direction.set(0, -1, 0);
-        light.intensity = 10f;
+        light.intensity = 5f;
         light.color.set(Color.WHITE);
         sceneService.environment.add(light);
 

@@ -28,7 +28,7 @@ public class Laboratory implements Building {
 
         float x = MathUtils.floor(position.x / 2.5f) * 2.5f + 1.7f;
         float z = MathUtils.floor(position.z / 2.5f) * 2.5f + 1.25f;
-        position.set(x, position.y+1f, z);
+        position.set(x, position.y+0.1f, z);
 
         scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
 
