@@ -16,7 +16,7 @@ public class StarBase implements Building {
     private static final SceneAsset sceneAsset;
 
     static {
-        sceneAsset = AssetService.getAsset("buildings/sb-7.glb");
+        sceneAsset = AssetService.getAsset("buildings/starbase/sb-7.glb");
     }
 
     public StarBase(Vector3 position) {
@@ -31,6 +31,7 @@ public class StarBase implements Building {
         position.set(x, position.y, z);
 
         scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
+
     }
 
     @Override

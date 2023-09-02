@@ -101,8 +101,8 @@ public class EnvironmentService {
         BlendingAttribute blendingAttribute = new BlendingAttribute();
         blendingAttribute.opacity = 1f;
         MeshPartBuilder builder = modelBuilder.part("grid", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material(blendingAttribute));
-        Color color = Color.valueOf("#175717");
-        color.a = 0.75f;
+        Color color = Color.WHITE;
+        color.a = 0.5f;
         builder.setColor(color);
         for (float t = GRID_MIN; t <= GRID_MAX; t += GRID_STEP) {
             builder.line(t, 1, GRID_MIN, t, 1, GRID_MAX);
@@ -116,7 +116,7 @@ public class EnvironmentService {
 
         axesInstance.transform.setToTranslation(0f, -1f, 0f);
 
-        this.sceneManager.addScene(new Scene(axesInstance), false);
+        this.sceneManager.addScene(new Scene(axesInstance));
     }
 
     public void dispose() {
@@ -144,9 +144,9 @@ public class EnvironmentService {
         for (Entity entity : entityService.getBuildings()) {
             Scene scene = entity.getScene();
             boolean isVisible = this.isVisible(sceneManager.camera, scene.modelInstance);
-            if (!sceneManager.getRenderableProviders().contains(entity.getScene(), false) && isVisible) {
+            if (!sceneManager.getRenderableProviders().contains(scene, false) && isVisible) {
                 sceneManager.addScene(scene);
-            } else if (sceneManager.getRenderableProviders().contains(entity.getScene(), false) && !isVisible) {
+            } else if (sceneManager.getRenderableProviders().contains(scene, false) && !isVisible) {
                 sceneManager.removeScene(scene);
             }
         }

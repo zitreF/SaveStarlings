@@ -13,7 +13,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(0);
 		config.setIdleFPS(60);
-		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4);
+		config.setBackBufferConfig(8, 8, 8, 8, 24, 0, 0);
 		config.useVsync(false);
 		config.setWindowedMode(1600, 900);
 		config.setTitle("Save Starlings");

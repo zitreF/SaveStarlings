@@ -10,8 +10,12 @@ import com.badlogic.gdx.utils.Array;
 import me.cocos.savestarlings.entity.Entity;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.building.base.StarBase;
+import me.cocos.savestarlings.entity.building.other.Laboratory;
 import me.cocos.savestarlings.entity.building.tower.impl.SniperTower;
 import me.cocos.savestarlings.map.Chunk;
+import me.cocos.savestarlings.util.SoundUtil;
+
+import java.util.concurrent.CompletableFuture;
 
 public class EntityService {
 
@@ -40,6 +44,27 @@ public class EntityService {
     }
 
     public void update(float delta) {
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.MIDDLE)) {
+
+            ChunkService chunkService = environmentService.getChunkService();
+
+            int mouseX = Gdx.input.getX();
+            int mouseY = Gdx.input.getY();
+
+            Ray ray = this.environmentService.getSceneManager().camera.getPickRay(mouseX, mouseY);
+
+            Vector3 intersection = new Vector3();
+            boolean hit = Intersector.intersectRayPlane(ray, new Plane(Vector3.Y, 0), intersection);
+
+            if (hit) {
+                Building building = new Laboratory(intersection);
+
+                for (Chunk chunk : chunkService.getChunksIntersectingWithBuilding(building)) {
+                    chunk.addEntity(building);
+                }
+                this.addBuilding(building);
+            }
+        }
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
 
             ChunkService chunkService = environmentService.getChunkService();
@@ -58,31 +83,31 @@ public class EntityService {
                 for (Chunk chunk : chunkService.getChunksIntersectingWithBuilding(building)) {
                     chunk.addEntity(building);
                 }
-
                 this.addBuilding(building);
             }
         }
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            CompletableFuture.runAsync(() -> {
+                ChunkService chunkService = environmentService.getChunkService();
 
-            ChunkService chunkService = environmentService.getChunkService();
+                int mouseX = Gdx.input.getX();
+                int mouseY = Gdx.input.getY();
 
-            int mouseX = Gdx.input.getX();
-            int mouseY = Gdx.input.getY();
+                Ray ray = this.environmentService.getSceneManager().camera.getPickRay(mouseX, mouseY);
 
-            Ray ray = this.environmentService.getSceneManager().camera.getPickRay(mouseX, mouseY);
+                Vector3 intersection = new Vector3();
+                boolean hit = Intersector.intersectRayPlane(ray, new Plane(Vector3.Y, 0), intersection);
 
-            Vector3 intersection = new Vector3();
-            boolean hit = Intersector.intersectRayPlane(ray, new Plane(Vector3.Y, 0), intersection);
+                if (hit) {
+                    Building building = new SniperTower(intersection);
 
-            if (hit) {
-                Building building = new SniperTower(intersection);
-
-                for (Chunk chunk : chunkService.getChunksIntersectingWithBuilding(building)) {
-                    chunk.addEntity(building);
+                    for (Chunk chunk : chunkService.getChunksIntersectingWithBuilding(building)) {
+                        chunk.addEntity(building);
+                    }
+                    SoundUtil.play("build.mp3");
+                    this.addBuilding(building);
                 }
-
-                this.addBuilding(building);
-            }
+            });
         }
         for (Building building : this.buildings) {
             building.update(delta);

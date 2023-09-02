@@ -1,5 +1,7 @@
 package me.cocos.savestarlings.entity.building.tower.impl;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -14,6 +16,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.building.tower.Tower;
 import me.cocos.savestarlings.service.AssetService;
 import me.cocos.savestarlings.service.GameService;
+import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
@@ -58,7 +61,6 @@ public class SniperTower implements Tower {
 
     @Override
     public void update(float delta) {
-        scene.modelInstance.transform.rotate(Vector3.Y, 10f * delta);
     }
 
     @Override

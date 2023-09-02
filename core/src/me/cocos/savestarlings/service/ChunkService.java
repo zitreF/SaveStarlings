@@ -23,8 +23,8 @@ public class ChunkService {
     }
 
     private void createChunks() {
-        for (int chunkX = -10; chunkX < -10 + CHUNKS_X; chunkX++) {
-            for (int chunkY = -10; chunkY < -10 + CHUNKS_Y; chunkY++) {
+        for (int chunkX = -4; chunkX < -4 + CHUNKS_X; chunkX++) {
+            for (int chunkY = -4; chunkY < -4 + CHUNKS_Y; chunkY++) {
                 Chunk chunk = new Chunk(chunkX * CHUNK_SIZE, chunkY * CHUNK_SIZE);
                 chunks.add(chunk);
             }

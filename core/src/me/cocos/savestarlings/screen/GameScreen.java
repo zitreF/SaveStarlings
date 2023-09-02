@@ -3,7 +3,6 @@ package me.cocos.savestarlings.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import me.cocos.savestarlings.controller.CameraController;
 import me.cocos.savestarlings.service.GameService;
@@ -20,7 +19,7 @@ public class GameScreen implements Screen {
     public GameScreen() {
         this.gameService = new GameService();
         this.camera = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.near = 0.01f;
+        camera.near = 0.1f;
         camera.far = 1000f;
         camera.position.set(10f, 40f, 0f);
         camera.lookAt(0f, 0f, 0f);
