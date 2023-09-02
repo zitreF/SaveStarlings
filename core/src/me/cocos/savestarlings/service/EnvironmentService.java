@@ -11,21 +11,21 @@ import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import me.cocos.savestarlings.entity.Entity;
+import me.cocos.savestarlings.scene.SceneService;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
+import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 import net.mgsx.gltf.scene3d.lights.DirectionalLightEx;
 import net.mgsx.gltf.scene3d.lights.DirectionalShadowLight;
-import net.mgsx.gltf.scene3d.scene.Scene;
-import net.mgsx.gltf.scene3d.scene.SceneManager;
-import net.mgsx.gltf.scene3d.scene.SceneSkybox;
+import net.mgsx.gltf.scene3d.scene.*;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderConfig;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
 
 public class EnvironmentService {
 
-    private final SceneManager sceneManager;
+    private final SceneService sceneService;
     private final Cubemap diffuseCubemap;
     private final Cubemap environmentCubemap;
     private final Cubemap specularCubemap;
@@ -47,14 +47,14 @@ public class EnvironmentService {
         config.numPointLights = 0;
         DepthShader.Config depthConfig = new DepthShader.Config();
         depthConfig.numBones = config.numBones;
-        this.sceneManager = new SceneManager(PBRShaderProvider.createDefault(config), PBRShaderProvider.createDefaultDepth(depthConfig));
+        this.sceneService = new SceneService(PBRShaderProvider.createDefault(config), PBRShaderProvider.createDefaultDepth(depthConfig));
         this.chunkService = new ChunkService();
 
         DirectionalLightEx light = new DirectionalLightEx();
         light.direction.set(0, -1, 0);
-        light.intensity = 1f;
+        light.intensity = 10f;
         light.color.set(Color.WHITE);
-        sceneManager.environment.add(light);
+        sceneService.environment.add(light);
 
         IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
         this.environmentCubemap = iblBuilder.buildEnvMap(1);
@@ -64,15 +64,16 @@ public class EnvironmentService {
 
         this.brdfLUT = new Texture(Gdx.files.classpath("net/mgsx/gltf/shaders/brdfLUT.png"));
 
-        sceneManager.setAmbientLight(1f);
-        sceneManager.environment.set(new PBRTextureAttribute(PBRTextureAttribute.BRDFLUTTexture, brdfLUT));
-        sceneManager.environment.set(PBRCubemapAttribute.createSpecularEnv(specularCubemap));
-        sceneManager.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
-        sceneManager.environment.set(PBRColorAttribute.createDiffuse(Color.WHITE));
-        this.directionalShadowLight = new DirectionalShadowLight(2048, 2048, 30f, 30f, 1f, 100f);
-        sceneManager.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0f, -1f, 0f), 2f));
+        sceneService.setAmbientLight(1f);
+        sceneService.environment.set(new PBRTextureAttribute(PBRTextureAttribute.BRDFLUTTexture, brdfLUT));
+        sceneService.environment.set(PBRCubemapAttribute.createSpecularEnv(specularCubemap));
+        sceneService.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
+        sceneService.environment.set(PBRColorAttribute.createDiffuse(Color.WHITE));
+        sceneService.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 1 / 256f));
+        this.directionalShadowLight = new DirectionalShadowLight(2048, 2048, 200f, 200f, 1f, 200f);
+        sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, 0f), 0.1f));
         this.skybox = new SceneSkybox(environmentCubemap);
-        sceneManager.setSkyBox(skybox);
+        sceneService.setSkyBox(skybox);
 
         ModelBuilder modelBuilder = new ModelBuilder();
 
@@ -82,6 +83,7 @@ public class EnvironmentService {
         PBRTextureAttribute textureAttribute = PBRTextureAttribute.createBaseColorTexture(texture);
         textureAttribute.scaleU = 16f;
         textureAttribute.scaleV = 16f;
+
         Model greenBoxModel = modelBuilder.createBox(
                 200f, 1f, 200f,
                 new Material(textureAttribute),
@@ -90,7 +92,7 @@ public class EnvironmentService {
         ModelInstance greenBoxInstance = new ModelInstance(greenBoxModel);
         greenBoxInstance.transform.setFromEulerAngles(90f, 0f, 0f);
         greenBoxInstance.transform.setToTranslation(0f, -1f, 0f);
-        this.sceneManager.addScene(new Scene(greenBoxInstance));
+        this.sceneService.addScene(new Scene(greenBoxInstance));
         this.createGrid();
     }
 
@@ -116,11 +118,11 @@ public class EnvironmentService {
 
         axesInstance.transform.setToTranslation(0f, -1f, 0f);
 
-        this.sceneManager.addScene(new Scene(axesInstance));
+        this.sceneService.addSceneWithoutShadows(new Scene(axesInstance), false);
     }
 
     public void dispose() {
-        sceneManager.dispose();
+        sceneService.dispose();
         environmentCubemap.dispose();
         diffuseCubemap.dispose();
         specularCubemap.dispose();
@@ -129,30 +131,31 @@ public class EnvironmentService {
     }
 
     public void addScene(Scene scene) {
-        this.sceneManager.addScene(scene);
+        this.sceneService.addScene(scene);
     }
 
     public void removeScene(Scene scene) {
-        this.sceneManager.removeScene(scene);
+        this.sceneService.removeScene(scene);
     }
 
-    public SceneManager getSceneManager() {
-        return this.sceneManager;
+    public SceneService getSceneService() {
+        return this.sceneService;
     }
 
     public void update(float delta) {
         for (Entity entity : entityService.getBuildings()) {
             Scene scene = entity.getScene();
-            boolean isVisible = this.isVisible(sceneManager.camera, scene.modelInstance);
-            if (!sceneManager.getRenderableProviders().contains(scene, false) && isVisible) {
-                sceneManager.addScene(scene);
-            } else if (sceneManager.getRenderableProviders().contains(scene, false) && !isVisible) {
-                sceneManager.removeScene(scene);
+            boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
+            if (!sceneService.getRenderableProviders().contains(scene, false) && isVisible) {
+                sceneService.addScene(scene);
+            } else if (sceneService.getRenderableProviders().contains(scene, false) && !isVisible) {
+                sceneService.removeScene(scene);
             }
         }
-        directionalShadowLight.setCenter(sceneManager.camera.position);
-        sceneManager.update(delta);
-        sceneManager.render();
+        directionalShadowLight.setCenter(sceneService.camera.position);
+//        cascadeShadowMap.setCascades(sceneService.camera, this.directionalShadowLight, 1000f, 4f);
+        sceneService.update(delta);
+        sceneService.render();
     }
 
     private final Vector3 position = new Vector3();

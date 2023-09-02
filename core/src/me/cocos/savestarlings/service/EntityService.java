@@ -51,7 +51,7 @@ public class EntityService {
             int mouseX = Gdx.input.getX();
             int mouseY = Gdx.input.getY();
 
-            Ray ray = this.environmentService.getSceneManager().camera.getPickRay(mouseX, mouseY);
+            Ray ray = this.environmentService.getSceneService().camera.getPickRay(mouseX, mouseY);
 
             Vector3 intersection = new Vector3();
             boolean hit = Intersector.intersectRayPlane(ray, new Plane(Vector3.Y, 0), intersection);
@@ -72,7 +72,7 @@ public class EntityService {
             int mouseX = Gdx.input.getX();
             int mouseY = Gdx.input.getY();
 
-            Ray ray = this.environmentService.getSceneManager().camera.getPickRay(mouseX, mouseY);
+            Ray ray = this.environmentService.getSceneService().camera.getPickRay(mouseX, mouseY);
 
             Vector3 intersection = new Vector3();
             boolean hit = Intersector.intersectRayPlane(ray, new Plane(Vector3.Y, 0), intersection);
@@ -93,7 +93,7 @@ public class EntityService {
                 int mouseX = Gdx.input.getX();
                 int mouseY = Gdx.input.getY();
 
-                Ray ray = this.environmentService.getSceneManager().camera.getPickRay(mouseX, mouseY);
+                Ray ray = this.environmentService.getSceneService().camera.getPickRay(mouseX, mouseY);
 
                 Vector3 intersection = new Vector3();
                 boolean hit = Intersector.intersectRayPlane(ray, new Plane(Vector3.Y, 0), intersection);

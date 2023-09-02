@@ -24,7 +24,7 @@ public class GameScreen implements Screen {
         camera.position.set(10f, 40f, 0f);
         camera.lookAt(0f, 0f, 0f);
 
-        gameService.getEnvironmentService().getSceneManager().setCamera(camera);
+        gameService.getEnvironmentService().getSceneService().setCamera(camera);
 
         this.cameraController = new CameraController(camera);
 
@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        this.gameService.getEnvironmentService().getSceneManager().updateViewport(width, height);
+        this.gameService.getEnvironmentService().getSceneService().updateViewport(width, height);
     }
 
     @Override
