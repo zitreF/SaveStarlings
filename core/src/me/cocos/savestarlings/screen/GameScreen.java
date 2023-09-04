@@ -18,6 +18,7 @@ public class GameScreen implements Screen {
 
     public GameScreen() {
         this.gameService = new GameService();
+
         this.camera = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.near = 0.1f;
         camera.far = 1000f;
@@ -28,7 +29,7 @@ public class GameScreen implements Screen {
 
         this.cameraController = new CameraController(camera);
 
-        Gdx.input.setInputProcessor(cameraController);
+        gameService.setInputProcessors(cameraController);
     }
 
     @Override

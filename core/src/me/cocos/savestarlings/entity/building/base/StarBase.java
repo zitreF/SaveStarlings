@@ -1,6 +1,7 @@
 package me.cocos.savestarlings.entity.building.base;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.building.Building;
@@ -37,6 +38,11 @@ public class StarBase implements Building {
     @Override
     public void update(float delta) {
         //scene.modelInstance.transform.rotate(Vector3.Y, 10f * delta);
+    }
+
+    @Override
+    public Vector2 getDimensions() {
+        return new Vector2(0f, 0f);
     }
 
     @Override

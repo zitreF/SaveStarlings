@@ -21,6 +21,7 @@ public class AssetService {
 
         // MODELS
         ASSET_MANAGER.load("buildings/turrets/sniper_tower.glb", SceneAsset.class);
+        ASSET_MANAGER.load("buildings/turrets/cannon_blast.glb", SceneAsset.class);
         ASSET_MANAGER.load("buildings/starbase/sb-7.glb", SceneAsset.class);
         ASSET_MANAGER.load("buildings/other/laboratory.glb", SceneAsset.class);
 

@@ -30,14 +30,6 @@ public class SceneService extends SceneManager {
         batch.end();
     }
 
-    @Override
-    public void renderDepth(Camera camera) {
-        ModelBatch depthBatch = this.getDepthBatch();
-        depthBatch.begin(camera);
-        depthBatch.render(this.getRenderableProviders());
-        depthBatch.end();
-    }
-
     public void addSceneWithoutShadows(Scene scene, boolean appendLights) {
         this.nonShadowRenderableProviders.add(scene);
         if (appendLights) {

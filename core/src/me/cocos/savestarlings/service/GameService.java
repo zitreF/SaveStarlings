@@ -1,8 +1,13 @@
 package me.cocos.savestarlings.service;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
+import me.cocos.savestarlings.controller.CameraController;
 import me.cocos.savestarlings.entity.building.tower.impl.SniperTower;
 import me.cocos.savestarlings.hud.Hud;
 import me.cocos.savestarlings.map.Chunk;
+import me.cocos.savestarlings.map.Map;
 
 public class GameService {
 
@@ -10,14 +15,24 @@ public class GameService {
 
     private final EnvironmentService environmentService;
     private final EntityService entityService;
+    private final BuildingService buildingService;
     private final Hud hud;
+    private final Map map;
 
     public GameService() {
         instance = this;
+        this.hud = new Hud();
         this.environmentService = new EnvironmentService();
         this.entityService = new EntityService(environmentService);
         environmentService.setEntityService(entityService);
-        this.hud = new Hud();
+        this.buildingService = new BuildingService(entityService, environmentService, hud);
+        this.map = new Map(entityService);
+        map.generate();
+    }
+
+    public void setInputProcessors(InputProcessor cameraController) {
+        InputMultiplexer inputMultiplexer = new InputMultiplexer(cameraController, hud);
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     public EnvironmentService getEnvironmentService() {
@@ -32,6 +47,7 @@ public class GameService {
         this.entityService.update(delta);
         this.environmentService.update(delta);
         this.hud.update();
+        buildingService.update();
     }
 
     public void dispose() {

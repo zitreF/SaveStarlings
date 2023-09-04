@@ -70,7 +70,7 @@ public class EnvironmentService {
         sceneService.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
         sceneService.environment.set(PBRColorAttribute.createDiffuse(Color.WHITE));
         sceneService.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 1 / 256f));
-        this.directionalShadowLight = new DirectionalShadowLight(2048, 2048, 200f, 200f, 1f, 200f);
+        this.directionalShadowLight = new DirectionalShadowLight(2048, 2048, 200f, 200f, 1f, 300f);
         sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, 0f), 0.1f));
         this.skybox = new SceneSkybox(environmentCubemap);
         sceneService.setSkyBox(skybox);
@@ -153,7 +153,6 @@ public class EnvironmentService {
             }
         }
         directionalShadowLight.setCenter(sceneService.camera.position);
-//        cascadeShadowMap.setCascades(sceneService.camera, this.directionalShadowLight, 1000f, 4f);
         sceneService.update(delta);
         sceneService.render();
     }

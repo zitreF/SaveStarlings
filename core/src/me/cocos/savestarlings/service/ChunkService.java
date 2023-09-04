@@ -1,10 +1,7 @@
 package me.cocos.savestarlings.service;
 
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import me.cocos.savestarlings.entity.building.Building;
-import me.cocos.savestarlings.entity.building.tower.impl.SniperTower;
-import me.cocos.savestarlings.map.Cell;
 import me.cocos.savestarlings.map.Chunk;
 
 import java.util.ArrayList;

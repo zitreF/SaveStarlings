@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.graphics.g3d.model.MeshPart;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.building.tower.Tower;
@@ -27,11 +28,7 @@ public class SniperTower implements Tower {
 
     private final Scene scene;
     private final Vector3 position;
-
-    private static final BoundingBox bounds = new BoundingBox();
-    private final Map<MeshPart, BoundingBox> boundingBoxes = new HashMap<>();
-    private Camera camera;
-
+    private final Vector2 dimension;
 
     private static final SceneAsset sceneAsset;
 
@@ -44,6 +41,7 @@ public class SniperTower implements Tower {
         this.scene = new Scene(sceneAsset.scene);
         BoundingBox bounds = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(bounds);
+        this.dimension = new Vector2(3f, 3f);
 
         float x = MathUtils.round(position.x / 2.5f) * 2.5f;
         float z = MathUtils.round(position.z / 2.5f) * 2.5f;
@@ -64,6 +62,11 @@ public class SniperTower implements Tower {
     }
 
     @Override
+    public Vector2 getDimensions() {
+        return this.dimension;
+    }
+
+    @Override
     public Scene getScene() {
         return this.scene;
     }
@@ -76,5 +79,9 @@ public class SniperTower implements Tower {
     @Override
     public int getRange() {
         return 300;
+    }
+
+    public static SceneAsset getSceneAsset() {
+        return sceneAsset;
     }
 }

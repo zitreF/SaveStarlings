@@ -5,11 +5,12 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class CameraController implements InputProcessor {
 
-    private static final float CAMERA_SPEED = 25f;
-
+    private static final float CAMERA_SPEED = 30f;
     private final Camera camera;
 
     public CameraController(Camera camera) {
