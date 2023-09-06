@@ -28,7 +28,7 @@ public class SniperTower implements Tower {
 
     private final Scene scene;
     private final Vector3 position;
-    private final Vector2 dimension;
+    private final float dimension;
 
     private static final SceneAsset sceneAsset;
 
@@ -41,7 +41,7 @@ public class SniperTower implements Tower {
         this.scene = new Scene(sceneAsset.scene);
         BoundingBox bounds = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(bounds);
-        this.dimension = new Vector2(3f, 3f);
+        this.dimension = 4f;
 
         float x = MathUtils.round(position.x / 2.5f) * 2.5f;
         float z = MathUtils.round(position.z / 2.5f) * 2.5f;
@@ -62,7 +62,7 @@ public class SniperTower implements Tower {
     }
 
     @Override
-    public Vector2 getDimensions() {
+    public float getDimension() {
         return this.dimension;
     }
 

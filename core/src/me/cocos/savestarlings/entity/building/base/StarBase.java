@@ -13,6 +13,7 @@ public class StarBase implements Building {
 
     private final Scene scene;
     private final Vector3 position;
+    private final float dimension;
 
     private static final SceneAsset sceneAsset;
 
@@ -23,6 +24,7 @@ public class StarBase implements Building {
     public StarBase(Vector3 position) {
         this.position = position;
         this.scene = new Scene(sceneAsset.scene);
+        this.dimension = 6f;
         scene.modelInstance.transform.scale(0.4f, 0.4f, 0.4f);
         BoundingBox bounds = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(bounds);
@@ -33,16 +35,16 @@ public class StarBase implements Building {
 
         scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
 
+        scene.modelInstance.materials.clear();
     }
 
     @Override
     public void update(float delta) {
-        //scene.modelInstance.transform.rotate(Vector3.Y, 10f * delta);
     }
 
     @Override
-    public Vector2 getDimensions() {
-        return new Vector2(0f, 0f);
+    public float getDimension() {
+        return this.dimension;
     }
 
     @Override

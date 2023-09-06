@@ -2,28 +2,35 @@ package me.cocos.savestarlings.service;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.*;
-import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.building.BuildingType;
+import me.cocos.savestarlings.entity.building.base.StarBase;
 import me.cocos.savestarlings.hud.Hud;
 import me.cocos.savestarlings.util.SoundUtil;
+import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 
 import java.util.concurrent.CompletableFuture;
 
 public class BuildingService {
 
+    private static final Plane PLANE = new Plane(Vector3.Y, 0);
     private static final BlendingAttribute OPACITY_ATTRIBUTE = new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.5f);
+    private static final ColorAttribute RED_COLOR_ATTRIBUTE = PBRColorAttribute.createBaseColorFactor(new Color(1f, 51f / 255f, 51f / 255f, 0.75f));
+    private static final ColorAttribute GREEN_COLOR_ATTRIBUTE = PBRColorAttribute.createBaseColorFactor(new Color(84f / 255f, 189f / 255f, 46f / 255f, 0.75f));
     private final EntityService entityService;
     private final EnvironmentService environmentService;
     private final Hud hud;
     private final Vector2 mouseCoords;
     private final Vector3 intersection;
     private BuildingType currentBuilding;
+    private boolean isPlaceable;
 
     public BuildingService(EntityService entityService, EnvironmentService environmentService, Hud hud) {
         this.entityService = entityService;
@@ -33,6 +40,7 @@ public class BuildingService {
         this.intersection = new Vector3();
         this.currentBuilding = null;
         this.hud.setBuildingService(this);
+        this.isPlaceable = true;
     }
 
     public void update() {
@@ -65,7 +73,7 @@ public class BuildingService {
 
     private void addBuildingToScene() {
         for (Material material : currentBuilding.getScene().modelInstance.materials) {
-            material.set(OPACITY_ATTRIBUTE);
+            material.set(GREEN_COLOR_ATTRIBUTE, OPACITY_ATTRIBUTE);
         }
         this.environmentService.addScene(this.currentBuilding.getScene());
     }
@@ -73,43 +81,58 @@ public class BuildingService {
     private void handleBuildingPlacement() {
         if (currentBuilding == null) return;
 
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
+            this.environmentService.getSceneService().removeScene(this.currentBuilding.getScene());
+            this.currentBuilding = null;
+            return;
+        }
+
         boolean isPressed = Gdx.input.isButtonJustPressed(Input.Buttons.LEFT);
 
         CompletableFuture.runAsync(() -> {
             int mouseX = Gdx.input.getX();
             int mouseY = Gdx.input.getY();
             Ray ray = environmentService.getSceneService().camera.getPickRay(mouseX, mouseY);
-            if (Intersector.intersectRayPlane(ray, new Plane(Vector3.Y, 0), intersection)) {
-                float x = MathUtils.round(intersection.x / 2.5f) * 2.5f;
-                float z = MathUtils.round(intersection.z / 2.5f) * 2.5f;
+            if (Intersector.intersectRayPlane(ray, PLANE, intersection)) {
+                float offset = this.currentBuilding.getPositionOffset();
+                float x = MathUtils.round(intersection.x / offset) * offset;
+                float z = MathUtils.round(intersection.z / offset) * offset;
                 currentBuilding.getScene().modelInstance.transform.setTranslation(x, intersection.y, z);
 
-                Vector2 location = new Vector2(x, z);
-
-                if (isPressed && !this.isBuildingCollision(location, new Vector2(2.5f, 2.5f))) {
-                    Building building = this.currentBuilding.getBuildingResult().result(intersection);
-                    SoundUtil.play("build.mp3");
-                    this.addBuilding(building);
+                if (this.isBuildingCollision(x, z)) {
+                    if (isPlaceable) {
+                        for (Material material : currentBuilding.getScene().modelInstance.materials) {
+                            material.set(RED_COLOR_ATTRIBUTE, OPACITY_ATTRIBUTE);
+                        }
+                        this.isPlaceable = false;
+                    }
+                } else {
+                    if (isPressed) {
+                        Building building = this.currentBuilding.getBuildingResult().result(intersection);
+                        SoundUtil.playSound("building/build.mp3");
+                        this.addBuilding(building);
+                        return;
+                    }
+                    if (!isPlaceable) {
+                        for (Material material : currentBuilding.getScene().modelInstance.materials) {
+                            material.set(GREEN_COLOR_ATTRIBUTE, OPACITY_ATTRIBUTE);
+                        }
+                        this.isPlaceable = true;
+                    }
                 }
             }
         });
     }
 
-    private boolean isBuildingCollision(Vector2 otherPosition, Vector2 otherDimensions) {
+    private final Vector3 translation = new Vector3();
+    private final Vector2 collisionPosition = new Vector2();
+
+    private boolean isBuildingCollision(float x, float z) {
         for (Building existingBuilding : entityService.getBuildings()) {
-            Vector2 dimensions = existingBuilding.getDimensions();
-            Vector2 position = new Vector2(existingBuilding.getPosition().x, existingBuilding.getPosition().z);
-            if (position.x < otherPosition.x + otherDimensions.x &&
-                    position.x + dimensions.x > otherPosition.x &&
-                    position.y < otherPosition.y + otherDimensions.y &&
-                    position.y + dimensions.y > otherPosition.y) {
-                System.out.println(otherPosition.x);
-                System.out.println(otherDimensions.x);
-                System.out.println(position.x + " : " + (otherPosition.x + otherDimensions.x));
-                System.out.println(position.x < otherPosition.x + otherDimensions.x);
-                System.out.println(position.x + dimensions.x > otherPosition.x);
-                System.out.println(position.y < otherPosition.y + otherDimensions.y);
-                System.out.println(position.y + dimensions.y > otherPosition.y);
+            if (existingBuilding instanceof StarBase) continue;
+            Vector3 otherPosition = existingBuilding.getScene().modelInstance.transform.getTranslation(translation);
+            this.collisionPosition.set(otherPosition.x, otherPosition.z);
+            if (collisionPosition.dst(x, z) <= existingBuilding.getDimension()) {
                 return true;
             }
         }

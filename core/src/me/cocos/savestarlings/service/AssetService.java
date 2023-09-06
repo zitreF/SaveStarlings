@@ -3,6 +3,7 @@ package me.cocos.savestarlings.service;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SoundLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import net.mgsx.gltf.loaders.glb.GLBAssetLoader;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
@@ -26,13 +27,16 @@ public class AssetService {
         ASSET_MANAGER.load("buildings/other/laboratory.glb", SceneAsset.class);
 
         // SOUNDS
-        ASSET_MANAGER.load("sounds/Body_1.mp3", Sound.class);
-        ASSET_MANAGER.load("sounds/Body_2.mp3", Sound.class);
-        ASSET_MANAGER.load("sounds/Body_3.mp3", Sound.class);
-        ASSET_MANAGER.load("sounds/Body_4.mp3", Sound.class);
-        ASSET_MANAGER.load("sounds/click.mp3", Sound.class);
-        ASSET_MANAGER.load("sounds/repair.mp3", Sound.class);
-        ASSET_MANAGER.load("sounds/build.mp3", Sound.class);
+        ASSET_MANAGER.load("sounds/starling/Body_1.mp3", Sound.class);
+        ASSET_MANAGER.load("sounds/starling/Body_2.mp3", Sound.class);
+        ASSET_MANAGER.load("sounds/starling/Body_3.mp3", Sound.class);
+        ASSET_MANAGER.load("sounds/starling/Body_4.mp3", Sound.class);
+        ASSET_MANAGER.load("sounds/other/click.mp3", Sound.class);
+        ASSET_MANAGER.load("sounds/building/repair.mp3", Sound.class);
+        ASSET_MANAGER.load("sounds/building/build.mp3", Sound.class);
+
+        // MUSIC
+        ASSET_MANAGER.load("sounds/music/music_main.mp3", Music.class);
     }
 
     public static <T> T getAsset(String name) {

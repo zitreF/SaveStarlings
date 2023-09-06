@@ -13,6 +13,7 @@ public class Laboratory implements Building {
 
     private final Scene scene;
     private final Vector3 position;
+    private final float dimension;
 
     private static final SceneAsset sceneAsset;
 
@@ -23,6 +24,7 @@ public class Laboratory implements Building {
     public Laboratory(Vector3 position) {
         this.position = position;
         this.scene = new Scene(sceneAsset.scene);
+        this.dimension = 6f;
         scene.modelInstance.transform.scale(1.5f, 1.5f, 1.5f);
         BoundingBox bounds = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(bounds);
@@ -41,8 +43,8 @@ public class Laboratory implements Building {
     }
 
     @Override
-    public Vector2 getDimensions() {
-        return new Vector2(0f, 0f);
+    public float getDimension() {
+        return this.dimension;
     }
 
     @Override

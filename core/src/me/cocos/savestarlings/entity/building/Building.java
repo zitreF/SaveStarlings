@@ -7,5 +7,5 @@ public interface Building extends Entity {
 
     void update(float delta);
 
-    Vector2 getDimensions();
+    float getDimension();
 }

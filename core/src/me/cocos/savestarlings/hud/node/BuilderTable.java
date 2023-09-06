@@ -1,12 +1,17 @@
 package me.cocos.savestarlings.hud.node;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import me.cocos.savestarlings.entity.building.BuildingType;
 import me.cocos.savestarlings.hud.Hud;
@@ -17,17 +22,26 @@ public class BuilderTable extends Table {
 
     public BuilderTable(Hud hud) {
         this.hud = hud;
-        Texture backgroundTexture = new Texture("ui/hud.png");
+
+        Pixmap background = this.createRoundedRectanglePixmap(800, 200, 45, Color.valueOf("#292e79"));
+
+        Texture backgroundTexture = new Texture(background);
+
         backgroundTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-        Image backgroundImage = new Image(backgroundTexture);
+        NinePatch roundedRectanglePatch = new NinePatch(backgroundTexture, 10, 10, 10, 10);
+        Color color = Color.valueOf("#292e79");
+        color.a = 0.5f;
+        roundedRectanglePatch.setColor(color);
+
+        NinePatchDrawable backgroundDrawable = new NinePatchDrawable(roundedRectanglePatch);
 
         this.defaults().pad(20f);
 
         this.addBuilding(BuildingType.SNIPER, "ui/buildings/turrets/sniper.png", "ui/buildings/turrets/sniper_pressed.png");
         this.addBuilding(BuildingType.CANNON_BLAST, "ui/buildings/turrets/cannon_blast.png", "ui/buildings/turrets/cannon_blast_pressed.png");
 
-        this.background(backgroundImage.getDrawable());
+        this.background(backgroundDrawable);
         this.setSize(800f, 200f);
         this.setPosition(Gdx.graphics.getWidth() / 2f - this.getWidth() / 2f, this.getY()-50f);
     }
@@ -67,5 +81,21 @@ public class BuilderTable extends Table {
             }
         });
         this.add(image).padBottom(70f).size(100f, 100f);
+    }
+
+
+    private Pixmap createRoundedRectanglePixmap(int width, int height, int cornerRadius, Color color) {
+        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+        pixmap.setColor(color);
+
+        pixmap.fillRectangle(cornerRadius, 0, width - 2 * cornerRadius, height);
+        pixmap.fillRectangle(0, cornerRadius, width, height - 2 * cornerRadius);
+
+        pixmap.fillCircle(cornerRadius, cornerRadius, cornerRadius);
+        pixmap.fillCircle(cornerRadius, height - cornerRadius - 1, cornerRadius);
+        pixmap.fillCircle(width - cornerRadius - 1, cornerRadius, cornerRadius);
+        pixmap.fillCircle(width - cornerRadius - 1, height - cornerRadius - 1, cornerRadius);
+
+        return pixmap;
     }
 }

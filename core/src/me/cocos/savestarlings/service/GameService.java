@@ -8,6 +8,7 @@ import me.cocos.savestarlings.entity.building.tower.impl.SniperTower;
 import me.cocos.savestarlings.hud.Hud;
 import me.cocos.savestarlings.map.Chunk;
 import me.cocos.savestarlings.map.Map;
+import me.cocos.savestarlings.util.SoundUtil;
 
 public class GameService {
 
@@ -17,7 +18,6 @@ public class GameService {
     private final EntityService entityService;
     private final BuildingService buildingService;
     private final Hud hud;
-    private final Map map;
 
     public GameService() {
         instance = this;
@@ -26,8 +26,9 @@ public class GameService {
         this.entityService = new EntityService(environmentService);
         environmentService.setEntityService(entityService);
         this.buildingService = new BuildingService(entityService, environmentService, hud);
-        this.map = new Map(entityService);
+        Map map = new Map(entityService);
         map.generate();
+        SoundUtil.playMusic("music_main.mp3");
     }
 
     public void setInputProcessors(InputProcessor cameraController) {
