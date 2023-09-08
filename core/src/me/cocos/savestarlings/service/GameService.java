@@ -36,6 +36,10 @@ public class GameService {
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
+    public Hud getHud() {
+        return this.hud;
+    }
+
     public EnvironmentService getEnvironmentService() {
         return this.environmentService;
     }
