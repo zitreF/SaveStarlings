@@ -1,11 +1,10 @@
-package me.cocos.savestarlings.hud.node;
+package me.cocos.savestarlings.hud.node.table;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -15,35 +14,39 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import me.cocos.savestarlings.entity.building.BuildingType;
 import me.cocos.savestarlings.hud.Hud;
+import me.cocos.savestarlings.hud.node.BuilderHud;
 
-public class BuilderTable extends Table {
+public class BuildingsTable extends Table {
 
     private final Hud hud;
 
-    public BuilderTable(Hud hud) {
-        this.hud = hud;
-
-        Pixmap background = this.createRoundedRectanglePixmap(800, 200, 45, Color.valueOf("#292e79"));
-
-        Texture backgroundTexture = new Texture(background);
-
-        backgroundTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
-        NinePatch roundedRectanglePatch = new NinePatch(backgroundTexture, 10, 10, 10, 10);
-        Color color = Color.valueOf("#292e79");
-        color.a = 0.5f;
-        roundedRectanglePatch.setColor(color);
-
-        NinePatchDrawable backgroundDrawable = new NinePatchDrawable(roundedRectanglePatch);
+    public BuildingsTable(BuilderHud hud) {
+        this.hud = hud.getHud();
 
         this.defaults().pad(20f);
+        this.setSize(800f, 200f);
+
+        Pixmap pixmap = hud.createRoundedRectanglePixmap(800, 200, 20, Color.BLACK);
+        Texture texture = new Texture(pixmap);
+
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        NinePatch ninePatch = new NinePatch(texture);
+
+        Color backgroundColor = Color.BLACK;
+
+        backgroundColor.a = 0.5f;
+
+        ninePatch.setColor(backgroundColor);
+
+        NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(ninePatch);
+
+        this.background(ninePatchDrawable);
+
+        this.left();
 
         this.addBuilding(BuildingType.SNIPER, "ui/buildings/turrets/sniper.png", "ui/buildings/turrets/sniper_pressed.png");
         this.addBuilding(BuildingType.CANNON_BLAST, "ui/buildings/turrets/cannon_blast.png", "ui/buildings/turrets/cannon_blast_pressed.png");
-
-        this.background(backgroundDrawable);
-        this.setSize(800f, 200f);
-        this.setPosition(Gdx.graphics.getWidth() / 2f - this.getWidth() / 2f, this.getY()-50f);
     }
 
     private void addBuilding(BuildingType buildingType, String texturePath, String pressedPath) {
@@ -81,21 +84,5 @@ public class BuilderTable extends Table {
             }
         });
         this.add(image).padBottom(70f).size(100f, 100f);
-    }
-
-
-    private Pixmap createRoundedRectanglePixmap(int width, int height, int cornerRadius, Color color) {
-        Pixmap pixmap = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-        pixmap.setColor(color);
-
-        pixmap.fillRectangle(cornerRadius, 0, width - 2 * cornerRadius, height);
-        pixmap.fillRectangle(0, cornerRadius, width, height - 2 * cornerRadius);
-
-        pixmap.fillCircle(cornerRadius, cornerRadius, cornerRadius);
-        pixmap.fillCircle(cornerRadius, height - cornerRadius - 1, cornerRadius);
-        pixmap.fillCircle(width - cornerRadius - 1, cornerRadius, cornerRadius);
-        pixmap.fillCircle(width - cornerRadius - 1, height - cornerRadius - 1, cornerRadius);
-
-        return pixmap;
     }
 }
