@@ -41,7 +41,7 @@ public class SniperTower implements Tower {
         this.scene = new Scene(sceneAsset.scene);
         BoundingBox bounds = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(bounds);
-        this.dimension = 4f;
+        this.dimension = 2.5f;
 
         float x = MathUtils.round(position.x / 2.5f) * 2.5f;
         float z = MathUtils.round(position.z / 2.5f) * 2.5f;

@@ -16,22 +16,25 @@ public class Laboratory implements Building {
     private final float dimension;
 
     private static final SceneAsset sceneAsset;
+    private static final Scene staticScene;
 
     static {
         sceneAsset = AssetService.getAsset("buildings/other/laboratory.glb");
+        staticScene = new Scene(sceneAsset.scene);
+        staticScene.modelInstance.transform.scale(1.5f, 1.5f, 1.5f);
     }
 
     public Laboratory(Vector3 position) {
         this.position = position;
         this.scene = new Scene(sceneAsset.scene);
-        this.dimension = 6f;
+        this.dimension = 5f;
         scene.modelInstance.transform.scale(1.5f, 1.5f, 1.5f);
         BoundingBox bounds = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(bounds);
 
-        float x = MathUtils.floor(position.x / 2.5f) * 2.5f + 1.7f;
+        float x = MathUtils.floor(position.x / 2.5f) * 2.5f + 1.25f;
         float z = MathUtils.floor(position.z / 2.5f) * 2.5f + 1.25f;
-        position.set(x, position.y+0.1f, z);
+        position.set(x, position.y-0.75f, z);
 
         scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
 
@@ -57,4 +60,7 @@ public class Laboratory implements Building {
         return this.position;
     }
 
+    public static Scene getSceneAsset() {
+        return staticScene;
+    }
 }

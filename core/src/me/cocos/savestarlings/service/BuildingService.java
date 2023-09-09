@@ -13,6 +13,7 @@ import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.building.BuildingType;
 import me.cocos.savestarlings.entity.building.base.StarBase;
 import me.cocos.savestarlings.hud.Hud;
+import me.cocos.savestarlings.hud.node.table.BuildingsTable;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 
@@ -94,9 +95,9 @@ public class BuildingService {
             int mouseY = Gdx.input.getY();
             Ray ray = environmentService.getSceneService().camera.getPickRay(mouseX, mouseY);
             if (Intersector.intersectRayPlane(ray, PLANE, intersection)) {
-                float offset = this.currentBuilding.getPositionOffset();
-                float x = MathUtils.round(intersection.x / offset) * offset;
-                float z = MathUtils.round(intersection.z / offset) * offset;
+                float x = currentBuilding.getPositionFunction().apply(intersection.x);
+                float z = currentBuilding.getPositionFunction().apply(intersection.z);
+
                 currentBuilding.getScene().modelInstance.transform.setTranslation(x, intersection.y, z);
 
                 if (this.isBuildingCollision(x, z)) {
@@ -126,13 +127,15 @@ public class BuildingService {
 
     private final Vector3 translation = new Vector3();
     private final Vector2 collisionPosition = new Vector2();
+    private final Vector2 otherPosition = new Vector2();
 
     private boolean isBuildingCollision(float x, float z) {
         for (Building existingBuilding : entityService.getBuildings()) {
-            if (existingBuilding instanceof StarBase) continue;
-            Vector3 otherPosition = existingBuilding.getScene().modelInstance.transform.getTranslation(translation);
-            this.collisionPosition.set(otherPosition.x, otherPosition.z);
-            if (collisionPosition.dst(x, z) <= existingBuilding.getDimension()) {
+            Vector3 temp = existingBuilding.getScene().modelInstance.transform.getTranslation(translation);
+            otherPosition.set(temp.x, temp.z);
+            BuildingType building = this.currentBuilding;
+            this.collisionPosition.set(otherPosition.x, otherPosition.y);
+            if (collisionPosition.dst2(x, z) - (building.getSize() * building.getSize()) <= existingBuilding.getDimension() * existingBuilding.getDimension()) {
                 return true;
             }
         }

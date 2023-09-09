@@ -16,9 +16,10 @@ public class BuilderHud extends Table {
     public BuilderHud(Hud hud) {
         this.hud = hud;
 
-        MenuTable menuTable = new MenuTable(this);
-
         BuildingsTable buildingsTable = new BuildingsTable(this);
+
+        MenuTable menuTable = new MenuTable(this, buildingsTable);
+
         this.add(menuTable).left().padLeft(30f).row();
 
         this.add(buildingsTable);

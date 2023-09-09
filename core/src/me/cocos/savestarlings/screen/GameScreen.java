@@ -29,12 +29,11 @@ public class GameScreen implements Screen {
 
         this.cameraController = new CameraController(camera);
 
-        gameService.setInputProcessors(cameraController);
     }
 
     @Override
     public void show() {
-
+        gameService.setInputProcessors(cameraController);
     }
 
     @Override

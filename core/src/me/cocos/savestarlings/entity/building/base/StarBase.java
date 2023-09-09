@@ -24,7 +24,7 @@ public class StarBase implements Building {
     public StarBase(Vector3 position) {
         this.position = position;
         this.scene = new Scene(sceneAsset.scene);
-        this.dimension = 6f;
+        this.dimension = 5f;
         scene.modelInstance.transform.scale(0.4f, 0.4f, 0.4f);
         BoundingBox bounds = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(bounds);
