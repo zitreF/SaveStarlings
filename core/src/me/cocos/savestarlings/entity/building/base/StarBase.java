@@ -26,9 +26,6 @@ public class StarBase implements Building {
         this.scene = new Scene(sceneAsset.scene);
         this.dimension = 5f;
         scene.modelInstance.transform.scale(0.4f, 0.4f, 0.4f);
-        BoundingBox bounds = new BoundingBox();
-        scene.modelInstance.calculateBoundingBox(bounds);
-
         float x = MathUtils.floor(position.x / 2.5f) * 2.5f + 1.75f;
         float z = MathUtils.floor(position.z / 2.5f) * 2.5f + 1.25f;
         position.set(x, position.y, z);

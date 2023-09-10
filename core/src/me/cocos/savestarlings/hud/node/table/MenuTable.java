@@ -78,6 +78,8 @@ public class MenuTable extends Table {
 
         TextButton button = new TextButton(text, buttonStyle);
 
+        button.setSize(75f, 30f);
+
         button.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

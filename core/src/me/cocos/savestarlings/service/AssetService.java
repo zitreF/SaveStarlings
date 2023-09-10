@@ -25,6 +25,7 @@ public class AssetService {
         ASSET_MANAGER.load("buildings/turrets/cannon_blast.glb", SceneAsset.class);
         ASSET_MANAGER.load("buildings/starbase/sb-7.glb", SceneAsset.class);
         ASSET_MANAGER.load("buildings/other/laboratory.glb", SceneAsset.class);
+        ASSET_MANAGER.load("entities/starlings/starling.glb", SceneAsset.class);
 
         // SOUNDS
         ASSET_MANAGER.load("sounds/starling/Body_1.mp3", Sound.class);

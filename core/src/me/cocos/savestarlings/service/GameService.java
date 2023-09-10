@@ -28,6 +28,7 @@ public class GameService {
         this.buildingService = new BuildingService(entityService, environmentService, hud);
         Map map = new Map(entityService);
         map.generate();
+        map.populate();
         SoundUtil.playMusic("music_main.mp3");
     }
 

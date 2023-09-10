@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import me.cocos.savestarlings.entity.Entity;
+import me.cocos.savestarlings.entity.building.Building;
+import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.scene.SceneService;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
@@ -143,8 +145,19 @@ public class EnvironmentService {
     }
 
     public void update(float delta) {
-        for (Entity entity : entityService.getBuildings()) {
-            Scene scene = entity.getScene();
+        for (int i = 0; i < entityService.getBuildings().size; i++) {
+            Building building = entityService.getBuildings().get(i);
+            Scene scene = building.getScene();
+            boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
+            if (!sceneService.getRenderableProviders().contains(scene, false) && isVisible) {
+                sceneService.addScene(scene);
+            } else if (sceneService.getRenderableProviders().contains(scene, false) && !isVisible) {
+                sceneService.removeScene(scene);
+            }
+        }
+        for (int i = 0; i < entityService.getEntities().size; i++) {
+            LivingEntity livingEntity = entityService.getEntities().get(i);
+            Scene scene = livingEntity.getScene();
             boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
             if (!sceneService.getRenderableProviders().contains(scene, false) && isVisible) {
                 sceneService.addScene(scene);

@@ -27,8 +27,6 @@ public class CannonBlast implements Tower {
     public CannonBlast(Vector3 position) {
         this.position = position;
         this.scene = new Scene(sceneAsset.scene);
-        BoundingBox bounds = new BoundingBox();
-        scene.modelInstance.calculateBoundingBox(bounds);
         this.dimension = 2.5f;
 
         float x = MathUtils.round(position.x / 2.5f) * 2.5f;

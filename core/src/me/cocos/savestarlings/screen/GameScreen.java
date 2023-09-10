@@ -28,7 +28,6 @@ public class GameScreen implements Screen {
         gameService.getEnvironmentService().getSceneService().setCamera(camera);
 
         this.cameraController = new CameraController(camera);
-
     }
 
     @Override
