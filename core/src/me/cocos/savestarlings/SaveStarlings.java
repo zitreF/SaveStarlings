@@ -2,6 +2,7 @@ package me.cocos.savestarlings;
 
 import com.badlogic.gdx.Game;
 import me.cocos.savestarlings.screen.GameScreen;
+import me.cocos.savestarlings.screen.MenuScreen;
 import me.cocos.savestarlings.service.AssetService;
 
 public class SaveStarlings extends Game {
@@ -14,8 +15,9 @@ public class SaveStarlings extends Game {
 		while (!AssetService.getAssetManager().isFinished()) {
 			AssetService.getAssetManager().update();
 		}
-		this.gameScreen = new GameScreen();
-		this.setScreen(gameScreen);
+		//this.gameScreen = new GameScreen();
+		MenuScreen menuScreen = new MenuScreen();
+		this.setScreen(menuScreen);
 	}
 
 	@Override

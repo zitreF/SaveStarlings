@@ -5,17 +5,21 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
+import me.cocos.savestarlings.entity.Entity;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.building.BuildingType;
-import me.cocos.savestarlings.entity.building.base.StarBase;
+import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
+import me.cocos.savestarlings.entity.livingentitiy.starling.Citizen;
 import me.cocos.savestarlings.hud.Hud;
-import me.cocos.savestarlings.hud.node.table.BuildingsTable;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
+import net.mgsx.gltf.scene3d.scene.Scene;
 
 import java.util.concurrent.CompletableFuture;
 

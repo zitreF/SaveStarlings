@@ -72,7 +72,7 @@ public class MenuTable extends Table {
 
         FreeTypeFontGenerator freeTypeFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/glfont.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 9;
+        parameter.size = 10;
 
         buttonStyle.font = freeTypeFontGenerator.generateFont(parameter);
 

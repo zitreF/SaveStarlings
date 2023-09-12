@@ -1,7 +1,9 @@
 package me.cocos.savestarlings.service;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
@@ -9,8 +11,8 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.shaders.DepthShader;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
-import me.cocos.savestarlings.entity.Entity;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.scene.SceneService;
@@ -20,7 +22,8 @@ import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 import net.mgsx.gltf.scene3d.lights.DirectionalLightEx;
 import net.mgsx.gltf.scene3d.lights.DirectionalShadowLight;
-import net.mgsx.gltf.scene3d.scene.*;
+import net.mgsx.gltf.scene3d.scene.Scene;
+import net.mgsx.gltf.scene3d.scene.SceneSkybox;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderConfig;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
@@ -40,7 +43,6 @@ public class EnvironmentService {
     private static final float GRID_MAX = 100f;
     private static final float GRID_STEP = 2.5f;
 
-    private final ChunkService chunkService;
 
     public EnvironmentService() {
         PBRShaderConfig config = PBRShaderProvider.createDefaultConfig();
@@ -50,7 +52,6 @@ public class EnvironmentService {
         DepthShader.Config depthConfig = new DepthShader.Config();
         depthConfig.numBones = config.numBones;
         this.sceneService = new SceneService(PBRShaderProvider.createDefault(config), PBRShaderProvider.createDefaultDepth(depthConfig));
-        this.chunkService = new ChunkService();
 
         DirectionalLightEx light = new DirectionalLightEx();
         light.direction.set(0, -1, 0);
@@ -149,9 +150,10 @@ public class EnvironmentService {
             Building building = entityService.getBuildings().get(i);
             Scene scene = building.getScene();
             boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
-            if (!sceneService.getRenderableProviders().contains(scene, false) && isVisible) {
+            boolean contains = sceneService.getRenderableProviders().contains(scene, false);
+            if (!contains && isVisible) {
                 sceneService.addScene(scene);
-            } else if (sceneService.getRenderableProviders().contains(scene, false) && !isVisible) {
+            } else if (contains && !isVisible) {
                 sceneService.removeScene(scene);
             }
         }
@@ -159,15 +161,17 @@ public class EnvironmentService {
             LivingEntity livingEntity = entityService.getEntities().get(i);
             Scene scene = livingEntity.getScene();
             boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
-            if (!sceneService.getRenderableProviders().contains(scene, false) && isVisible) {
+            boolean contains = sceneService.getRenderableProviders().contains(scene, false);
+            if (!contains && isVisible) {
                 sceneService.addScene(scene);
-            } else if (sceneService.getRenderableProviders().contains(scene, false) && !isVisible) {
+            } else if (contains && !isVisible) {
                 sceneService.removeScene(scene);
             }
         }
         directionalShadowLight.setCenter(sceneService.camera.position);
         sceneService.update(delta);
-        sceneService.render();
+        sceneService.renderShadows();
+        sceneService.renderColors();
     }
 
     private final Vector3 position = new Vector3();
@@ -175,10 +179,6 @@ public class EnvironmentService {
     private boolean isVisible(Camera cam, ModelInstance instance) {
         instance.transform.getTranslation(position);
         return cam.frustum.pointInFrustum(position);
-    }
-
-    public ChunkService getChunkService() {
-        return this.chunkService;
     }
 
     public void setEntityService(EntityService entityService) {

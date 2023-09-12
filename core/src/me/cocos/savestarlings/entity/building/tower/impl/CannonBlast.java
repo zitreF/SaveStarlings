@@ -9,12 +9,14 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.building.tower.Tower;
 import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.util.IntersectorUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 public class CannonBlast implements Tower {
 
     private final Scene scene;
+    private final BoundingBox boundingBox;
     private final Vector3 position;
     private final float dimension;
 
@@ -28,6 +30,16 @@ public class CannonBlast implements Tower {
         this.position = position;
         this.scene = new Scene(sceneAsset.scene);
         this.dimension = 2.5f;
+        this.boundingBox = new BoundingBox();
+        scene.modelInstance.calculateBoundingBox(boundingBox);
+
+        float scaleX = 4f / boundingBox.getWidth();
+        float scaleY = 3.25f / boundingBox.getHeight();
+        float scaleZ = 6f / boundingBox.getDepth();
+
+        this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
+
+        this.boundingBox.mul(scene.modelInstance.transform);
 
         float x = MathUtils.round(position.x / 2.5f) * 2.5f;
         float z = MathUtils.round(position.z / 2.5f) * 2.5f;
@@ -58,6 +70,11 @@ public class CannonBlast implements Tower {
     }
 
     @Override
+    public BoundingBox getBoundingBox() {
+        return this.boundingBox;
+    }
+
+    @Override
     public Vector3 getPosition() {
         return this.position;
     }
@@ -69,5 +86,15 @@ public class CannonBlast implements Tower {
 
     public static SceneAsset getSceneAsset() {
         return sceneAsset;
+    }
+
+    @Override
+    public void onClick() {
+
+    }
+
+    @Override
+    public boolean isClicked() {
+        return IntersectorUtil.isPressed(this.position, 1.25f);
     }
 }

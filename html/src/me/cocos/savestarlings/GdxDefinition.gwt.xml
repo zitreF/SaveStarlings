@@ -5,7 +5,6 @@
 	<inherits name='com.badlogic.gdx.ai' />
 	<inherits name='SaveStarlings' />
 
-	<inherits name='SaveStarlings' />
 	<entry-point class='me.cocos.savestarlings.client.HtmlLauncher' />
 	<set-configuration-property name='xsiframe.failIfScriptTag' value='FALSE'/>
 	<set-configuration-property name="gdx.assetpath" value="../assets" />

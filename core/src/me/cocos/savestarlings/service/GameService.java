@@ -3,10 +3,7 @@ package me.cocos.savestarlings.service;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import me.cocos.savestarlings.controller.CameraController;
-import me.cocos.savestarlings.entity.building.tower.impl.SniperTower;
 import me.cocos.savestarlings.hud.Hud;
-import me.cocos.savestarlings.map.Chunk;
 import me.cocos.savestarlings.map.Map;
 import me.cocos.savestarlings.util.SoundUtil;
 

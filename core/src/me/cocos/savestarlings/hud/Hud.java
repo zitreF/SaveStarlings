@@ -30,7 +30,7 @@ public class Hud extends Stage {
     }
 
     public void update() {
-        fpsLabel.setText("FPS: " + (Gdx.graphics.getFramesPerSecond() + 800));
+        fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
         this.act();
         this.draw();
     }
