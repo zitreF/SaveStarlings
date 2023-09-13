@@ -83,7 +83,7 @@ public class MenuScreen implements Screen {
         }
         this.progressBar = new Image(progressTextures.get(0));
 
-        progressBar.setSize(800f, 150f);
+        progressBar.setSize(800f, 125f);
 
         progressBar.setX(Gdx.graphics.getWidth() / 2f - (progressBar.getWidth() / 2f) + progressBar.getWidth() / 8f);
         progressBar.setY(Gdx.graphics.getHeight() / 2f - 300f);
