@@ -11,12 +11,8 @@ public class SaveStarlings extends Game {
 	
 	@Override
 	public void create() {
-		AssetService.load();
-		while (!AssetService.getAssetManager().isFinished()) {
-			AssetService.getAssetManager().update();
-		}
 		//this.gameScreen = new GameScreen();
-		MenuScreen menuScreen = new MenuScreen();
+		MenuScreen menuScreen = new MenuScreen(this);
 		this.setScreen(menuScreen);
 	}
 

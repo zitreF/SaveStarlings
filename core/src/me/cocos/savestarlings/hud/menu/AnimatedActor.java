@@ -7,10 +7,12 @@ import com.badlogic.gdx.graphics.Texture;
 public class AnimatedActor extends Actor {
     private Texture[] frames;
     private float stateTime;
+    private final float speed;
     private int currentFrame;
 
-    public AnimatedActor(Texture[] frames) {
+    public AnimatedActor(Texture[] frames, float speed) {
         this.frames = frames;
+        this.speed = speed;
         this.stateTime = 0;
         this.currentFrame = 0;
     }
@@ -18,9 +20,9 @@ public class AnimatedActor extends Actor {
     @Override
     public void act(float delta) {
         super.act(delta);
-        stateTime += delta;
+        this.stateTime += delta;
 
-        currentFrame = (int) (stateTime / 0.05f) % frames.length;
+        this.currentFrame = (int) (stateTime / speed) % frames.length;
     }
 
     @Override
