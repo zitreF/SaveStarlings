@@ -1,5 +1,6 @@
 package me.cocos.savestarlings.service;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.*;
@@ -29,8 +30,13 @@ import net.mgsx.gltf.scene3d.shaders.PBRShaderConfig;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
 
+import java.util.concurrent.*;
+
 public class EnvironmentService {
 
+    private static final float GRID_MIN = -100f;
+    private static final float GRID_MAX = 100f;
+    private static final float GRID_STEP = 2.5f;
     private final SceneService sceneService;
     private final Cubemap diffuseCubemap;
     private final Cubemap environmentCubemap;
@@ -40,15 +46,11 @@ public class EnvironmentService {
     private final DirectionalShadowLight directionalShadowLight;
     private final CascadeShadowMap cascadeShadowMap;
     private EntityService entityService;
-
-    private static final float GRID_MIN = -100f;
-    private static final float GRID_MAX = 100f;
-    private static final float GRID_STEP = 2.5f;
-
+    private ScheduledExecutorService executorService;
 
     public EnvironmentService() {
         PBRShaderConfig config = PBRShaderProvider.createDefaultConfig();
-        config.numBones = 16;
+        config.numBones = 12;
         config.numDirectionalLights = 2;
         config.numPointLights = 0;
         DepthShader.Config depthConfig = new DepthShader.Config();
@@ -75,7 +77,7 @@ public class EnvironmentService {
         sceneService.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
         sceneService.environment.set(PBRColorAttribute.createDiffuse(Color.WHITE));
         sceneService.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 1f / 256f));
-        this.directionalShadowLight = new DirectionalShadowLight(2048, 2048, 200f, 200f, 1f, 300f);
+        this.directionalShadowLight = new DirectionalShadowLight(2024, 2024, 200f, 200f, 1f, 300f);
         this.cascadeShadowMap = new CascadeShadowMap(3);
         sceneService.setCascadeShadowMap(cascadeShadowMap);
         sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, 0f), 0.1f));
@@ -126,6 +128,38 @@ public class EnvironmentService {
         axesInstance.transform.setToTranslation(0f, -1f, 0f);
 
         this.sceneService.addSceneWithoutShadows(new Scene(axesInstance), false);
+        this.executorService = Executors.newScheduledThreadPool(2);
+
+        Thread gdxThread = Thread.currentThread();
+
+        executorService.scheduleAtFixedRate(() -> {
+            if (!gdxThread.isAlive()) {
+                executorService.shutdown();
+                return;
+            }
+            for (int i = 0; i < entityService.getBuildings().size; i++) {
+                Building building = entityService.getBuildings().get(i);
+                Scene scene = building.getScene();
+                boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
+                boolean contains = sceneService.getRenderableProviders().contains(scene, false);
+                if (!contains && isVisible) {
+                    sceneService.addScene(scene);
+                } else if (contains && !isVisible) {
+                    sceneService.removeScene(scene);
+                }
+            }
+            for (int i = 0; i < entityService.getEntities().size; i++) {
+                LivingEntity livingEntity = entityService.getEntities().get(i);
+                Scene scene = livingEntity.getScene();
+                boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
+                boolean contains = sceneService.getRenderableProviders().contains(scene, false);
+                if (!contains && isVisible) {
+                    sceneService.addScene(scene);
+                } else if (contains && !isVisible) {
+                    sceneService.removeScene(scene);
+                }
+            }
+        }, 300, 300, TimeUnit.MILLISECONDS);
     }
 
     public void dispose() {
@@ -150,30 +184,8 @@ public class EnvironmentService {
     }
 
     public void update(float delta) {
-        for (int i = 0; i < entityService.getBuildings().size; i++) {
-            Building building = entityService.getBuildings().get(i);
-            Scene scene = building.getScene();
-            boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
-            boolean contains = sceneService.getRenderableProviders().contains(scene, false);
-            if (!contains && isVisible) {
-                sceneService.addScene(scene);
-            } else if (contains && !isVisible) {
-                sceneService.removeScene(scene);
-            }
-        }
-        for (int i = 0; i < entityService.getEntities().size; i++) {
-            LivingEntity livingEntity = entityService.getEntities().get(i);
-            Scene scene = livingEntity.getScene();
-            boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
-            boolean contains = sceneService.getRenderableProviders().contains(scene, false);
-            if (!contains && isVisible) {
-                sceneService.addScene(scene);
-            } else if (contains && !isVisible) {
-                sceneService.removeScene(scene);
-            }
-        }
         directionalShadowLight.setCenter(sceneService.camera.position);
-        cascadeShadowMap.setCascades(sceneService.camera, directionalShadowLight, 10f, 4f);
+        cascadeShadowMap.setCascades(sceneService.camera, directionalShadowLight, 50f, 4f);
         sceneService.update(delta);
         sceneService.renderShadows();
         sceneService.renderColors();

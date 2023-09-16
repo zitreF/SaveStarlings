@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import net.mgsx.gltf.loaders.glb.GLBAssetLoader;
+import net.mgsx.gltf.loaders.gltf.GLTFAssetLoader;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 public class AssetService {
@@ -26,6 +27,7 @@ public class AssetService {
         ASSET_MANAGER.load("buildings/starbase/sb-7.glb", SceneAsset.class);
         ASSET_MANAGER.load("buildings/other/laboratory.glb", SceneAsset.class);
         ASSET_MANAGER.load("entities/starlings/starling.glb", SceneAsset.class);
+        ASSET_MANAGER.load("entities/units/colossus.glb", SceneAsset.class);
 
         // SOUNDS
         ASSET_MANAGER.load("sounds/starling/Body_1.mp3", Sound.class);

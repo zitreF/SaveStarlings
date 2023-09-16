@@ -26,7 +26,7 @@ public class Popup extends Dialog {
         WINDOW_STYLE.titleFontColor = Color.WHITE;
     }
 
-    public Popup(String title) {
+    public Popup(String title, String text) {
         super(title, WINDOW_STYLE);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
@@ -37,7 +37,13 @@ public class Popup extends Dialog {
         labelStyle.font = freeTypeFontGenerator.generateFont(parameter);
         labelStyle.fontColor = Color.WHITE;
 
-        this.debugAll();
+        Texture ornament = new Texture("ui/popup/ornament.png");
+        ornament.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        ornament.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        Image image = new Image(ornament);
+        System.out.println(this.getWidth());
+        image.setSize(this.getWidth(), 50f);
+        this.addActor(image);
 
         this.getTitleTable().padTop(25f);
         this.getTitleTable().add(this.createCloseButton()).right().padBottom(5f);
@@ -49,9 +55,10 @@ public class Popup extends Dialog {
         backgroundPixmap.dispose();
 
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
-        this.setBackground(backgroundDrawable);
 
-        this.text("Testing text blablabla :)", labelStyle);
+        this.text(text, labelStyle);
+
+        this.setBackground(backgroundDrawable);
 
         this.setSize(500f, 250f);
 

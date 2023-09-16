@@ -1,18 +1,16 @@
 package me.cocos.savestarlings;
 
 import com.badlogic.gdx.Game;
-import me.cocos.savestarlings.screen.GameScreen;
 import me.cocos.savestarlings.screen.MenuScreen;
-import me.cocos.savestarlings.service.AssetService;
 
 public class SaveStarlings extends Game {
 
-	private GameScreen gameScreen;
-	
+	private MenuScreen menuScreen;
+
 	@Override
 	public void create() {
 		//this.gameScreen = new GameScreen();
-		MenuScreen menuScreen = new MenuScreen(this);
+		this.menuScreen = new MenuScreen(this);
 		this.setScreen(menuScreen);
 	}
 
@@ -23,6 +21,6 @@ public class SaveStarlings extends Game {
 	
 	@Override
 	public void dispose() {
-		gameScreen.dispose();
+		menuScreen.dispose();
 	}
 }

@@ -50,6 +50,7 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         this.gameService.getEnvironmentService().getSceneService().updateViewport(width, height);
+        this.gameService.getHud().getViewport().update(width, height);
     }
 
     @Override

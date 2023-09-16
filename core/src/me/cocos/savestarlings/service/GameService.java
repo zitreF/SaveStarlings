@@ -46,6 +46,10 @@ public class GameService {
         return this.entityService;
     }
 
+    public BuildingService getBuildingService() {
+        return this.buildingService;
+    }
+
     public void update(float delta) {
         this.entityService.update(delta);
         this.environmentService.update(delta);

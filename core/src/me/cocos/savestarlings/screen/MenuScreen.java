@@ -12,28 +12,34 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import me.cocos.savestarlings.SaveStarlings;
 import me.cocos.savestarlings.hud.menu.AnimatedActor;
 import me.cocos.savestarlings.service.AssetService;
 
+import java.util.concurrent.CompletableFuture;
+
 public class MenuScreen implements Screen {
 
     private final Stage stage;
+    private final Array<Disposable> disposables;
     private final Array<TextureRegionDrawable> progressTextures;
     private final Image progressBar;
-    private float progress;
     private final SaveStarlings saveStarlings;
 
     public MenuScreen(SaveStarlings saveStarlings) {
         this.saveStarlings = saveStarlings;
+        this.disposables = new Array<>();
         this.stage = new Stage(new FitViewport(1600f, 900f));
+        this.disposables.add(stage);
         Array<Texture> spiralTextures = new Array<>();
         for (int i = 1; i < 31; i++) {
             Texture texture = new Texture("menu/spiral/" + i + ".png");
             texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             spiralTextures.add(texture);
         }
+        disposables.addAll(spiralTextures);
         AnimatedActor spiralAnimation = new AnimatedActor(spiralTextures.toArray(Texture.class), 0.05f);
 
         spiralAnimation.setWidth(1400f);
@@ -50,6 +56,8 @@ public class MenuScreen implements Screen {
             texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
             unitTextures.add(texture);
         }
+        disposables.addAll(unitTextures);
+
         AnimatedActor unitAnimation = new AnimatedActor(unitTextures.toArray(Texture.class), 0.05f);
 
         unitAnimation.setSize(600f, 500f);
@@ -79,6 +87,8 @@ public class MenuScreen implements Screen {
         for (int i = 1; i < 51; i++) {
             Texture texture = new Texture("menu/progressbar/" + i + ".png");
             texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            this.disposables.add(texture);
+
             progressTextures.add(new TextureRegionDrawable(texture));
         }
         this.progressBar = new Image(progressTextures.get(0));
@@ -99,14 +109,12 @@ public class MenuScreen implements Screen {
         topicStyle.fontColor = Color.WHITE;
 
         Label topic = new Label("Coming soon :)", topicStyle);
-
         this.stage.addActor(topic);
-        AssetService.load();
     }
 
     @Override
     public void show() {
-
+        AssetService.load();
     }
 
     @Override
@@ -115,9 +123,10 @@ public class MenuScreen implements Screen {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
         if (!AssetService.getAssetManager().isFinished()) {
             AssetService.getAssetManager().update();
-            this.progress = AssetService.getAssetManager().getProgress();
+            float progress = AssetService.getAssetManager().getProgress();
             progressBar.setDrawable(this.progressTextures.get(Math.min(49, (int) progress * 50)));
         } else {
+            this.dispose();
             this.saveStarlings.setScreen(new GameScreen());
             return;
         }
@@ -147,6 +156,10 @@ public class MenuScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        Gdx.app.postRunnable(() -> {
+            for (Disposable disposable : this.disposables) {
+                disposable.dispose();
+            }
+        });
     }
 }

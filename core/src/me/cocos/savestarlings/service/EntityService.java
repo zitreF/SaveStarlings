@@ -56,14 +56,20 @@ public class EntityService {
     public void update(float delta) {
         for (Building building : this.buildings) {
             building.update(delta);
-            if (!this.found && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && building.isClicked()) {
+            if (!this.found
+                    && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)
+                    && building.isClicked()
+                    && !GameService.getInstance().getBuildingService().isMouseOverHudElement()) {
                 building.onClick();
                 this.found = true;
             }
         }
         for (LivingEntity livingEntity : this.entities) {
             livingEntity.update(delta);
-            if (!this.found && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && livingEntity instanceof Clickable clickable) {
+            if (!this.found
+                    && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)
+                    && livingEntity instanceof Clickable clickable
+                    && !GameService.getInstance().getBuildingService().isMouseOverHudElement()) {
                 if (clickable.isClicked()) {
                     clickable.onClick();
                     this.found = true;

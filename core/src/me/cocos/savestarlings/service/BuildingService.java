@@ -16,6 +16,7 @@ import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.building.BuildingType;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.entity.livingentitiy.starling.Citizen;
+import me.cocos.savestarlings.entity.livingentitiy.unit.Colossus;
 import me.cocos.savestarlings.hud.Hud;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
@@ -36,6 +37,7 @@ public class BuildingService {
     private final Vector3 intersection;
     private BuildingType currentBuilding;
     private boolean isPlaceable;
+    private boolean mouseOverHud;
 
     public BuildingService(EntityService entityService, EnvironmentService environmentService, Hud hud) {
         this.entityService = entityService;
@@ -46,6 +48,7 @@ public class BuildingService {
         this.currentBuilding = null;
         this.hud.setBuildingService(this);
         this.isPlaceable = true;
+        this.mouseOverHud = false;
     }
 
     public void update() {
@@ -66,10 +69,11 @@ public class BuildingService {
     private void updateMouseCoords() {
         this.mouseCoords.set(Gdx.input.getX(), Gdx.input.getY());
         this.hud.getViewport().unproject(this.mouseCoords);
+        this.mouseOverHud = this.hud.hit(this.mouseCoords.x, this.mouseCoords.y, false) != null;
     }
 
-    private boolean isMouseOverHudElement() {
-        return this.hud.hit(this.mouseCoords.x, this.mouseCoords.y, false) != null;
+    public boolean isMouseOverHudElement() {
+        return this.mouseOverHud;
     }
 
     private boolean isBuildingInScene() {
@@ -84,7 +88,9 @@ public class BuildingService {
     }
 
     private void handleBuildingPlacement() {
-        if (currentBuilding == null) return;
+        if (currentBuilding == null) {
+            return;
+        }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             this.environmentService.getSceneService().removeScene(this.currentBuilding.getScene());
