@@ -136,16 +136,16 @@ public class BuildingService {
     }
 
     private final Vector3 translation = new Vector3();
-    private final Vector2 collisionPosition = new Vector2();
     private final Vector2 otherPosition = new Vector2();
+    private final Rectangle collision = new Rectangle();
 
     private boolean isBuildingCollision(float x, float z) {
         for (Building existingBuilding : entityService.getBuildings()) {
             Vector3 temp = existingBuilding.getScene().modelInstance.transform.getTranslation(translation);
             otherPosition.set(temp.x, temp.z);
             BuildingType building = this.currentBuilding;
-            this.collisionPosition.set(otherPosition.x, otherPosition.y);
-            if (collisionPosition.dst2(x, z) - (building.getSize() * building.getSize()) <= existingBuilding.getDimension() * existingBuilding.getDimension()) {
+            collision.set(x, z, building.getSize(), building.getSize());
+            if (existingBuilding.getBounding().overlaps(collision)) {
                 return true;
             }
         }

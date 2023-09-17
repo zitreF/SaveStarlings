@@ -1,10 +1,7 @@
 package me.cocos.savestarlings.service;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
@@ -12,7 +9,6 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.shaders.DepthShader;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.math.Vector3;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
@@ -23,14 +19,15 @@ import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 import net.mgsx.gltf.scene3d.lights.DirectionalLightEx;
 import net.mgsx.gltf.scene3d.lights.DirectionalShadowLight;
-import net.mgsx.gltf.scene3d.scene.CascadeShadowMap;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneSkybox;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderConfig;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
 
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class EnvironmentService {
 
@@ -44,7 +41,6 @@ public class EnvironmentService {
     private final Texture brdfLUT;
     private final SceneSkybox skybox;
     private final DirectionalShadowLight directionalShadowLight;
-    private final CascadeShadowMap cascadeShadowMap;
     private EntityService entityService;
     private ScheduledExecutorService executorService;
 
@@ -78,8 +74,6 @@ public class EnvironmentService {
         sceneService.environment.set(PBRColorAttribute.createDiffuse(Color.WHITE));
         sceneService.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 1f / 256f));
         this.directionalShadowLight = new DirectionalShadowLight(2024, 2024, 200f, 200f, 1f, 300f);
-        this.cascadeShadowMap = new CascadeShadowMap(3);
-        sceneService.setCascadeShadowMap(cascadeShadowMap);
         sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, 0f), 0.1f));
         this.skybox = new SceneSkybox(environmentCubemap);
         sceneService.setSkyBox(skybox);
@@ -137,8 +131,7 @@ public class EnvironmentService {
                 executorService.shutdown();
                 return;
             }
-            for (int i = 0; i < entityService.getBuildings().size; i++) {
-                Building building = entityService.getBuildings().get(i);
+            for (Building building : entityService.getBuildings()) {
                 Scene scene = building.getScene();
                 boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
                 boolean contains = sceneService.getRenderableProviders().contains(scene, false);
@@ -148,8 +141,7 @@ public class EnvironmentService {
                     sceneService.removeScene(scene);
                 }
             }
-            for (int i = 0; i < entityService.getEntities().size; i++) {
-                LivingEntity livingEntity = entityService.getEntities().get(i);
+            for (LivingEntity livingEntity : this.entityService.getEntities()) {
                 Scene scene = livingEntity.getScene();
                 boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
                 boolean contains = sceneService.getRenderableProviders().contains(scene, false);
@@ -185,10 +177,22 @@ public class EnvironmentService {
 
     public void update(float delta) {
         directionalShadowLight.setCenter(sceneService.camera.position);
-        cascadeShadowMap.setCascades(sceneService.camera, directionalShadowLight, 50f, 4f);
+        this.updateShadows();
         sceneService.update(delta);
         sceneService.renderShadows();
         sceneService.renderColors();
+    }
+
+    private boolean isCascaded;
+
+    private void updateShadows() {
+        if (!isCascaded && sceneService.camera.position.y < 20f) {
+            this.isCascaded = true;
+            directionalShadowLight.setShadowMapSize(5000, 5000);
+        } else if (isCascaded && sceneService.camera.position.y > 20f) {
+            this.isCascaded = false;
+            directionalShadowLight.setShadowMapSize(2048, 2048);
+        }
     }
 
     private final Vector3 position = new Vector3();

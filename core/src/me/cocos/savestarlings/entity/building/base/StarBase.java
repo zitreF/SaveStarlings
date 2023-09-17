@@ -2,12 +2,14 @@ package me.cocos.savestarlings.entity.building.base;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -21,8 +23,8 @@ public class StarBase implements Building {
 
     private final Scene scene;
     private final BoundingBox boundingBox;
+    private final Rectangle rectangle;
     private final Vector3 position;
-    private final float dimension;
 
     private static final SceneAsset sceneAsset;
 
@@ -33,25 +35,24 @@ public class StarBase implements Building {
     public StarBase(Vector3 position) {
         this.position = position;
         this.scene = new Scene(sceneAsset.scene);
-        this.dimension = 5f;
         this.boundingBox = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
-        float scaleX = 7.5f / boundingBox.getWidth();
-        float scaleY = 7.5f / boundingBox.getHeight();
-        float scaleZ = 7f / boundingBox.getDepth();
+        float scaleX = 10f / boundingBox.getWidth();
+        float scaleY = 10f / boundingBox.getHeight();
+        float scaleZ = 10f / boundingBox.getDepth();
 
         this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
 
         this.boundingBox.mul(scene.modelInstance.transform);
-        float x = MathUtils.floor(position.x / 2.5f) * 2.5f + 1.75f;
-        float z = MathUtils.floor(position.z / 2.5f) * 2.5f + 1.25f;
-        position.set(x, position.y, z);
+        float x = MathUtils.round(position.x / 2.5f) * 2.5f;
+        float z = MathUtils.round(position.z / 2.5f) * 2.5f;
+        this.position.set(x, position.y, z);
 
-        scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
+        scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
         scene.modelInstance.materials.clear();
-
+        this.rectangle = new Rectangle(x - 2.5f, z - 2.5f, 10f, 10f);
     }
 
     @Override
@@ -59,8 +60,8 @@ public class StarBase implements Building {
     }
 
     @Override
-    public float getDimension() {
-        return this.dimension;
+    public Rectangle getBounding() {
+        return this.rectangle;
     }
 
     @Override

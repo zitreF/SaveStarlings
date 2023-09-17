@@ -11,15 +11,18 @@ import me.cocos.savestarlings.entity.livingentitiy.starling.Citizen;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import me.cocos.savestarlings.util.SoundUtil;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class EntityService {
 
-    private final Array<LivingEntity> entities;
-    private final Array<Building> buildings;
+    private final Set<LivingEntity> entities;
+    private final Set<Building> buildings;
     private final EnvironmentService environmentService;
 
     public EntityService(EnvironmentService environmentService) {
-        this.entities = new Array<>();
-        this.buildings = new Array<>();
+        this.entities = new HashSet<>();
+        this.buildings = new HashSet<>();
         this.environmentService = environmentService;
     }
 
@@ -29,7 +32,7 @@ public class EntityService {
     }
 
     public void removeBuilding(Building building) {
-        this.buildings.removeValue(building, false);
+        this.buildings.remove(building);
         environmentService.removeScene(building.getScene());
     }
 
@@ -39,15 +42,15 @@ public class EntityService {
     }
 
     public void removeEntity(LivingEntity entity) {
-        this.entities.removeValue(entity, false);
+        this.entities.remove(entity);
         environmentService.removeScene(entity.getScene());
     }
 
-    public Array<Building> getBuildings() {
+    public Set<Building> getBuildings() {
         return this.buildings;
     }
 
-    public Array<LivingEntity> getEntities() {
+    public Set<LivingEntity> getEntities() {
         return this.entities;
     }
 

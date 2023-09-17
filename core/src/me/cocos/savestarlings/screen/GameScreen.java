@@ -3,6 +3,7 @@ package me.cocos.savestarlings.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL31;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.controller.CameraController;

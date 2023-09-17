@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.PointLight;
 import com.badlogic.gdx.graphics.g3d.model.MeshPart;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -29,8 +30,8 @@ public class SniperTower implements Tower {
 
     private final Scene scene;
     private final BoundingBox boundingBox;
+    private final Rectangle rectangle;
     private final Vector3 position;
-    private final float dimension;
 
     private static final SceneAsset sceneAsset;
 
@@ -41,7 +42,6 @@ public class SniperTower implements Tower {
     public SniperTower(Vector3 position) {
         this.position = position;
         this.scene = new Scene(sceneAsset.scene);
-        this.dimension = 2.5f;
         this.boundingBox = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
@@ -53,18 +53,20 @@ public class SniperTower implements Tower {
 
         this.boundingBox.mul(scene.modelInstance.transform);
 
-        float x = MathUtils.round(position.x / 2.5f) * 2.5f;
-        float z = MathUtils.round(position.z / 2.5f) * 2.5f;
+        float x = MathUtils.round(this.position.x / 2.5f) * 2.5f;
+        float z = MathUtils.round(this.position.z / 2.5f) * 2.5f;
 
-        position.set(x, position.y, z);
+        this.position.set(x, this.position.y, z);
 
-        scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
+        scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
         Material material = new Material();
         material.set(new BlendingAttribute(GL20.GL_DST_COLOR, GL20.GL_ZERO));
 
         scene.modelInstance.materials.clear();
         scene.modelInstance.materials.add(material);
+
+        this.rectangle = new Rectangle(x, z, 5f, 5f);
     }
 
     @Override
@@ -72,8 +74,8 @@ public class SniperTower implements Tower {
     }
 
     @Override
-    public float getDimension() {
-        return this.dimension;
+    public Rectangle getBounding() {
+        return this.rectangle;
     }
 
     @Override

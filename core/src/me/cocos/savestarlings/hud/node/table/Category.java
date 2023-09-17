@@ -21,7 +21,7 @@ public enum Category {
     RESOURCES() {
         @Override
         void loadTable(Table table) {
-
+            Category.addBuilding(BuildingType.BANK, table, "ui/buildings/turrets/sniper.png", "ui/buildings/turrets/sniper_pressed.png");
         }
     },
     ARMY() {

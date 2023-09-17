@@ -3,6 +3,7 @@ package me.cocos.savestarlings.hud;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
@@ -18,9 +19,11 @@ public class Hud extends Stage {
     public Hud() {
         super(new ExtendViewport(1600, 900));
         BuilderHud builderHud = new BuilderHud(this);
-
-        BitmapFont font = new BitmapFont();
-        Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
+        FreeTypeFontGenerator freeTypeFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/glfont.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 10;
+        BitmapFont bitmapFont = freeTypeFontGenerator.generateFont(parameter);
+        Label.LabelStyle labelStyle = new Label.LabelStyle(bitmapFont, Color.BLACK);
         this.fpsLabel = new Label("FPS: " + Gdx.graphics.getFramesPerSecond(), labelStyle);
         fpsLabel.setSize(5f, 10f);
         fpsLabel.setAlignment(Align.left, Align.top);

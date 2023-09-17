@@ -1,6 +1,7 @@
 package me.cocos.savestarlings.entity.building.other;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -14,8 +15,7 @@ public class Laboratory implements Building {
 
     private final Scene scene;
     private final Vector3 position;
-    private final float dimension;
-
+    private final Rectangle rectangle;
     private static final SceneAsset sceneAsset;
     private static final Scene staticScene;
 
@@ -28,7 +28,6 @@ public class Laboratory implements Building {
     public Laboratory(Vector3 position) {
         this.position = position;
         this.scene = new Scene(sceneAsset.scene);
-        this.dimension = 5f;
         scene.modelInstance.transform.scale(1.5f, 1.5f, 1.5f);
         float x = MathUtils.floor(position.x / 2.5f) * 2.5f + 1.25f;
         float z = MathUtils.floor(position.z / 2.5f) * 2.5f + 1.25f;
@@ -36,6 +35,7 @@ public class Laboratory implements Building {
 
         scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
 
+        this.rectangle = new Rectangle(x, z, 7.5f, 7.5f);
     }
 
     @Override
@@ -44,8 +44,8 @@ public class Laboratory implements Building {
     }
 
     @Override
-    public float getDimension() {
-        return this.dimension;
+    public Rectangle getBounding() {
+        return this.rectangle;
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
@@ -17,9 +18,8 @@ public class CannonBlast implements Tower {
 
     private final Scene scene;
     private final BoundingBox boundingBox;
+    private final Rectangle rectangle;
     private final Vector3 position;
-    private final float dimension;
-
     private static final SceneAsset sceneAsset;
 
     static {
@@ -29,7 +29,6 @@ public class CannonBlast implements Tower {
     public CannonBlast(Vector3 position) {
         this.position = position;
         this.scene = new Scene(sceneAsset.scene);
-        this.dimension = 2.5f;
         this.boundingBox = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
@@ -53,6 +52,8 @@ public class CannonBlast implements Tower {
 
         scene.modelInstance.materials.clear();
         scene.modelInstance.materials.add(material);
+
+        this.rectangle = new Rectangle(x, z, 5f, 5f);
     }
 
     @Override
@@ -60,8 +61,8 @@ public class CannonBlast implements Tower {
     }
 
     @Override
-    public float getDimension() {
-        return this.dimension;
+    public Rectangle getBounding() {
+        return this.rectangle;
     }
 
     @Override
