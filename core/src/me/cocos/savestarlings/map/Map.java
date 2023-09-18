@@ -20,7 +20,7 @@ public class Map {
     }
 
     public void populate() {
-        for (int i = 0; i < 150; i++) {
+        for (int i = 0; i < 50; i++) {
             Vector3 position = new Vector3();
             position.x = MathUtils.random(-50f, 50f);
             position.y = 0f;

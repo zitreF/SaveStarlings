@@ -40,7 +40,6 @@ public class Laboratory implements Building {
 
     @Override
     public void update(float delta) {
-        //scene.modelInstance.transform.rotate(Vector3.Y, 10f * delta);
     }
 
     @Override
@@ -60,7 +59,7 @@ public class Laboratory implements Building {
 
     @Override
     public Vector3 getPosition() {
-        return this.position;
+        return scene.modelInstance.transform.getTranslation(this.position);
     }
 
     public static Scene getSceneAsset() {

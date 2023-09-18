@@ -60,13 +60,10 @@ public class SniperTower implements Tower {
 
         scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
-        Material material = new Material();
-        material.set(new BlendingAttribute(GL20.GL_DST_COLOR, GL20.GL_ZERO));
-
         scene.modelInstance.materials.clear();
-        scene.modelInstance.materials.add(material);
 
         this.rectangle = new Rectangle(x, z, 5f, 5f);
+
     }
 
     @Override
@@ -90,7 +87,7 @@ public class SniperTower implements Tower {
 
     @Override
     public Vector3 getPosition() {
-        return this.position;
+        return scene.modelInstance.transform.getTranslation(this.position);
     }
 
     @Override

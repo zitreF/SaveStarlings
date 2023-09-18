@@ -1,47 +1,61 @@
 package me.cocos.savestarlings.entity.livingentitiy.unit;
 
+import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.service.EntityService;
+import me.cocos.savestarlings.service.GameService;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
+import java.util.Comparator;
+import java.util.Optional;
+
 public class Colossus implements LivingEntity {
+
+    private static final SceneAsset sceneAsset;
 
     private final Scene scene;
     private final BoundingBox boundingBox;
     private final Vector3 position;
-    private static final SceneAsset sceneAsset;
-    private final Vector3 targetPosition;
+    private float delay;
+    private Building target;
     private final Vector3 rotationDirection;
+    private final Vector3 direction;
 
     static {
         sceneAsset = AssetService.getAsset("entities/units/colossus.glb");
     }
 
     public Colossus(Vector3 position) {
-        this.position = position;
+        this.position = new Vector3(position);
         this.scene = new Scene(sceneAsset.scene);
         this.boundingBox = new BoundingBox();
         this.rotationDirection = new Vector3();
+        this.direction = new Vector3();
+        this.delay = 5f;
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
-        float scaleX = 5f / boundingBox.getWidth();
-        float scaleY = 5f / boundingBox.getHeight();
-        float scaleZ = 5f / boundingBox.getDepth();
+        float scaleX = 4f / boundingBox.getWidth();
+        float scaleY = 4f / boundingBox.getHeight();
+        float scaleZ = 4.5f / boundingBox.getDepth();
 
         this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
 
-        this.boundingBox.mul(scene.modelInstance.transform);
+        scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
-        scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
-
-        this.targetPosition = new Vector3(position);
+        scene.modelInstance.materials.clear();
     }
 
     @Override
@@ -61,7 +75,29 @@ public class Colossus implements LivingEntity {
 
     @Override
     public void update(float delta) {
-        this.position.add(0.1f, 0f, 0f);
-        this.scene.modelInstance.transform.setTranslation(position);
+        if (delay < 1.0f) {
+            this.delay += delta;
+        }
+        if (delay >= 1.0f) {
+            this.delay = 0f;
+            EntityService entityService = GameService.getInstance().getEntityService();
+            entityService.getBuildings().stream()
+                    .min(Comparator.comparing(building -> this.position.dst2(building.getPosition())))
+                    .ifPresent(nearestBuilding -> this.target = nearestBuilding);
+            this.rotationDirection.set(target.getPosition()).sub(position).nor();
+
+            float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
+            scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
+            scene.modelInstance.transform.setTranslation(this.position);
+            scene.modelInstance.transform.scale(4f / boundingBox.getWidth(), 4f / boundingBox.getHeight(), 4.5f / boundingBox.getDepth());
+        }
+        if (target != null) {
+            if (position.epsilonEquals(target.getPosition(), 15f)) {
+                return;
+            }
+            this.direction.set(target.getPosition()).sub(position).nor();
+            position.add(direction.scl(1.5f * delta));
+            scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
+        }
     }
 }

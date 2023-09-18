@@ -69,7 +69,7 @@ public class Bank implements Building {
 
     @Override
     public Vector3 getPosition() {
-        return this.position;
+        return scene.modelInstance.transform.getTranslation(this.position);
     }
 
     @Override

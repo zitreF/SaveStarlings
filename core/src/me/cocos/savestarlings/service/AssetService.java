@@ -48,6 +48,10 @@ public class AssetService {
         return ASSET_MANAGER.get(name);
     }
 
+    public static <T> T getAsset(String name, Class<T> clazz) {
+        return ASSET_MANAGER.get(name, clazz);
+    }
+
     public static AssetManager getAssetManager() {
         return ASSET_MANAGER;
     }

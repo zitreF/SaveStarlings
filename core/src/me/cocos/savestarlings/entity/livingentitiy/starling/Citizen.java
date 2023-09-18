@@ -41,13 +41,13 @@ public class Citizen implements LivingEntity, Clickable {
 
         float scaleX = 1.5f / boundingBox.getWidth();
         float scaleY = 1.5f / boundingBox.getHeight();
-        float scaleZ = 1.5f / boundingBox.getDepth();
+        float scaleZ = 1f / boundingBox.getDepth();
 
         this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
 
-        this.boundingBox.mul(scene.modelInstance.transform);
-
         scene.modelInstance.transform.setTranslation(position.x, position.y - 0.5f, position.z);
+
+        scene.modelInstance.materials.clear();
 
         this.targetPosition = new Vector3(position);
     }
@@ -68,7 +68,7 @@ public class Citizen implements LivingEntity, Clickable {
                 position.y = initialPosition.y;
                 float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
                 scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
-                this.scene.modelInstance.transform.scale(1.5f * boundingBox.getWidth(), 1.5f * boundingBox.getHeight(), 1.25f * boundingBox.getDepth());
+                this.scene.modelInstance.transform.scale(1.5f / boundingBox.getWidth(), 1.5f / boundingBox.getHeight(), 1.25f / boundingBox.getDepth());
             }
             this.scene.modelInstance.transform.setTranslation(position.x, position.y - 0.5f, position.z);
             return;
@@ -105,7 +105,7 @@ public class Citizen implements LivingEntity, Clickable {
         float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
 
         scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
-        this.scene.modelInstance.transform.scale(1.5f * boundingBox.getWidth(), 1.5f * boundingBox.getHeight(), 1.25f * boundingBox.getDepth());
+        this.scene.modelInstance.transform.scale(1.5f / boundingBox.getWidth(), 1.5f / boundingBox.getHeight(), 1f / boundingBox.getDepth());
     }
 
     public static SceneAsset getSceneAsset() {
@@ -123,7 +123,7 @@ public class Citizen implements LivingEntity, Clickable {
             this.jumpTimer = 0.0f;
             this.initialPosition.set(position);
             this.scene.modelInstance.transform.setToRotation(Vector3.Y, 90f);
-            this.scene.modelInstance.transform.scale(1.5f * boundingBox.getWidth(), 1.5f * boundingBox.getHeight(), 1.25f * boundingBox.getDepth());
+            this.scene.modelInstance.transform.scale(1.5f * boundingBox.getWidth(), 1.5f * boundingBox.getHeight(), 1f * boundingBox.getDepth());
             SoundUtil.playSound(MathUtils.randomBoolean() ? "starling/Body_2.mp3" : "starling/Body_3.mp3");
         }
     }

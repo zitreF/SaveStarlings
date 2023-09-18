@@ -89,6 +89,15 @@ public class BuildingService {
 
     private void handleBuildingPlacement() {
         if (currentBuilding == null) {
+            if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
+                int mouseX = Gdx.input.getX();
+                int mouseY = Gdx.input.getY();
+                Ray ray = environmentService.getSceneService().camera.getPickRay(mouseX, mouseY);
+                if (Intersector.intersectRayPlane(ray, PLANE, intersection)) {
+                    Colossus colossus = new Colossus(intersection);
+                    entityService.addEntity(colossus);
+                }
+            }
             return;
         }
 

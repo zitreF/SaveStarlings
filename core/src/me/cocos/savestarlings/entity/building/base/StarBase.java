@@ -44,7 +44,6 @@ public class StarBase implements Building {
 
         this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
 
-        this.boundingBox.mul(scene.modelInstance.transform);
         float x = MathUtils.round(position.x / 2.5f) * 2.5f;
         float z = MathUtils.round(position.z / 2.5f) * 2.5f;
         this.position.set(x, position.y, z);
@@ -76,7 +75,7 @@ public class StarBase implements Building {
 
     @Override
     public Vector3 getPosition() {
-        return this.position;
+        return scene.modelInstance.transform.getTranslation(this.position);
     }
 
     @Override
