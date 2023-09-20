@@ -1,39 +1,51 @@
 package me.cocos.savestarlings.entity.livingentitiy.projectiles;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.service.GameService;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 public final class Bullet implements LivingEntity {
-
+    private static final float SPEED = 5f;
     private static final SceneAsset sceneAsset;
     private final Scene scene;
     private final BoundingBox boundingBox;
     private final Vector3 position;
+    private final Vector3 direction;
+    private final Vector3 scaling;
+    private final Rectangle bounding;
 
     static {
-        sceneAsset = AssetService.getAsset("");
+        sceneAsset = AssetService.getAsset("entities/projectiles/rocket.glb");
     }
 
-    public Bullet(Vector3 position) {
-        this.position = new Vector3(position);
+    public Bullet(Vector3 position, Vector3 direction) {
+        this.position = new Vector3(position).add(0f, 1.5f, 0f);
+        this.direction = new Vector3(direction);
         this.scene = new Scene(sceneAsset.scene);
         this.boundingBox = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
         float scaleX = 1f / boundingBox.getWidth();
-        float scaleY = 1f / boundingBox.getHeight();
+        float scaleY = 2f / boundingBox.getHeight();
         float scaleZ = 1f / boundingBox.getDepth();
 
-        this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
+        this.scaling = new Vector3(scaleX, scaleY, scaleZ);
 
         scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
+        this.scene.modelInstance.transform.scale(scaling.x, scaling.y, scaling.z);
+
         scene.modelInstance.materials.clear();
 
+        this.bounding = new Rectangle(this.position.x - 0.5f, this.position.y - 0.5f, 1f, 1f);
     }
 
     @Override
@@ -51,8 +63,24 @@ public final class Bullet implements LivingEntity {
         return this.position;
     }
 
+    private final Vector3 velocity = new Vector3();
+
     @Override
     public void update(float delta) {
+        velocity.set(direction).scl(SPEED * delta);
+        position.add(velocity);
 
+        float rotationAngleDeg = MathUtils.atan2(direction.x, direction.z) * MathUtils.radiansToDegrees;
+        scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
+        scene.modelInstance.transform.rotate(Vector3.X, 90f);
+        scene.modelInstance.transform.setTranslation(position);
+        scene.modelInstance.transform.scale(this.scaling.x, this.scaling.y, this.scaling.z);
+        this.bounding.setPosition(position.x - 0.5f, position.z - 0.5f);
+        for (Building building : GameService.getInstance().getEntityService().getBuildings()) {
+            if (this.bounding.overlaps(building.getBounding())) {
+                Gdx.app.postRunnable(() -> GameService.getInstance().getEntityService().removeEntityWithoutShadows(this));
+                return;
+            }
+        }
     }
 }

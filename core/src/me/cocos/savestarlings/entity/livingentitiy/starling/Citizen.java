@@ -1,5 +1,6 @@
 package me.cocos.savestarlings.entity.livingentitiy.starling;
 
+import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -123,7 +124,7 @@ public class Citizen implements LivingEntity, Clickable {
             this.jumpTimer = 0.0f;
             this.initialPosition.set(position);
             this.scene.modelInstance.transform.setToRotation(Vector3.Y, 90f);
-            this.scene.modelInstance.transform.scale(1.5f * boundingBox.getWidth(), 1.5f * boundingBox.getHeight(), 1f * boundingBox.getDepth());
+            this.scene.modelInstance.transform.scale(1.5f / boundingBox.getWidth(), 1.5f / boundingBox.getHeight(), 1f / boundingBox.getDepth());
             SoundUtil.playSound(MathUtils.randomBoolean() ? "starling/Body_2.mp3" : "starling/Body_3.mp3");
         }
     }

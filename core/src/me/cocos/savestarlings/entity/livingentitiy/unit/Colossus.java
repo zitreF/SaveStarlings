@@ -1,5 +1,6 @@
 package me.cocos.savestarlings.entity.livingentitiy.unit;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
+import me.cocos.savestarlings.entity.livingentitiy.projectiles.Bullet;
 import me.cocos.savestarlings.service.AssetService;
 import me.cocos.savestarlings.service.EntityService;
 import me.cocos.savestarlings.service.GameService;
@@ -30,6 +32,7 @@ public class Colossus implements LivingEntity {
     private final BoundingBox boundingBox;
     private final Vector3 position;
     private float delay;
+    private float attackDelay;
     private Building target;
     private final Vector3 rotationDirection;
     private final Vector3 direction;
@@ -45,6 +48,7 @@ public class Colossus implements LivingEntity {
         this.rotationDirection = new Vector3();
         this.direction = new Vector3();
         this.delay = 5f;
+        this.attackDelay = 0f;
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
         float scaleX = 4f / boundingBox.getWidth();
@@ -75,10 +79,13 @@ public class Colossus implements LivingEntity {
 
     @Override
     public void update(float delta) {
-        if (delay < 1.0f) {
+        if (delay < 1f) {
             this.delay += delta;
         }
-        if (delay >= 1.0f) {
+        if (attackDelay < 2f) {
+            this.attackDelay += delta;
+        }
+        if (delay >= 1f) {
             this.delay = 0f;
             EntityService entityService = GameService.getInstance().getEntityService();
             entityService.getBuildings().stream()
@@ -93,6 +100,12 @@ public class Colossus implements LivingEntity {
         }
         if (target != null) {
             if (position.epsilonEquals(target.getPosition(), 15f)) {
+                if (attackDelay >= 2f) {
+                    this.attackDelay = 0f;
+                    EntityService entityService = GameService.getInstance().getEntityService();
+                    Bullet bullet = new Bullet(this.position, rotationDirection);
+                    Gdx.app.postRunnable(() -> entityService.addEntityWithoutShadows(bullet));
+                }
                 return;
             }
             this.direction.set(target.getPosition()).sub(position).nor();

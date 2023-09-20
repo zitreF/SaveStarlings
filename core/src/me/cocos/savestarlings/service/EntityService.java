@@ -41,9 +41,19 @@ public class EntityService {
         environmentService.addScene(entity.getScene());
     }
 
+    public void addEntityWithoutShadows(LivingEntity entity) {
+        this.entities.add(entity);
+        environmentService.addSceneWithoutShadows(entity.getScene());
+    }
+
     public void removeEntity(LivingEntity entity) {
         this.entities.remove(entity);
         environmentService.removeScene(entity.getScene());
+    }
+
+    public void removeEntityWithoutShadows(LivingEntity entity) {
+        this.entities.remove(entity);
+        environmentService.removeSceneWithoutShadows(entity.getScene());
     }
 
     public Set<Building> getBuildings() {

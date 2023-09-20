@@ -73,7 +73,7 @@ public class EnvironmentService {
         sceneService.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
         sceneService.environment.set(PBRColorAttribute.createDiffuse(Color.WHITE));
         sceneService.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 1f / 256f));
-        this.directionalShadowLight = new DirectionalShadowLight(2024, 2024, 200f, 200f, 1f, 300f);
+        this.directionalShadowLight = new DirectionalShadowLight(1500, 1500, 200f, 200f, 1f, 300f);
         sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, 0f), 0.1f));
         this.skybox = new SceneSkybox(environmentCubemap);
         sceneService.setSkyBox(skybox);
@@ -97,31 +97,6 @@ public class EnvironmentService {
         greenBoxInstance.transform.setToTranslation(0f, -1f, 0f);
         this.sceneService.addScene(new Scene(greenBoxInstance));
         this.createGrid();
-    }
-
-    private void createGrid() {
-        Gdx.gl.glLineWidth(2f);
-        ModelBuilder modelBuilder = new ModelBuilder();
-        modelBuilder.begin();
-        BlendingAttribute blendingAttribute = new BlendingAttribute();
-        blendingAttribute.opacity = 1f;
-        MeshPartBuilder builder = modelBuilder.part("grid", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material(blendingAttribute));
-        Color color = Color.WHITE;
-        color.a = 0.5f;
-        builder.setColor(color);
-        for (float t = GRID_MIN; t <= GRID_MAX; t += GRID_STEP) {
-            builder.line(t, 1, GRID_MIN, t, 1, GRID_MAX);
-            builder.line(GRID_MIN, 1, t, GRID_MAX, 1, t);
-        }
-        modelBuilder.part("axes", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material());
-
-        Model axesModel = modelBuilder.end();
-
-        ModelInstance axesInstance = new ModelInstance(axesModel);
-
-        axesInstance.transform.setToTranslation(0f, -1f, 0f);
-
-        this.sceneService.addSceneWithoutShadows(new Scene(axesInstance), false);
         this.executorService = Executors.newScheduledThreadPool(2);
 
         Thread gdxThread = Thread.currentThread();
@@ -154,6 +129,31 @@ public class EnvironmentService {
         }, 300, 300, TimeUnit.MILLISECONDS);
     }
 
+    private void createGrid() {
+        Gdx.gl.glLineWidth(2f);
+        ModelBuilder modelBuilder = new ModelBuilder();
+        modelBuilder.begin();
+        BlendingAttribute blendingAttribute = new BlendingAttribute();
+        blendingAttribute.opacity = 1f;
+        MeshPartBuilder builder = modelBuilder.part("grid", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material(blendingAttribute));
+        Color color = Color.WHITE;
+        color.a = 0.5f;
+        builder.setColor(color);
+        for (float t = GRID_MIN; t <= GRID_MAX; t += GRID_STEP) {
+            builder.line(t, 1, GRID_MIN, t, 1, GRID_MAX);
+            builder.line(GRID_MIN, 1, t, GRID_MAX, 1, t);
+        }
+        modelBuilder.part("axes", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material());
+
+        Model axesModel = modelBuilder.end();
+
+        ModelInstance axesInstance = new ModelInstance(axesModel);
+
+        axesInstance.transform.setToTranslation(0f, -1f, 0f);
+
+        this.sceneService.addSceneWithoutShadows(new Scene(axesInstance), false);
+    }
+
     public void dispose() {
         sceneService.dispose();
         environmentCubemap.dispose();
@@ -165,6 +165,10 @@ public class EnvironmentService {
 
     public void addScene(Scene scene) {
         this.sceneService.addScene(scene);
+    }
+
+    public void addSceneWithoutShadows(Scene scene) {
+        this.sceneService.addSceneWithoutShadows(scene, false);
     }
 
     public void removeScene(Scene scene) {
@@ -204,5 +208,9 @@ public class EnvironmentService {
 
     public void setEntityService(EntityService entityService) {
         this.entityService = entityService;
+    }
+
+    public void removeSceneWithoutShadows(Scene scene) {
+        this.sceneService.removeSceneWithoutShadows(scene);
     }
 }

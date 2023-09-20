@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
+import me.cocos.savestarlings.controller.CameraController;
 import me.cocos.savestarlings.entity.Entity;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.building.BuildingType;
@@ -128,9 +129,11 @@ public class BuildingService {
                     }
                 } else {
                     if (isPressed) {
-                        Building building = this.currentBuilding.getBuildingResult().result(intersection);
+                        Gdx.app.postRunnable(() -> {
+                            Building building = this.currentBuilding.getBuildingResult().result(intersection);
+                            this.addBuilding(building);
+                        });
                         SoundUtil.playSound("building/build.mp3");
-                        this.addBuilding(building);
                         return;
                     }
                     if (!isPlaceable) {
@@ -153,7 +156,7 @@ public class BuildingService {
             Vector3 temp = existingBuilding.getScene().modelInstance.transform.getTranslation(translation);
             otherPosition.set(temp.x, temp.z);
             BuildingType building = this.currentBuilding;
-            collision.set(x, z, building.getSize(), building.getSize());
+            collision.set(x - building.getSize() / 2f, z - building.getSize() / 2f, building.getSize(), building.getSize());
             if (existingBuilding.getBounding().overlaps(collision)) {
                 return true;
             }

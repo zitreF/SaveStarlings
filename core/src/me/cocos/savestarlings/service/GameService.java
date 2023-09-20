@@ -54,7 +54,7 @@ public class GameService {
         this.entityService.update(delta);
         this.environmentService.update(delta);
         this.buildingService.update();
-        this.hud.update();
+        this.hud.update(delta);
     }
 
     public void dispose() {

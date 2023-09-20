@@ -23,8 +23,8 @@ public class SceneService extends SceneManager {
     public void renderColors() {
         ModelBatch batch = this.getBatch();
         batch.begin(camera);
-        batch.render(this.getRenderableProviders(), computedEnvironement);
         batch.render(this.nonShadowRenderableProviders, computedEnvironement);
+        batch.render(this.getRenderableProviders(), computedEnvironement);
         if (this.getSkyBox() != null) batch.render(this.getSkyBox());
         batch.end();
     }
@@ -36,5 +36,10 @@ public class SceneService extends SceneManager {
                 environment.add(e.value);
             }
         }
+    }
+
+    public void removeSceneWithoutShadows(Scene scene) {
+        this.nonShadowRenderableProviders.removeValue(scene, false);
+        this.removeScene(scene);
     }
 }

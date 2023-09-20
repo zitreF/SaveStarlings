@@ -12,6 +12,7 @@ public class CameraController implements InputProcessor {
 
     private static final float CAMERA_SPEED = 30f;
     private final Camera camera;
+    public static boolean isPressed;
 
     public CameraController(Camera camera) {
         this.camera = camera;
@@ -41,11 +42,17 @@ public class CameraController implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        if (button == Input.Buttons.LEFT) {
+            isPressed = true;
+        }
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        if (button == Input.Buttons.LEFT) {
+            isPressed = false;
+        }
         return false;
     }
 
