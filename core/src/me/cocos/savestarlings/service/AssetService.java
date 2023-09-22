@@ -1,10 +1,14 @@
 package me.cocos.savestarlings.service;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SoundLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
 import net.mgsx.gltf.loaders.glb.GLBAssetLoader;
 import net.mgsx.gltf.loaders.gltf.GLTFAssetLoader;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
@@ -17,6 +21,7 @@ public class AssetService {
         ASSET_MANAGER = new AssetManager();
         ASSET_MANAGER.setLoader(SceneAsset.class, ".glb", new GLBAssetLoader(new InternalFileHandleResolver()));
         ASSET_MANAGER.setLoader(Sound.class, ".mp3", new SoundLoader(new InternalFileHandleResolver()));
+        ASSET_MANAGER.setLoader(ParticleEffect.class, new ParticleEffectLoader(new InternalFileHandleResolver()));
     }
 
     public static void load() {
@@ -43,6 +48,9 @@ public class AssetService {
 
         // MUSIC
         ASSET_MANAGER.load("sounds/music/music_main.mp3", Music.class);
+
+        // PARTICLES
+        ASSET_MANAGER.load("particles/laser_smoke", ParticleEffect.class);
     }
 
     public static <T> T getAsset(String name) {

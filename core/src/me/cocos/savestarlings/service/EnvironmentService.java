@@ -42,9 +42,10 @@ public class EnvironmentService {
     private final SceneSkybox skybox;
     private final DirectionalShadowLight directionalShadowLight;
     private EntityService entityService;
-    private ScheduledExecutorService executorService;
+    private final ScheduledExecutorService executorService;
+    private final ParticleService particleService;
 
-    public EnvironmentService() {
+    public EnvironmentService(ParticleService particleService, Camera camera) {
         PBRShaderConfig config = PBRShaderProvider.createDefaultConfig();
         config.numBones = 12;
         config.numDirectionalLights = 2;
@@ -67,6 +68,7 @@ public class EnvironmentService {
 
         this.brdfLUT = new Texture(Gdx.files.classpath("net/mgsx/gltf/shaders/brdfLUT.png"));
 
+        sceneService.setCamera(camera);
         sceneService.setAmbientLight(1f);
         sceneService.environment.set(new PBRTextureAttribute(PBRTextureAttribute.BRDFLUTTexture, brdfLUT));
         sceneService.environment.set(PBRCubemapAttribute.createSpecularEnv(specularCubemap));
@@ -127,6 +129,7 @@ public class EnvironmentService {
                 }
             }
         }, 300, 300, TimeUnit.MILLISECONDS);
+        this.particleService = particleService;
     }
 
     private void createGrid() {
@@ -185,6 +188,7 @@ public class EnvironmentService {
         sceneService.update(delta);
         sceneService.renderShadows();
         sceneService.renderColors();
+        particleService.render(sceneService.getBatch(), this.sceneService.camera);
     }
 
     private boolean isCascaded;

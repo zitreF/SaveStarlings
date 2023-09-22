@@ -2,6 +2,7 @@ package me.cocos.savestarlings.entity.building.tower.impl;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.ai.steer.behaviors.Jump;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -16,14 +17,20 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.building.tower.Tower;
+import me.cocos.savestarlings.entity.livingentitiy.Enemy;
+import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
+import me.cocos.savestarlings.entity.livingentitiy.projectiles.Bullet;
 import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.service.EntityService;
 import me.cocos.savestarlings.service.GameService;
+import me.cocos.savestarlings.util.AsyncUtil;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +40,12 @@ public class SniperTower implements Tower {
     private final BoundingBox boundingBox;
     private final Rectangle rectangle;
     private final Vector3 position;
+    private LivingEntity target;
+    private float health;
+    private float delay;
+    private float attackDelay;
+    private final Vector3 rotationDirection;
+    private final Vector3 direction;
 
     private static final SceneAsset sceneAsset;
 
@@ -40,9 +53,12 @@ public class SniperTower implements Tower {
         sceneAsset = AssetService.getAsset("buildings/turrets/sniper_tower.glb");
     }
 
+
     public SniperTower(Vector3 position) {
-        this.position = position;
+        this.position = new Vector3(position);
         this.scene = new Scene(sceneAsset.scene);
+        this.rotationDirection = new Vector3();
+        this.direction = new Vector3();
         this.boundingBox = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
@@ -51,8 +67,6 @@ public class SniperTower implements Tower {
         float scaleZ = 6f / boundingBox.getDepth();
 
         this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
-
-        this.boundingBox.mul(scene.modelInstance.transform);
 
         float x = MathUtils.round(this.position.x / 2.5f) * 2.5f;
         float z = MathUtils.round(this.position.z / 2.5f) * 2.5f;
@@ -66,8 +80,52 @@ public class SniperTower implements Tower {
         this.rectangle = new Rectangle(x - 2.5f, z - 2.5f, 5f, 5f);
     }
 
+    boolean isKnockbackAnimating;
+
     @Override
     public void update(float delta) {
+        AsyncUtil.runAsync(() -> {
+            if (delay < 1f) {
+                this.delay += delta;
+            }
+            if (attackDelay < 2f) {
+                this.attackDelay += delta;
+            }
+            if (delay >= 1f) {
+                this.delay = 0f;
+                EntityService entityService = GameService.getInstance().getEntityService();
+                entityService.getEntities().stream()
+                        .filter(entity -> entity instanceof Enemy)
+                        .min(Comparator.comparing(building -> this.position.dst2(building.getPosition())))
+                        .ifPresent(nearestBuilding -> this.target = nearestBuilding);
+                this.rotationDirection.set(target.getPosition()).sub(position).nor();
+
+                float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
+                scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
+                scene.modelInstance.transform.setTranslation(this.position);
+                scene.modelInstance.transform.scale(4f / boundingBox.getWidth(), 3.25f / boundingBox.getHeight(), 6f / boundingBox.getDepth());
+            }
+            if (target != null) {
+                if (position.epsilonEquals(target.getPosition(), 15f)) {
+                    if (attackDelay >= 2f) {
+                        this.attackDelay = 0f;
+                        // TODO: move the model in opossite direction to target position and interpolate animation to move it back and to default position, something like knockback animation
+                    }
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public float getHealth() {
+        return this.health;
+    }
+
+    @Override
+    public void setHealth(float amount) {
+        this.health = amount;
+        // update health bar
     }
 
     @Override

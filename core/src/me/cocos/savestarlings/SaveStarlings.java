@@ -9,7 +9,6 @@ public class SaveStarlings extends Game {
 
 	@Override
 	public void create() {
-		//this.gameScreen = new GameScreen();
 		this.menuScreen = new MenuScreen(this);
 		this.setScreen(menuScreen);
 	}

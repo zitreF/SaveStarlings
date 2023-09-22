@@ -16,6 +16,7 @@ public class Laboratory implements Building {
     private final Scene scene;
     private final Vector3 position;
     private final Rectangle rectangle;
+    private float health;
     private static final SceneAsset sceneAsset;
     private static final Scene staticScene;
 
@@ -40,6 +41,16 @@ public class Laboratory implements Building {
 
     @Override
     public void update(float delta) {
+    }
+
+    @Override
+    public float getHealth() {
+        return this.health;
+    }
+
+    @Override
+    public void setHealth(float amount) {
+        this.health = amount;
     }
 
     @Override

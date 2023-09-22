@@ -3,6 +3,7 @@ package me.cocos.savestarlings.service;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Camera;
 import me.cocos.savestarlings.hud.Hud;
 import me.cocos.savestarlings.map.Map;
 import me.cocos.savestarlings.util.SoundUtil;
@@ -11,15 +12,17 @@ public class GameService {
 
     private static GameService instance;
 
+    private final ParticleService particleService;
     private final EnvironmentService environmentService;
     private final EntityService entityService;
     private final BuildingService buildingService;
     private final Hud hud;
 
-    public GameService() {
+    public GameService(Camera camera) {
         instance = this;
         this.hud = new Hud();
-        this.environmentService = new EnvironmentService();
+        this.particleService = new ParticleService(camera);
+        this.environmentService = new EnvironmentService(particleService, camera);
         this.entityService = new EntityService(environmentService);
         environmentService.setEntityService(entityService);
         this.buildingService = new BuildingService(entityService, environmentService, hud);
@@ -36,6 +39,10 @@ public class GameService {
 
     public Hud getHud() {
         return this.hud;
+    }
+
+    public ParticleService getParticleService() {
+        return this.particleService;
     }
 
     public EnvironmentService getEnvironmentService() {

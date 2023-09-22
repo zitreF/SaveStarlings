@@ -13,10 +13,11 @@ import net.mgsx.gltf.scene3d.scene.SceneManager;
 
 public class SceneService extends SceneManager {
 
-    private final Array<RenderableProvider> nonShadowRenderableProviders = new Array<>();
+    private final Array<RenderableProvider> nonShadowRenderableProviders;
 
     public SceneService(ShaderProvider shaderProvider, DepthShaderProvider depthShaderProvider) {
         super(shaderProvider, depthShaderProvider);
+        this.nonShadowRenderableProviders = new Array<>();
     }
 
     @Override
@@ -25,7 +26,6 @@ public class SceneService extends SceneManager {
         batch.begin(camera);
         batch.render(this.nonShadowRenderableProviders, computedEnvironement);
         batch.render(this.getRenderableProviders(), computedEnvironement);
-        if (this.getSkyBox() != null) batch.render(this.getSkyBox());
         batch.end();
     }
 
@@ -40,6 +40,9 @@ public class SceneService extends SceneManager {
 
     public void removeSceneWithoutShadows(Scene scene) {
         this.nonShadowRenderableProviders.removeValue(scene, false);
-        this.removeScene(scene);
+    }
+
+    public Array<RenderableProvider> getNonShadowRenderableProviders() {
+        return this.nonShadowRenderableProviders;
     }
 }

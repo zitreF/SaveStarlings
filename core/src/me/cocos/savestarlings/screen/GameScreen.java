@@ -20,15 +20,13 @@ public class GameScreen implements Screen {
     private final GameService gameService;
 
     public GameScreen() {
-        this.gameService = new GameService();
-
         this.camera = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.near = 0.1f;
         camera.far = 1000f;
         camera.position.set(10f, 40f, 0f);
         camera.lookAt(0f, 0f, 0f);
 
-        gameService.getEnvironmentService().getSceneService().setCamera(camera);
+        this.gameService = new GameService(camera);
 
         this.cameraController = new CameraController(camera);
     }

@@ -14,6 +14,7 @@ public class CompactHouse implements Building {
     private final Scene scene;
     private final BoundingBox boundingBox;
     private final Vector3 position;
+    private float health;
 
     private static final SceneAsset sceneAsset;
 
@@ -46,6 +47,16 @@ public class CompactHouse implements Building {
 
     @Override
     public void update(float delta) {
+    }
+
+    @Override
+    public float getHealth() {
+        return this.health;
+    }
+
+    @Override
+    public void setHealth(float amount) {
+        this.health = amount;
     }
 
     @Override

@@ -9,11 +9,12 @@ import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.service.AssetService;
 import me.cocos.savestarlings.service.GameService;
+import me.cocos.savestarlings.util.AsyncUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 public final class Bullet implements LivingEntity {
-    private static final float SPEED = 5f;
+    private static final float SPEED = 20f;
     private static final SceneAsset sceneAsset;
     private final Scene scene;
     private final BoundingBox boundingBox;
@@ -46,6 +47,7 @@ public final class Bullet implements LivingEntity {
         scene.modelInstance.materials.clear();
 
         this.bounding = new Rectangle(this.position.x - 0.5f, this.position.y - 0.5f, 1f, 1f);
+
     }
 
     @Override
@@ -67,20 +69,24 @@ public final class Bullet implements LivingEntity {
 
     @Override
     public void update(float delta) {
-        velocity.set(direction).scl(SPEED * delta);
-        position.add(velocity);
-
-        float rotationAngleDeg = MathUtils.atan2(direction.x, direction.z) * MathUtils.radiansToDegrees;
-        scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
-        scene.modelInstance.transform.rotate(Vector3.X, 90f);
-        scene.modelInstance.transform.setTranslation(position);
-        scene.modelInstance.transform.scale(this.scaling.x, this.scaling.y, this.scaling.z);
-        this.bounding.setPosition(position.x - 0.5f, position.z - 0.5f);
-        for (Building building : GameService.getInstance().getEntityService().getBuildings()) {
-            if (this.bounding.overlaps(building.getBounding())) {
-                Gdx.app.postRunnable(() -> GameService.getInstance().getEntityService().removeEntityWithoutShadows(this));
-                return;
+        AsyncUtil.runAsync(() -> {
+            velocity.set(direction).scl(SPEED * delta);
+            position.add(velocity);
+            float rotationAngleDeg = MathUtils.atan2(direction.x, direction.z) * MathUtils.radiansToDegrees;
+            scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
+            scene.modelInstance.transform.rotate(Vector3.X, 90f);
+            scene.modelInstance.transform.setTranslation(position);
+            scene.modelInstance.transform.scale(this.scaling.x, this.scaling.y, this.scaling.z);
+            this.bounding.setPosition(position.x - 0.5f, position.z - 0.5f);
+            for (Building building : GameService.getInstance().getEntityService().getBuildings()) {
+                if (this.bounding.overlaps(building.getBounding())) {
+                    Gdx.app.postRunnable(() -> {
+                        GameService.getInstance().getEntityService().removeEntity(this);
+                    });
+                    return;
+                }
             }
-        }
+        });
+
     }
 }

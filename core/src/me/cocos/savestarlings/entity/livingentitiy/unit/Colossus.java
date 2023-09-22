@@ -12,19 +12,22 @@ import com.badlogic.gdx.math.Quaternion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.building.Building;
+import me.cocos.savestarlings.entity.livingentitiy.Enemy;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.entity.livingentitiy.projectiles.Bullet;
 import me.cocos.savestarlings.service.AssetService;
 import me.cocos.savestarlings.service.EntityService;
 import me.cocos.savestarlings.service.GameService;
+import me.cocos.savestarlings.util.AsyncUtil;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
-public class Colossus implements LivingEntity {
+public class Colossus implements LivingEntity, Enemy {
 
     private static final SceneAsset sceneAsset;
 
@@ -44,9 +47,9 @@ public class Colossus implements LivingEntity {
     public Colossus(Vector3 position) {
         this.position = new Vector3(position);
         this.scene = new Scene(sceneAsset.scene);
-        this.boundingBox = new BoundingBox();
         this.rotationDirection = new Vector3();
         this.direction = new Vector3();
+        this.boundingBox = new BoundingBox();
         this.delay = 5f;
         this.attackDelay = 0f;
         scene.modelInstance.calculateBoundingBox(boundingBox);
@@ -79,38 +82,42 @@ public class Colossus implements LivingEntity {
 
     @Override
     public void update(float delta) {
-        if (delay < 1f) {
-            this.delay += delta;
-        }
-        if (attackDelay < 2f) {
-            this.attackDelay += delta;
-        }
-        if (delay >= 1f) {
-            this.delay = 0f;
-            EntityService entityService = GameService.getInstance().getEntityService();
-            entityService.getBuildings().stream()
-                    .min(Comparator.comparing(building -> this.position.dst2(building.getPosition())))
-                    .ifPresent(nearestBuilding -> this.target = nearestBuilding);
-            this.rotationDirection.set(target.getPosition()).sub(position).nor();
-
-            float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
-            scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
-            scene.modelInstance.transform.setTranslation(this.position);
-            scene.modelInstance.transform.scale(4f / boundingBox.getWidth(), 4f / boundingBox.getHeight(), 4.5f / boundingBox.getDepth());
-        }
-        if (target != null) {
-            if (position.epsilonEquals(target.getPosition(), 15f)) {
-                if (attackDelay >= 2f) {
-                    this.attackDelay = 0f;
-                    EntityService entityService = GameService.getInstance().getEntityService();
-                    Bullet bullet = new Bullet(this.position, rotationDirection);
-                    Gdx.app.postRunnable(() -> entityService.addEntityWithoutShadows(bullet));
-                }
-                return;
+        AsyncUtil.runAsync(() -> {
+            if (delay < 1f) {
+                this.delay += delta;
             }
-            this.direction.set(target.getPosition()).sub(position).nor();
-            position.add(direction.scl(1.5f * delta));
-            scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
-        }
+            if (attackDelay < 2f) {
+                this.attackDelay += delta;
+            }
+            if (delay >= 1f) {
+                this.delay = 0f;
+                EntityService entityService = GameService.getInstance().getEntityService();
+                entityService.getBuildings().stream()
+                        .min(Comparator.comparing(building -> this.position.dst2(building.getPosition())))
+                        .ifPresent(nearestBuilding -> this.target = nearestBuilding);
+                this.rotationDirection.set(target.getPosition()).sub(position).nor();
+
+                float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
+                scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
+                scene.modelInstance.transform.setTranslation(this.position);
+                scene.modelInstance.transform.scale(4f / boundingBox.getWidth(), 4f / boundingBox.getHeight(), 4.5f / boundingBox.getDepth());
+            }
+            if (target != null) {
+                if (position.epsilonEquals(target.getPosition(), 15f)) {
+                    if (attackDelay >= 2f) {
+                        this.attackDelay = 0f;
+                        EntityService entityService = GameService.getInstance().getEntityService();
+                        Bullet bullet = new Bullet(this.position, rotationDirection);
+                        Gdx.app.postRunnable(() -> {
+                            entityService.addEntity(bullet);
+                        });
+                    }
+                    return;
+                }
+                this.direction.set(target.getPosition()).sub(position).nor();
+                position.add(direction.scl(1.5f * delta));
+                scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
+            }
+        });
     }
 }

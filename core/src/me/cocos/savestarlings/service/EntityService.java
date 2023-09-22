@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import me.cocos.savestarlings.entity.Clickable;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
+import me.cocos.savestarlings.entity.livingentitiy.projectiles.Bullet;
 import me.cocos.savestarlings.entity.livingentitiy.starling.Citizen;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import me.cocos.savestarlings.util.SoundUtil;

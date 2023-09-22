@@ -17,6 +17,7 @@ public class Bank implements Building {
     private final BoundingBox boundingBox;
     private final Rectangle rectangle;
     private final Vector3 position;
+    private float health;
 
     private static final SceneAsset sceneAsset;
 
@@ -50,6 +51,16 @@ public class Bank implements Building {
 
     @Override
     public void update(float delta) {
+    }
+
+    @Override
+    public float getHealth() {
+        return this.health;
+    }
+
+    @Override
+    public void setHealth(float amount) {
+        this.health = amount;
     }
 
     @Override
