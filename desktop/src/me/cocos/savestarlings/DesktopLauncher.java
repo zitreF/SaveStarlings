@@ -13,8 +13,8 @@ public class DesktopLauncher {
 	public static void main(String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(0);
-		config.setIdleFPS(60);
-		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 8);
+		config.setIdleFPS(0);
+		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4);
 		config.useVsync(false);
 		config.setWindowedMode(1600, 900);
 		config.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.GL32, 4, 6);

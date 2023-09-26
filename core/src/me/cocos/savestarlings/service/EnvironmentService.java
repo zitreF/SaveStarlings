@@ -75,7 +75,7 @@ public class EnvironmentService {
         sceneService.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
         sceneService.environment.set(PBRColorAttribute.createDiffuse(Color.WHITE));
         sceneService.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 1f / 256f));
-        this.directionalShadowLight = new DirectionalShadowLight(1500, 1500, 200f, 200f, 1f, 300f);
+        this.directionalShadowLight = new DirectionalShadowLight(2048, 2048, 200f, 200f, 1f, 300f);
         sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, 0f), 0.1f));
         this.skybox = new SceneSkybox(environmentCubemap);
         sceneService.setSkyBox(skybox);
@@ -88,7 +88,6 @@ public class EnvironmentService {
         PBRTextureAttribute textureAttribute = PBRTextureAttribute.createBaseColorTexture(texture);
         textureAttribute.scaleU = 16f;
         textureAttribute.scaleV = 16f;
-
         Model greenBoxModel = modelBuilder.createBox(
                 200f, 1f, 200f,
                 new Material(textureAttribute),
@@ -138,7 +137,7 @@ public class EnvironmentService {
         modelBuilder.begin();
         BlendingAttribute blendingAttribute = new BlendingAttribute();
         blendingAttribute.opacity = 1f;
-        MeshPartBuilder builder = modelBuilder.part("grid", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material(blendingAttribute));
+        MeshPartBuilder builder = modelBuilder.part("grid", GL32.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material(blendingAttribute));
         Color color = Color.WHITE;
         color.a = 0.5f;
         builder.setColor(color);
@@ -146,7 +145,7 @@ public class EnvironmentService {
             builder.line(t, 1, GRID_MIN, t, 1, GRID_MAX);
             builder.line(GRID_MIN, 1, t, GRID_MAX, 1, t);
         }
-        modelBuilder.part("axes", GL20.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material());
+        modelBuilder.part("axes", GL32.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material());
 
         Model axesModel = modelBuilder.end();
 
@@ -194,12 +193,12 @@ public class EnvironmentService {
     private boolean isCascaded;
 
     private void updateShadows() {
-        if (!isCascaded && sceneService.camera.position.y < 20f) {
+        if (!isCascaded && sceneService.camera.position.y < 25f) {
             this.isCascaded = true;
-            directionalShadowLight.setShadowMapSize(5000, 5000);
-        } else if (isCascaded && sceneService.camera.position.y > 20f) {
+            directionalShadowLight.setShadowMapSize(4096, 4096);
+        } else if (isCascaded && sceneService.camera.position.y > 25f) {
             this.isCascaded = false;
-            directionalShadowLight.setShadowMapSize(2048, 2048);
+            directionalShadowLight.setShadowMapSize(1500, 1500);
         }
     }
 

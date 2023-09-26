@@ -1,5 +1,6 @@
 package me.cocos.savestarlings.entity.building.tower.impl;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
@@ -9,10 +10,17 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.building.tower.Tower;
+import me.cocos.savestarlings.entity.livingentitiy.Enemy;
+import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.service.EntityService;
+import me.cocos.savestarlings.service.GameService;
+import me.cocos.savestarlings.util.AsyncUtil;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
+
+import java.util.Comparator;
 
 public class CannonBlast implements Tower {
 
@@ -20,7 +28,11 @@ public class CannonBlast implements Tower {
     private final BoundingBox boundingBox;
     private final Rectangle rectangle;
     private final Vector3 position;
+    private LivingEntity target;
     private float health;
+    private float delay;
+    private float attackDelay;
+    private final Vector3 rotationDirection;
     private static final SceneAsset sceneAsset;
 
     static {
@@ -31,6 +43,7 @@ public class CannonBlast implements Tower {
         this.position = position;
         this.scene = new Scene(sceneAsset.scene);
         this.boundingBox = new BoundingBox();
+        this.rotationDirection = new Vector3();
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
         float scaleX = 4f / boundingBox.getWidth();
@@ -55,6 +68,45 @@ public class CannonBlast implements Tower {
 
     @Override
     public void update(float delta) {
+        AsyncUtil.runAsync(() -> {
+            if (delay < 1f) {
+                this.delay += delta;
+            }
+            if (attackDelay < 2f) {
+                this.attackDelay += delta;
+            }
+            if (delay >= 1f) {
+                this.delay = 0f;
+                EntityService entityService = GameService.getInstance().getEntityService();
+                entityService.getEntities()
+                        .stream()
+                        .filter(entity -> entity instanceof Enemy && this.position.dst2(entity.getPosition()) < (15*15))
+                        .min(Comparator.comparing(enemy -> this.position.dst2(enemy.getPosition())))
+                        .ifPresent(nearestBuilding -> this.target = nearestBuilding);
+                if (target != null) {
+                    this.rotationDirection.set(target.getPosition()).sub(position).nor();
+
+                    float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
+                    Gdx.app.postRunnable(() -> {
+                        scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
+                        scene.modelInstance.transform.setTranslation(this.position);
+                        scene.modelInstance.transform.scale(4f / boundingBox.getWidth(), 3.25f / boundingBox.getHeight(), 6f / boundingBox.getDepth());
+                    });
+                }
+            }
+            if (target != null) {
+                if (position.epsilonEquals(target.getPosition(), 15f)) {
+                    if (attackDelay >= 2f) {
+                        this.attackDelay = 0f;
+//                        Vector3 copy = new Vector3(rotationDirection);
+//                        copy.nor();
+//                        Vector3 clone = new Vector3(position);
+//                        clone.add(-copy.x * 1.5f, 0f, -copy.z * 1.5f);
+//                        scene.modelInstance.transform.setTranslation(clone);
+                    }
+                }
+            }
+        });
     }
 
     @Override

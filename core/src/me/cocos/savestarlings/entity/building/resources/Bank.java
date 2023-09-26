@@ -31,9 +31,9 @@ public class Bank implements Building {
         this.boundingBox = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
-        float scaleX = 7.5f / boundingBox.getWidth();
-        float scaleY = 7.5f / boundingBox.getHeight();
-        float scaleZ = 7.5f / boundingBox.getDepth();
+        float scaleX = 6.5f / boundingBox.getWidth();
+        float scaleY = 6.5f / boundingBox.getHeight();
+        float scaleZ = 6.5f / boundingBox.getDepth();
 
         this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
 

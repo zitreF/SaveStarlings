@@ -98,17 +98,19 @@ public class Colossus implements LivingEntity, Enemy {
                 this.rotationDirection.set(target.getPosition()).sub(position).nor();
 
                 float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
-                scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
-                scene.modelInstance.transform.setTranslation(this.position);
-                scene.modelInstance.transform.scale(4f / boundingBox.getWidth(), 4f / boundingBox.getHeight(), 4.5f / boundingBox.getDepth());
+                Gdx.app.postRunnable(() -> {
+                    scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
+                    scene.modelInstance.transform.setTranslation(this.position);
+                    scene.modelInstance.transform.scale(4f / boundingBox.getWidth(), 4f / boundingBox.getHeight(), 4.5f / boundingBox.getDepth());
+                });
             }
             if (target != null) {
                 if (position.epsilonEquals(target.getPosition(), 15f)) {
                     if (attackDelay >= 2f) {
                         this.attackDelay = 0f;
-                        EntityService entityService = GameService.getInstance().getEntityService();
-                        Bullet bullet = new Bullet(this.position, rotationDirection);
                         Gdx.app.postRunnable(() -> {
+                            EntityService entityService = GameService.getInstance().getEntityService();
+                            Bullet bullet = new Bullet(this.position, rotationDirection);
                             entityService.addEntity(bullet);
                         });
                     }
@@ -116,7 +118,7 @@ public class Colossus implements LivingEntity, Enemy {
                 }
                 this.direction.set(target.getPosition()).sub(position).nor();
                 position.add(direction.scl(1.5f * delta));
-                scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
+                scene.modelInstance.transform.setTranslation(this.position);
             }
         });
     }

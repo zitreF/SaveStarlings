@@ -45,7 +45,6 @@ public class SniperTower implements Tower {
     private float delay;
     private float attackDelay;
     private final Vector3 rotationDirection;
-    private final Vector3 direction;
 
     private static final SceneAsset sceneAsset;
 
@@ -53,12 +52,10 @@ public class SniperTower implements Tower {
         sceneAsset = AssetService.getAsset("buildings/turrets/sniper_tower.glb");
     }
 
-
     public SniperTower(Vector3 position) {
         this.position = new Vector3(position);
         this.scene = new Scene(sceneAsset.scene);
         this.rotationDirection = new Vector3();
-        this.direction = new Vector3();
         this.boundingBox = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
@@ -77,10 +74,10 @@ public class SniperTower implements Tower {
 
         scene.modelInstance.materials.clear();
 
+        this.delay = 1f;
+
         this.rectangle = new Rectangle(x - 2.5f, z - 2.5f, 5f, 5f);
     }
-
-    boolean isKnockbackAnimating;
 
     @Override
     public void update(float delta) {
@@ -94,22 +91,31 @@ public class SniperTower implements Tower {
             if (delay >= 1f) {
                 this.delay = 0f;
                 EntityService entityService = GameService.getInstance().getEntityService();
-                entityService.getEntities().stream()
-                        .filter(entity -> entity instanceof Enemy)
-                        .min(Comparator.comparing(building -> this.position.dst2(building.getPosition())))
+                entityService.getEntities()
+                        .stream()
+                        .filter(entity -> entity instanceof Enemy && this.position.dst2(entity.getPosition()) < (15*15))
+                        .min(Comparator.comparing(enemy -> this.position.dst2(enemy.getPosition())))
                         .ifPresent(nearestBuilding -> this.target = nearestBuilding);
-                this.rotationDirection.set(target.getPosition()).sub(position).nor();
+                if (target != null) {
+                    this.rotationDirection.set(target.getPosition()).sub(position).nor();
 
-                float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
-                scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
-                scene.modelInstance.transform.setTranslation(this.position);
-                scene.modelInstance.transform.scale(4f / boundingBox.getWidth(), 3.25f / boundingBox.getHeight(), 6f / boundingBox.getDepth());
+                    float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
+                    Gdx.app.postRunnable(() -> {
+                        scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
+                        scene.modelInstance.transform.setTranslation(this.position);
+                        scene.modelInstance.transform.scale(4f / boundingBox.getWidth(), 3.25f / boundingBox.getHeight(), 6f / boundingBox.getDepth());
+                    });
+                }
             }
             if (target != null) {
                 if (position.epsilonEquals(target.getPosition(), 15f)) {
                     if (attackDelay >= 2f) {
                         this.attackDelay = 0f;
-                        // TODO: move the model in opossite direction to target position and interpolate animation to move it back and to default position, something like knockback animation
+//                        Vector3 copy = new Vector3(rotationDirection);
+//                        copy.nor();
+//                        Vector3 clone = new Vector3(position);
+//                        clone.add(-copy.x * 1.5f, 0f, -copy.z * 1.5f);
+//                        scene.modelInstance.transform.setTranslation(clone);
                     }
                 }
             }
