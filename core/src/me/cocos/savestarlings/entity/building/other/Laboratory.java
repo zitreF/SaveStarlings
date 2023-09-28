@@ -36,7 +36,7 @@ public class Laboratory implements Building {
 
         scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
 
-        this.rectangle = new Rectangle(x, z, 7.5f, 7.5f);
+        this.rectangle = new Rectangle(x - 3.25f, z - 3.25f, 7.5f, 7.5f);
     }
 
     @Override

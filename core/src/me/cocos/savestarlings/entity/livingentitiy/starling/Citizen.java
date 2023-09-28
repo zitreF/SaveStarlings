@@ -31,8 +31,7 @@ public class Citizen implements LivingEntity, Clickable {
     static {
         sceneAsset = AssetService.getAsset("entities/starlings/starling.glb");
     }
-
-
+    
     public Citizen(Vector3 position) {
         this.position = position;
         this.scene = new Scene(sceneAsset.scene);
