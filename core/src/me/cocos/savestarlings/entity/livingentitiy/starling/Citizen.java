@@ -97,9 +97,15 @@ public class Citizen implements LivingEntity, Clickable {
     }
 
     private void generateRandomTargetPosition() {
-        float randomX = MathUtils.random() * 20 - 10; // -10 & 10.
-        float randomZ = MathUtils.random() * 20 - 10; // -10 & 10.
-        targetPosition.set(position.x + randomX, position.y, position.z + randomZ);
+        float maxX = Math.min(position.x + 50f, 50f);
+        float minX = Math.max(position.x - 50f, -50f);
+        float maxZ = Math.min(position.z + 50f, 50f);
+        float minZ = Math.max(position.z - 50f, -50f);
+
+        float randomX = MathUtils.random(minX + 10f, maxX - 10f);
+        float randomZ = MathUtils.random(minZ + 10f, maxZ - 10f);
+
+        targetPosition.set(randomX, position.y, randomZ);
         this.rotationDirection.set(targetPosition).sub(position).nor();
 
         float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
@@ -107,6 +113,7 @@ public class Citizen implements LivingEntity, Clickable {
         scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
         this.scene.modelInstance.transform.scale(1.5f / boundingBox.getWidth(), 1.5f / boundingBox.getHeight(), 1f / boundingBox.getDepth());
     }
+
 
     public static SceneAsset getSceneAsset() {
         return sceneAsset;

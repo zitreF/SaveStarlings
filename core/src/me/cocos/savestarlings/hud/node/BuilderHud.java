@@ -20,13 +20,13 @@ public class BuilderHud extends Table {
 
         MenuTable menuTable = new MenuTable(this, buildingsTable);
 
-        this.add(menuTable).left().padLeft(30f).row();
+        this.add(menuTable).center().row();
 
         this.add(buildingsTable);
 
-        this.setSize(800f, 250f);
+        this.setSize(800f, 230f);
 
-        this.setPosition(Gdx.graphics.getWidth() / 2f - this.getWidth() / 2f, this.getY() - 50f);
+        this.setPosition(Gdx.graphics.getWidth() / 2f - this.getWidth() / 2f, this.getY());
     }
 
     public Pixmap createRoundedRectanglePixmap(int width, int height, int cornerRadius, Color color) {

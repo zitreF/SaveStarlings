@@ -47,7 +47,7 @@ public class EnvironmentService {
 
     public EnvironmentService(ParticleService particleService, Camera camera) {
         PBRShaderConfig config = PBRShaderProvider.createDefaultConfig();
-        config.numBones = 12;
+        config.numBones = 0;
         config.numDirectionalLights = 2;
         config.numPointLights = 0;
         DepthShader.Config depthConfig = new DepthShader.Config();
@@ -75,8 +75,8 @@ public class EnvironmentService {
         sceneService.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
         sceneService.environment.set(PBRColorAttribute.createDiffuse(Color.WHITE));
         sceneService.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 1f / 256f));
-        this.directionalShadowLight = new DirectionalShadowLight(2048, 2048, 200f, 200f, 1f, 300f);
-        sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, 0f), 0.1f));
+        this.directionalShadowLight = new DirectionalShadowLight(4048, 4048, Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 4f, 1f, 300f);
+        sceneService.environment.add(directionalShadowLight.set(Color.BLACK, new Vector3(0.5f, -1f, -0.5f), 0f));
         this.skybox = new SceneSkybox(environmentCubemap);
         sceneService.setSkyBox(skybox);
 
@@ -195,10 +195,10 @@ public class EnvironmentService {
     private void updateShadows() {
         if (!isCascaded && sceneService.camera.position.y < 25f) {
             this.isCascaded = true;
-            directionalShadowLight.setShadowMapSize(4096, 4096);
+            directionalShadowLight.setShadowMapSize(8096, 8096);
         } else if (isCascaded && sceneService.camera.position.y > 25f) {
             this.isCascaded = false;
-            directionalShadowLight.setShadowMapSize(1500, 1500);
+            directionalShadowLight.setShadowMapSize(4048, 4048);
         }
     }
 

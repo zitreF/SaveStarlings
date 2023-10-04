@@ -12,9 +12,9 @@ public class BuildingsTable extends Table {
 
     public BuildingsTable(BuilderHud hud) {
         this.defaults().pad(20f);
-        this.setSize(800f, 200f);
+        this.setSize(800f, 150f);
 
-        Pixmap pixmap = hud.createRoundedRectanglePixmap(800, 200, 20, Color.BLACK);
+        Pixmap pixmap = hud.createRoundedRectanglePixmap(800, 150, 20, Color.BLACK);
         Texture texture = new Texture(pixmap);
         pixmap.dispose();
 
@@ -24,7 +24,7 @@ public class BuildingsTable extends Table {
 
         Color backgroundColor = Color.BLACK;
 
-        backgroundColor.a = 0.5f;
+        backgroundColor.a = 0.6f;
 
         ninePatch.setColor(backgroundColor);
 

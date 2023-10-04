@@ -1,16 +1,13 @@
 package me.cocos.savestarlings.hud.node.table;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -23,14 +20,11 @@ public class MenuTable extends Table {
     public MenuTable(BuilderHud hud, BuildingsTable buildingsTable) {
         this.buildingsTable = buildingsTable;
 
-        this.setSize(400f, 50f);
-        this.defaults().pad(1f);
+        this.setSize(450f, 80f);
 
-        Pixmap pixmap = hud.createRoundedRectanglePixmap(400, 50, 20, Color.BLACK);
+        Pixmap pixmap = hud.createRoundedRectanglePixmap(450, 80, 20, Color.BLACK);
         Texture texture = new Texture(pixmap);
         pixmap.dispose();
-
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         NinePatch ninePatch = new NinePatch(texture);
 
@@ -42,43 +36,42 @@ public class MenuTable extends Table {
 
         NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(ninePatch);
 
-        this.addButton("RESOURCES", () -> {
+        this.addButton("ui/icons/turrets/resources.png", () -> {
             Category.RESOURCES.loadTable(buildingsTable);
         });
-        this.addButton("ARMY", () -> {
+        this.addButton("ui/icons/turrets/army.png", () -> {
             Category.ARMY.loadTable(buildingsTable);
         });
-        this.addButton("TURRETS", () -> {
+        this.addButton("ui/icons/turrets/turrets.png", () -> {
             Category.TURRETS.loadTable(buildingsTable);
         });
-        this.addButton("DEFENSES", () -> {
+        this.addButton("ui/icons/turrets/defenses.png", () -> {
             Category.DEFENSES.loadTable(buildingsTable);
         });
-        this.addButton("DECORATIONS", () -> {
+        this.addButton("ui/icons/turrets/decorations.png", () -> {
             Category.DECORATIONS.loadTable(buildingsTable);
         });
 
         this.background(ninePatchDrawable);
     }
 
-    private void addButton(String text, Runnable onClick) {
-        TextButton.TextButtonStyle buttonStyle = new TextButton.TextButtonStyle();
+    private void addButton(String texture, Runnable onClick) {
 
-        TextureRegionDrawable upDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("ui/buttons/hud_background.png")));
-        TextureRegionDrawable downDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("ui/buttons/hud_background_clicked.png")));
+        Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
+
+        Texture upTexture = new Texture(texture);
+        upTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        Texture downTexture = new Texture(texture.replace(".png", "_hover.png"));
+        downTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+        TextureRegionDrawable upDrawable = new TextureRegionDrawable(new TextureRegion(upTexture));
+        TextureRegionDrawable downDrawable = new TextureRegionDrawable(new TextureRegion(downTexture));
 
         buttonStyle.up = upDrawable;
-        buttonStyle.down = downDrawable;
+        buttonStyle.over = downDrawable;
 
-        FreeTypeFontGenerator freeTypeFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/glfont.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 10;
-
-        buttonStyle.font = freeTypeFontGenerator.generateFont(parameter);
-
-        TextButton button = new TextButton(text, buttonStyle);
-
-        button.setSize(75f, 30f);
+        Button button = new Button(buttonStyle);
 
         button.addListener(new ClickListener() {
             @Override
@@ -89,6 +82,6 @@ public class MenuTable extends Table {
             }
         });
 
-        this.add(button).size(75f, 30f);
+        this.add(button).expandX();
     }
 }

@@ -105,6 +105,6 @@ public enum Category {
         Container<Image> infoContainer = new Container<>(infoImage);
         infoContainer.top().left();
         stack.add(infoContainer);
-        table.add(stack).padBottom(70f).size(100f, 100f);
+        table.add(stack).padBottom(10f).size(100f, 100f);
     }
 }
