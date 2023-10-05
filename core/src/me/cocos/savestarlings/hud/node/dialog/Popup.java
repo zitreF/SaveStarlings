@@ -9,25 +9,17 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-public class Popup extends Dialog {
-
-    private static final WindowStyle WINDOW_STYLE;
-
-    static {
-        WINDOW_STYLE = new WindowStyle();
-        FreeTypeFontGenerator freeTypeFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/glfont.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 15;
-        WINDOW_STYLE.titleFont = freeTypeFontGenerator.generateFont(parameter);
-        WINDOW_STYLE.titleFontColor = Color.WHITE;
-    }
+public class Popup extends Table {
 
     public Popup(String title, String text) {
-        super(title, WINDOW_STYLE);
+        this.setSize(800f, 400f);
+
+        this.debugAll();
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         FreeTypeFontGenerator freeTypeFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/glfont.ttf"));
@@ -35,34 +27,28 @@ public class Popup extends Dialog {
         parameter.size = 15;
 
         labelStyle.font = freeTypeFontGenerator.generateFont(parameter);
-        labelStyle.fontColor = Color.WHITE;
+        labelStyle.fontColor = new Color(1f, 1f, 1f, 1f);
 
-        Texture ornament = new Texture("ui/popup/ornament.png");
-        ornament.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        ornament.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        Image image = new Image(ornament);
-        System.out.println(this.getWidth());
-        image.setSize(this.getWidth(), 50f);
-        this.addActor(image);
-
-        this.getTitleTable().padTop(25f);
-        this.getTitleTable().add(this.createCloseButton()).right().padBottom(5f);
-
-        Pixmap backgroundPixmap = new Pixmap(500, 250, Pixmap.Format.RGBA8888);
-        backgroundPixmap.setColor(0f, 0f, 0f, 0.5f);
+        Pixmap backgroundPixmap = new Pixmap(800, 400, Pixmap.Format.RGB888);
+        backgroundPixmap.setColor(0f, 0f, 0f, 1f);
         backgroundPixmap.fill();
         Texture backgroundTexture = new Texture(backgroundPixmap);
         backgroundPixmap.dispose();
 
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
 
-        this.text(text, labelStyle);
-
         this.setBackground(backgroundDrawable);
-
-        this.setSize(500f, 250f);
-
         this.setPosition((Gdx.graphics.getWidth() - this.getWidth()) / 2, (Gdx.graphics.getHeight() - this.getHeight()) / 2);
+
+        Table topBar = new Table();
+        topBar.setSize(this.getWidth(), 50f);
+
+        Label titleLabel = new Label(title, labelStyle);
+
+        topBar.add(titleLabel).expand().center();
+        topBar.add(this.createCloseButton()).size(32f, 32f).right();
+
+        this.add(topBar).growX().expandY().top();
     }
 
     private ImageButton createCloseButton() {
@@ -74,9 +60,13 @@ public class Popup extends Dialog {
         closeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                hide();
+                remove();
             }
         });
         return closeButton;
+    }
+
+    public void show(Stage stage) {
+        stage.addActor(this);
     }
 }

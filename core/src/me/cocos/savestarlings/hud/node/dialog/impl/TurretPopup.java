@@ -5,6 +5,6 @@ import me.cocos.savestarlings.hud.node.dialog.Popup;
 public class TurretPopup extends Popup {
 
     public TurretPopup(String text) {
-        super("", text);
+        super("TURRET", text);
     }
 }

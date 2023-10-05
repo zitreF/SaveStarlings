@@ -15,6 +15,7 @@ import me.cocos.savestarlings.entity.building.BuildingType;
 import me.cocos.savestarlings.hud.node.dialog.Popup;
 import me.cocos.savestarlings.hud.node.dialog.impl.TurretPopup;
 import me.cocos.savestarlings.service.GameService;
+import me.cocos.savestarlings.util.SoundUtil;
 
 public enum Category {
 
@@ -63,6 +64,7 @@ public enum Category {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Popup popup = new TurretPopup("Need a massive killer!? We're the bomb! We can kill many Starlings with a couple of blasts. Killing enemy crowds is our thing!");
                 popup.show(table.getStage());
+                SoundUtil.playSound("other/click.mp3");
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -85,6 +87,7 @@ public enum Category {
                 Gdx.app.postRunnable(() -> {
                     GameService.getInstance().getHud().getBuildingService().setCurrentBuilding(buildingType);
                 });
+                SoundUtil.playSound("other/click.mp3");
                 return super.touchDown(event, x, y, pointer, button);
             }
 

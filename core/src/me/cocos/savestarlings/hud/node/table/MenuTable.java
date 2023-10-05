@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import me.cocos.savestarlings.hud.node.BuilderHud;
+import me.cocos.savestarlings.util.SoundUtil;
 
 public class MenuTable extends Table {
 
@@ -78,6 +79,7 @@ public class MenuTable extends Table {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 buildingsTable.clear();
                 onClick.run();
+                SoundUtil.playSound("other/click.mp3");
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
