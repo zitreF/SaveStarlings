@@ -33,7 +33,7 @@ public class Hud extends Stage {
         parameter.magFilter = Texture.TextureFilter.Linear;
         parameter.minFilter = Texture.TextureFilter.Linear;
         BitmapFont bitmapFont = freeTypeFontGenerator.generateFont(parameter);
-
+        freeTypeFontGenerator.dispose();
         Label.LabelStyle labelStyle = new Label.LabelStyle(bitmapFont, new Color(1f, 1f, 1f, 1f));
         this.fpsLabel = new Label("FPS: " + Gdx.graphics.getFramesPerSecond(), labelStyle);
         fpsLabel.setAlignment(Align.left, Align.top);

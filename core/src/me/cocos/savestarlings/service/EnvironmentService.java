@@ -138,8 +138,7 @@ public class EnvironmentService {
         BlendingAttribute blendingAttribute = new BlendingAttribute();
         blendingAttribute.opacity = 1f;
         MeshPartBuilder builder = modelBuilder.part("grid", GL32.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material(blendingAttribute));
-        Color color = Color.WHITE;
-        color.a = 0.5f;
+        Color color = new Color(1f, 1f, 1f, 0.25f);
         builder.setColor(color);
         for (float t = GRID_MIN; t <= GRID_MAX; t += GRID_STEP) {
             builder.line(t, 1, GRID_MIN, t, 1, GRID_MAX);

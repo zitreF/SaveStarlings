@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.utils.ScreenUtils;
 import me.cocos.savestarlings.hud.Hud;
 import me.cocos.savestarlings.map.Map;
 import me.cocos.savestarlings.util.SoundUtil;

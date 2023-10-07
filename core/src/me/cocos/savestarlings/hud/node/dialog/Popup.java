@@ -13,40 +13,33 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import me.cocos.savestarlings.builder.FontBuilder;
 
 public class Popup extends Table {
 
-    public Popup(String title, String text) {
-        this.setSize(800f, 400f);
+    public Popup(String title) {
+        this.setSize(1000f, 600f);
 
         this.debugAll();
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
-        FreeTypeFontGenerator freeTypeFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/glfont.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 15;
 
-        labelStyle.font = freeTypeFontGenerator.generateFont(parameter);
-        labelStyle.fontColor = new Color(1f, 1f, 1f, 1f);
+        labelStyle.font = FontBuilder.from("ui/font/glfont.ttf")
+                .size(25)
+                .shadowOffsetY(3)
+                .build();
 
-        Pixmap backgroundPixmap = new Pixmap(800, 400, Pixmap.Format.RGB888);
-        backgroundPixmap.setColor(0f, 0f, 0f, 1f);
-        backgroundPixmap.fill();
-        Texture backgroundTexture = new Texture(backgroundPixmap);
-        backgroundPixmap.dispose();
-
-        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(backgroundTexture));
-
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("ui/popup/turret_popup.png")));
         this.setBackground(backgroundDrawable);
-        this.setPosition((Gdx.graphics.getWidth() - this.getWidth()) / 2, (Gdx.graphics.getHeight() - this.getHeight()) / 2);
+        this.setPosition((Gdx.graphics.getWidth() - this.getWidth()) / 2f, (Gdx.graphics.getHeight() - this.getHeight()) / 2f + 50f);
 
         Table topBar = new Table();
         topBar.setSize(this.getWidth(), 50f);
 
         Label titleLabel = new Label(title, labelStyle);
-
-        topBar.add(titleLabel).expand().center();
-        topBar.add(this.createCloseButton()).size(32f, 32f).right();
+        titleLabel.setColor(1f, 1f, 1f, 1f);
+        topBar.add(titleLabel).expand().padTop(5f).padLeft(titleLabel.getWidth() / 4f).center();
+        topBar.add(this.createCloseButton()).size(32f, 32f).padRight(10f).right();
 
         this.add(topBar).growX().expandY().top();
     }

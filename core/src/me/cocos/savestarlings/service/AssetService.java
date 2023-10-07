@@ -6,6 +6,10 @@ import com.badlogic.gdx.assets.loaders.SoundLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
@@ -19,9 +23,12 @@ public class AssetService {
 
     static {
         ASSET_MANAGER = new AssetManager();
-        ASSET_MANAGER.setLoader(SceneAsset.class, ".glb", new GLBAssetLoader(new InternalFileHandleResolver()));
-        ASSET_MANAGER.setLoader(Sound.class, ".mp3", new SoundLoader(new InternalFileHandleResolver()));
-        ASSET_MANAGER.setLoader(ParticleEffect.class, new ParticleEffectLoader(new InternalFileHandleResolver()));
+        InternalFileHandleResolver internalFileHandleResolver = new InternalFileHandleResolver();
+        ASSET_MANAGER.setLoader(SceneAsset.class, ".glb", new GLBAssetLoader(internalFileHandleResolver));
+        ASSET_MANAGER.setLoader(Sound.class, ".mp3", new SoundLoader(internalFileHandleResolver));
+        ASSET_MANAGER.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(internalFileHandleResolver));
+        ASSET_MANAGER.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(internalFileHandleResolver));
+        ASSET_MANAGER.setLoader(ParticleEffect.class, new ParticleEffectLoader(internalFileHandleResolver));
     }
 
     public static void load() {

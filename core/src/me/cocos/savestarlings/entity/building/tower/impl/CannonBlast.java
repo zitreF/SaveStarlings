@@ -40,7 +40,7 @@ public class CannonBlast implements Tower {
     }
 
     public CannonBlast(Vector3 position) {
-        this.position = position;
+        this.position = new Vector3(position);
         this.scene = new Scene(sceneAsset.scene);
         this.boundingBox = new BoundingBox();
         this.rotationDirection = new Vector3();
@@ -51,8 +51,6 @@ public class CannonBlast implements Tower {
         float scaleZ = 6f / boundingBox.getDepth();
 
         this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
-
-        this.boundingBox.mul(scene.modelInstance.transform);
 
         float x = MathUtils.round(position.x / 2.5f) * 2.5f;
         float z = MathUtils.round(position.z / 2.5f) * 2.5f;
@@ -98,11 +96,6 @@ public class CannonBlast implements Tower {
                 if (position.epsilonEquals(target.getPosition(), 15f)) {
                     if (attackDelay >= 2f) {
                         this.attackDelay = 0f;
-//                        Vector3 copy = new Vector3(rotationDirection);
-//                        copy.nor();
-//                        Vector3 clone = new Vector3(position);
-//                        clone.add(-copy.x * 1.5f, 0f, -copy.z * 1.5f);
-//                        scene.modelInstance.transform.setTranslation(clone);
                     }
                 }
             }

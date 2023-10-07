@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL31;
+import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import com.badlogic.gdx.utils.ScreenUtils;
 import me.cocos.savestarlings.controller.CameraController;
 import me.cocos.savestarlings.service.GameService;
 import net.mgsx.gltf.scene3d.scene.Scene;
@@ -40,7 +42,7 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         cameraController.update(delta);
 
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        Gdx.gl.glClear(GL32.GL_COLOR_BUFFER_BIT | GL32.GL_DEPTH_BUFFER_BIT);
 
         gameService.update(delta);
     }

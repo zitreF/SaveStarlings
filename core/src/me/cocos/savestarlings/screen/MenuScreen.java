@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,6 +17,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import me.cocos.savestarlings.SaveStarlings;
+import me.cocos.savestarlings.builder.FontBuilder;
 import me.cocos.savestarlings.hud.menu.AnimatedActor;
 import me.cocos.savestarlings.service.AssetService;
 
@@ -101,12 +104,10 @@ public class MenuScreen implements Screen {
         stage.addActor(progressBar);
 
         Label.LabelStyle topicStyle = new Label.LabelStyle();
-        FreeTypeFontGenerator freeTypeFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("ui/font/glfont.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 18;
 
-        topicStyle.font = freeTypeFontGenerator.generateFont(parameter);
-        topicStyle.fontColor = Color.WHITE;
+        topicStyle.font = FontBuilder.from("ui/font/glfont.ttf")
+                .size(18)
+                .build();
 
         Label topic = new Label("Coming soon :)", topicStyle);
         this.stage.addActor(topic);
@@ -119,8 +120,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1f);
+        Gdx.gl.glClear(GL32.GL_COLOR_BUFFER_BIT | GL32.GL_DEPTH_BUFFER_BIT);
         if (!AssetService.getAssetManager().isFinished()) {
             AssetService.getAssetManager().update();
             float progress = AssetService.getAssetManager().getProgress();
