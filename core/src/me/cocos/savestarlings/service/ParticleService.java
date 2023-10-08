@@ -19,7 +19,6 @@ public class ParticleService {
         this.particleSystem = new ParticleSystem();
         BillboardParticleBatch pointSpriteBatch = new BillboardParticleBatch();
         pointSpriteBatch.setUseGpu(true);
-        System.out.println(camera == null);
         pointSpriteBatch.setCamera(camera);
         particleSystem.add(pointSpriteBatch);
     }

@@ -10,6 +10,8 @@ public class FontBuilder {
 
     private final String path;
     private int size;
+    private float borderWidth;
+    private Color borderColor;
     private int shadowOffsetX;
     private int shadowOffsetY;
     private Texture.TextureFilter filter;
@@ -22,6 +24,8 @@ public class FontBuilder {
         this.shadowOffsetY = 0;
         this.filter = Texture.TextureFilter.Linear;
         this.color = Color.WHITE;
+        this.borderWidth = 1;
+        this.borderColor = Color.BLACK;
     }
 
     public FontBuilder color(Color color) {
@@ -49,6 +53,16 @@ public class FontBuilder {
         return this;
     }
 
+    public FontBuilder borderWidth(float width) {
+        this.borderWidth = width;
+        return this;
+    }
+
+    public FontBuilder borderColor(Color color) {
+        this.borderColor = color;
+        return this;
+    }
+
     public BitmapFont build() {
         FreeTypeFontGenerator freeTypeFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal(this.path));
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -59,6 +73,8 @@ public class FontBuilder {
         parameter.shadowOffsetY = this.shadowOffsetY;
         parameter.shadowOffsetX = this.shadowOffsetX;
         parameter.color = this.color;
+        parameter.borderWidth = this.borderWidth;
+        parameter.borderColor = this.borderColor;
         BitmapFont bitmapFont = freeTypeFontGenerator.generateFont(parameter);
         freeTypeFontGenerator.dispose();
         return bitmapFont;

@@ -26,6 +26,7 @@ import net.mgsx.gltf.scene3d.scene.SceneAsset;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.StreamSupport;
 
 public class Colossus implements LivingEntity, Enemy {
 
@@ -92,7 +93,7 @@ public class Colossus implements LivingEntity, Enemy {
             if (delay >= 1f) {
                 this.delay = 0f;
                 EntityService entityService = GameService.getInstance().getEntityService();
-                entityService.getBuildings().stream()
+                StreamSupport.stream(entityService.getBuildings().spliterator(), false)
                         .min(Comparator.comparing(building -> this.position.dst2(building.getPosition())))
                         .ifPresent(nearestBuilding -> this.target = nearestBuilding);
                 this.rotationDirection.set(target.getPosition()).sub(position).nor();

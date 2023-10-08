@@ -17,13 +17,13 @@ import java.util.Set;
 
 public class EntityService {
 
-    private final Set<LivingEntity> entities;
-    private final Set<Building> buildings;
+    private final Array<LivingEntity> entities;
+    private final Array<Building> buildings;
     private final EnvironmentService environmentService;
 
     public EntityService(EnvironmentService environmentService) {
-        this.entities = new HashSet<>();
-        this.buildings = new HashSet<>();
+        this.entities = new Array<>();
+        this.buildings = new Array<>();
         this.environmentService = environmentService;
     }
 
@@ -33,7 +33,7 @@ public class EntityService {
     }
 
     public void removeBuilding(Building building) {
-        this.buildings.remove(building);
+        this.buildings.removeValue(building, false);
         environmentService.removeScene(building.getScene());
     }
 
@@ -48,20 +48,20 @@ public class EntityService {
     }
 
     public void removeEntity(LivingEntity entity) {
-        this.entities.remove(entity);
+        this.entities.removeValue(entity, false);
         environmentService.removeScene(entity.getScene());
     }
 
     public void removeEntityWithoutShadows(LivingEntity entity) {
-        this.entities.remove(entity);
+        this.entities.removeValue(entity, false);
         environmentService.removeSceneWithoutShadows(entity.getScene());
     }
 
-    public Set<Building> getBuildings() {
+    public Array<Building> getBuildings() {
         return this.buildings;
     }
 
-    public Set<LivingEntity> getEntities() {
+    public Array<LivingEntity> getEntities() {
         return this.entities;
     }
 

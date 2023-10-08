@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -12,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import me.cocos.savestarlings.entity.building.BuildingType;
-import me.cocos.savestarlings.hud.node.dialog.Popup;
-import me.cocos.savestarlings.hud.node.dialog.impl.TurretPopup;
+import me.cocos.savestarlings.hud.node.popup.Popup;
+import me.cocos.savestarlings.hud.node.popup.impl.TurretPopup;
 import me.cocos.savestarlings.service.GameService;
 import me.cocos.savestarlings.util.SoundUtil;
 
@@ -63,7 +62,7 @@ public enum Category {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Popup popup = new TurretPopup("BLAST CANNON",
-                        "Need a massive killer!? We're the bomb! We can kill many Starlings with a couple of blasts. Killing enemy crowds is our thing!");
+                        "Hey look! Lots of enemy starlings there, use me to bing bang them all! I am powerful turret for grouped units!");
                 popup.show(table.getStage());
                 SoundUtil.playSound("other/click.mp3");
                 return super.touchDown(event, x, y, pointer, button);

@@ -1,13 +1,8 @@
-package me.cocos.savestarlings.hud.node.dialog;
+package me.cocos.savestarlings.hud.node.popup;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -20,7 +15,7 @@ public class Popup extends Table {
     public Popup(String title) {
         this.setSize(1000f, 600f);
 
-        this.debugAll();
+        //this.debugAll();
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
 

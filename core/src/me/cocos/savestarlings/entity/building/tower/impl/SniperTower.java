@@ -33,6 +33,7 @@ import net.mgsx.gltf.scene3d.scene.SceneAsset;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.StreamSupport;
 
 public class SniperTower implements Tower {
 
@@ -91,8 +92,7 @@ public class SniperTower implements Tower {
             if (delay >= 1f) {
                 this.delay = 0f;
                 EntityService entityService = GameService.getInstance().getEntityService();
-                entityService.getEntities()
-                        .stream()
+                StreamSupport.stream(entityService.getEntities().spliterator(), false)
                         .filter(entity -> entity instanceof Enemy && this.position.dst2(entity.getPosition()) < (15*15))
                         .min(Comparator.comparing(enemy -> this.position.dst2(enemy.getPosition())))
                         .ifPresent(nearestBuilding -> this.target = nearestBuilding);

@@ -3,9 +3,11 @@ package me.cocos.savestarlings.service;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SoundLoader;
+import com.badlogic.gdx.assets.loaders.TextureLoader;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
@@ -26,9 +28,8 @@ public class AssetService {
         InternalFileHandleResolver internalFileHandleResolver = new InternalFileHandleResolver();
         ASSET_MANAGER.setLoader(SceneAsset.class, ".glb", new GLBAssetLoader(internalFileHandleResolver));
         ASSET_MANAGER.setLoader(Sound.class, ".mp3", new SoundLoader(internalFileHandleResolver));
-        ASSET_MANAGER.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(internalFileHandleResolver));
-        ASSET_MANAGER.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(internalFileHandleResolver));
         ASSET_MANAGER.setLoader(ParticleEffect.class, new ParticleEffectLoader(internalFileHandleResolver));
+        ASSET_MANAGER.setLoader(Texture.class, new TextureLoader(internalFileHandleResolver));
     }
 
     public static void load() {
@@ -58,6 +59,12 @@ public class AssetService {
 
         // PARTICLES
         ASSET_MANAGER.load("particles/laser_smoke", ParticleEffect.class);
+
+        // TEXTURES
+        TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();
+        textureParameter.minFilter = Texture.TextureFilter.Linear;
+        textureParameter.magFilter = Texture.TextureFilter.Linear;
+        ASSET_MANAGER.load("ui/popup/turrets/blast_cannon_popup.png", Texture.class, textureParameter);
     }
 
     public static <T> T getAsset(String name) {

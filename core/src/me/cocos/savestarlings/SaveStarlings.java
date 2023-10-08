@@ -21,5 +21,6 @@ public class SaveStarlings extends Game {
 	@Override
 	public void dispose() {
 		menuScreen.dispose();
+		System.exit(0);
 	}
 }
