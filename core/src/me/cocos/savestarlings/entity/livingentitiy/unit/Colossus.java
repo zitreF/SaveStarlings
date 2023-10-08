@@ -93,7 +93,7 @@ public class Colossus implements LivingEntity, Enemy {
             if (delay >= 1f) {
                 this.delay = 0f;
                 EntityService entityService = GameService.getInstance().getEntityService();
-                StreamSupport.stream(entityService.getBuildings().spliterator(), false)
+                entityService.getBuildings().stream()
                         .min(Comparator.comparing(building -> this.position.dst2(building.getPosition())))
                         .ifPresent(nearestBuilding -> this.target = nearestBuilding);
                 this.rotationDirection.set(target.getPosition()).sub(position).nor();

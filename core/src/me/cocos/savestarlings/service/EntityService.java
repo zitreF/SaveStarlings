@@ -12,18 +12,18 @@ import me.cocos.savestarlings.entity.livingentitiy.starling.Citizen;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import me.cocos.savestarlings.util.SoundUtil;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EntityService {
 
-    private final Array<LivingEntity> entities;
-    private final Array<Building> buildings;
+    private final List<LivingEntity> entities;
+    private final List<Building> buildings;
     private final EnvironmentService environmentService;
 
     public EntityService(EnvironmentService environmentService) {
-        this.entities = new Array<>();
-        this.buildings = new Array<>();
+        this.entities = new CopyOnWriteArrayList<>();
+        this.buildings = new CopyOnWriteArrayList<>();
         this.environmentService = environmentService;
     }
 
@@ -33,7 +33,7 @@ public class EntityService {
     }
 
     public void removeBuilding(Building building) {
-        this.buildings.removeValue(building, false);
+        this.buildings.remove(building);
         environmentService.removeScene(building.getScene());
     }
 
@@ -48,20 +48,20 @@ public class EntityService {
     }
 
     public void removeEntity(LivingEntity entity) {
-        this.entities.removeValue(entity, false);
+        this.entities.remove(entity);
         environmentService.removeScene(entity.getScene());
     }
 
     public void removeEntityWithoutShadows(LivingEntity entity) {
-        this.entities.removeValue(entity, false);
+        this.entities.remove(entity);
         environmentService.removeSceneWithoutShadows(entity.getScene());
     }
 
-    public Array<Building> getBuildings() {
+    public List<Building> getBuildings() {
         return this.buildings;
     }
 
-    public Array<LivingEntity> getEntities() {
+    public List<LivingEntity> getEntities() {
         return this.entities;
     }
 

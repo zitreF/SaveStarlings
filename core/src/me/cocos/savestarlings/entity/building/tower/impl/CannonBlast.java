@@ -77,7 +77,7 @@ public class CannonBlast implements Tower {
             if (delay >= 1f) {
                 this.delay = 0f;
                 EntityService entityService = GameService.getInstance().getEntityService();
-                StreamSupport.stream(entityService.getEntities().spliterator(), false)
+                entityService.getEntities().stream()
                         .filter(entity -> entity instanceof Enemy && this.position.dst2(entity.getPosition()) < (15*15))
                         .min(Comparator.comparing(enemy -> this.position.dst2(enemy.getPosition())))
                         .ifPresent(nearestBuilding -> this.target = nearestBuilding);

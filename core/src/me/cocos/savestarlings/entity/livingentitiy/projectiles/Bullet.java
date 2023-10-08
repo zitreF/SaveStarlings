@@ -13,6 +13,8 @@ import me.cocos.savestarlings.util.AsyncUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
+import java.util.Iterator;
+
 public final class Bullet implements LivingEntity {
     private static final float SPEED = 20f;
     private static final SceneAsset sceneAsset;
