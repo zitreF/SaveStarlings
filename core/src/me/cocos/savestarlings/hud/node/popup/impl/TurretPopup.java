@@ -7,13 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import me.cocos.savestarlings.builder.FontBuilder;
 import me.cocos.savestarlings.hud.node.popup.Popup;
-import me.cocos.savestarlings.hud.progressbar.GLProgressBar;
 import me.cocos.savestarlings.hud.progressbar.impl.StatsProgressBar;
 import me.cocos.savestarlings.service.AssetService;
 
 public class TurretPopup extends Popup {
 
-    public TurretPopup(String name, String text) {
+    public TurretPopup(String name, String text, float max, float min, int width, int height) {
         super(name);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
@@ -30,8 +29,9 @@ public class TurretPopup extends Popup {
         Table center = new Table();
         Image turretImage = new Image(AssetService.getAsset("ui/popup/turrets/blast_cannon_popup.png", Texture.class));
 
-        StatsProgressBar damage = new StatsProgressBar("ui/popup/icons/damage_icon.png", 400f, 200f, 200, 35);
-        center.add(turretImage).size(250f, 230f).padRight(75f);
+        StatsProgressBar damage = new StatsProgressBar("ui/popup/icons/damage_icon.png", "Damage", max, min, width, height);
+
+        center.add(turretImage).size(250f, 230f);
         center.add(damage).padLeft(100f);
         this.add(center).center().padBottom(75f);
         this.row();

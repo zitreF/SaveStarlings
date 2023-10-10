@@ -62,7 +62,8 @@ public enum Category {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Popup popup = new TurretPopup("BLAST CANNON",
-                        "Hey look! Lots of enemy starlings there, use me to bing bang them all! I am powerful turret for grouped units!");
+                        "Hey look! Lots of enemy starlings there, use me to bing bang them all! I am powerful turret for grouped units!",
+                10_000f, 3_000f, 300, 35);
                 popup.show(table.getStage());
                 SoundUtil.playSound("other/click.mp3");
                 return super.touchDown(event, x, y, pointer, button);

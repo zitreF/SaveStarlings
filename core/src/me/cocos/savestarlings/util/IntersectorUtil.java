@@ -9,6 +9,8 @@ import me.cocos.savestarlings.service.GameService;
 
 public class IntersectorUtil {
 
+    private IntersectorUtil() {}
+
     public static boolean isPressed(Vector3 position, float size) {
         Ray ray = GameService.getInstance().getEnvironmentService().getSceneService().camera.getPickRay(Gdx.input.getX(), Gdx.input.getY());
 
