@@ -12,7 +12,7 @@ import me.cocos.savestarlings.service.AssetService;
 
 public class TurretPopup extends Popup {
 
-    public TurretPopup(String name, String text, float max, float min, int width, int height) {
+    public TurretPopup(String name, String text, float max, float min) {
         super(name);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
@@ -28,11 +28,24 @@ public class TurretPopup extends Popup {
         this.row();
         Table center = new Table();
         Image turretImage = new Image(AssetService.getAsset("ui/popup/turrets/blast_cannon_popup.png", Texture.class));
+        center.add(turretImage).size(250f, 230f).padRight(50f);
 
-        StatsProgressBar damage = new StatsProgressBar("ui/popup/icons/damage_icon.png", "Damage", max, min, width, height);
+        Table stats = new Table();
 
-        center.add(turretImage).size(250f, 230f);
-        center.add(damage).padLeft(100f);
+        StatsProgressBar health = new StatsProgressBar("ui/popup/icons/health_icon.png", "Health", max, min, 200, 30);
+        StatsProgressBar damage = new StatsProgressBar("ui/popup/icons/damage_icon.png", "Damage", max, min, 200, 30);
+        StatsProgressBar range = new StatsProgressBar("ui/popup/icons/range_icon.png", "Range", max, min, 200, 30);
+        StatsProgressBar firerate = new StatsProgressBar("ui/popup/icons/accelerate_icon.png", "Fire rate", max, min, 200, 30);
+
+        stats.add(health);
+        stats.row().padTop(15f);
+        stats.add(damage);
+        stats.row().padTop(15f);
+        stats.add(range);
+        stats.row().padTop(15f);
+        stats.add(firerate);
+
+        center.add(stats).padLeft(50f);
         this.add(center).center().padBottom(75f);
         this.row();
         this.add(description).size(300f, 100f).left().bottom().padLeft(90f).padBottom(100f);

@@ -1,4 +1,4 @@
-package me.cocos.savestarlings.hud.node;
+package me.cocos.savestarlings.hud.impl;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

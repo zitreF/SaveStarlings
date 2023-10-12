@@ -19,6 +19,8 @@ public class DesktopLauncher {
 		config.setWindowedMode(1600, 900);
 		config.setOpenGLEmulation(Lwjgl3ApplicationConfiguration.GLEmulation.GL32, 4, 6);
 		config.setTitle("Save Starlings");
+		config.setWindowIcon("logo.png");
+		config.setResizable(false);
 		new Lwjgl3Application(new SaveStarlings(), config);
 	}
 }

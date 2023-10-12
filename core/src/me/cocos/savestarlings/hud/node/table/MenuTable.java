@@ -11,7 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import me.cocos.savestarlings.hud.node.BuilderHud;
+import me.cocos.savestarlings.hud.impl.BuilderHud;
+import me.cocos.savestarlings.hud.node.Category;
 import me.cocos.savestarlings.util.SoundUtil;
 
 public class MenuTable extends Table {
@@ -37,19 +38,19 @@ public class MenuTable extends Table {
 
         NinePatchDrawable ninePatchDrawable = new NinePatchDrawable(ninePatch);
 
-        this.addButton("ui/icons/turrets/resources.png", () -> {
+        this.addButton("ui/icons/resources.png", () -> {
             Category.RESOURCES.loadTable(buildingsTable);
         });
-        this.addButton("ui/icons/turrets/army.png", () -> {
+        this.addButton("ui/icons/army.png", () -> {
             Category.ARMY.loadTable(buildingsTable);
         });
-        this.addButton("ui/icons/turrets/turrets.png", () -> {
+        this.addButton("ui/icons/turrets.png", () -> {
             Category.TURRETS.loadTable(buildingsTable);
         });
-        this.addButton("ui/icons/turrets/defenses.png", () -> {
+        this.addButton("ui/icons/defenses.png", () -> {
             Category.DEFENSES.loadTable(buildingsTable);
         });
-        this.addButton("ui/icons/turrets/decorations.png", () -> {
+        this.addButton("ui/icons/decorations.png", () -> {
             Category.DECORATIONS.loadTable(buildingsTable);
         });
 

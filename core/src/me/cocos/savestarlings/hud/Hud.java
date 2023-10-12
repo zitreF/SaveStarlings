@@ -2,19 +2,14 @@ package me.cocos.savestarlings.hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import me.cocos.savestarlings.builder.FontBuilder;
-import me.cocos.savestarlings.hud.node.BuilderHud;
+import me.cocos.savestarlings.hud.impl.BuilderHud;
+import me.cocos.savestarlings.hud.impl.ResourcesHud;
 import me.cocos.savestarlings.service.BuildingService;
 
 public class Hud extends Stage {
@@ -36,7 +31,9 @@ public class Hud extends Stage {
         this.fpsLabel = new Label("FPS: " + Gdx.graphics.getFramesPerSecond(), labelStyle);
         fpsLabel.setAlignment(Align.left, Align.top);
         fpsLabel.setPosition(50f, Gdx.graphics.getHeight() - fpsLabel.getHeight());
+        ResourcesHud resourcesHud = new ResourcesHud();
         this.addActor(builderHud);
+        this.addActor(resourcesHud);
         this.addActor(fpsLabel);
     }
 

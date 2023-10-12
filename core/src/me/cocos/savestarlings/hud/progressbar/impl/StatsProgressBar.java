@@ -28,7 +28,7 @@ public class StatsProgressBar extends Table {
         this.progressBar = new GLProgressBar(max, value, width, height);
         Label valueLabel = new Label(FormatUtils.formatNumber(value), labelStyle);
         this.add(image).size(height, height);
-        this.add(infoLabel).padLeft(5f);
+        this.add(infoLabel).width(75f).padLeft(5f);
         this.add(progressBar).padLeft(20f).size(width, height);
         this.add(valueLabel).padLeft(20f);
     }

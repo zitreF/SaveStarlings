@@ -12,6 +12,8 @@ import me.cocos.savestarlings.builder.FontBuilder;
 
 public class Popup extends Table {
 
+    public static boolean IS_OPENED;
+
     public Popup(String title) {
         this.setSize(1000f, 600f);
 
@@ -26,7 +28,7 @@ public class Popup extends Table {
 
         TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("ui/popup/turret_popup.png")));
         this.setBackground(backgroundDrawable);
-        this.setPosition((Gdx.graphics.getWidth() - this.getWidth()) / 2f, (Gdx.graphics.getHeight() - this.getHeight()) / 2f + 50f);
+        this.setPosition((1600 - this.getWidth()) / 2f, (900 - this.getHeight()) / 2f + 50f);
 
         Table topBar = new Table();
         topBar.setSize(this.getWidth(), 50f);
@@ -49,6 +51,7 @@ public class Popup extends Table {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 remove();
+                IS_OPENED = false;
             }
         });
         return closeButton;
@@ -56,5 +59,7 @@ public class Popup extends Table {
 
     public void show(Stage stage) {
         stage.addActor(this);
+        IS_OPENED = true;
+
     }
 }

@@ -31,6 +31,7 @@ public class GameService {
         map.generate();
         map.populate();
         SoundUtil.playMusic("music_main.mp3");
+        Gdx.graphics.setResizable(true);
     }
 
     public void setInputProcessors(InputProcessor cameraController) {

@@ -1,4 +1,4 @@
-package me.cocos.savestarlings.hud.node.table;
+package me.cocos.savestarlings.hud.node;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,37 +20,37 @@ public enum Category {
 
     RESOURCES() {
         @Override
-        void loadTable(Table table) {
+        public void loadTable(Table table) {
             Category.addBuilding(BuildingType.BANK, table, "ui/buildings/turrets/sniper.png", "ui/buildings/turrets/sniper_pressed.png");
         }
     },
     ARMY() {
         @Override
-        void loadTable(Table table) {
+        public void loadTable(Table table) {
             Category.addBuilding(BuildingType.LABORATORY, table, "ui/buildings/turrets/sniper.png", "ui/buildings/turrets/sniper_pressed.png");
         }
     },
     TURRETS() {
         @Override
-        void loadTable(Table table) {
+        public void loadTable(Table table) {
             Category.addBuilding(BuildingType.SNIPER, table, "ui/buildings/turrets/sniper.png", "ui/buildings/turrets/sniper_pressed.png");
             Category.addBuilding(BuildingType.CANNON_BLAST, table, "ui/buildings/turrets/cannon_blast.png", "ui/buildings/turrets/cannon_blast_pressed.png");
         }
     },
     DEFENSES() {
         @Override
-        void loadTable(Table table) {
+        public void loadTable(Table table) {
 
         }
     },
     DECORATIONS() {
         @Override
-        void loadTable(Table table) {
+        public void loadTable(Table table) {
 
         }
     };
 
-    abstract void loadTable(Table table);
+    public abstract void loadTable(Table table);
     private static void addBuilding(BuildingType buildingType, Table table, String texturePath, String pressedPath) {
 
         Texture infoTexture = new Texture("ui/buildings/turrets/btn_info.png");
@@ -61,9 +61,12 @@ public enum Category {
         infoImage.addListener(new ClickListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                if (Popup.IS_OPENED) {
+                    return super.touchDown(event, x, y, pointer, button);
+                }
                 Popup popup = new TurretPopup("BLAST CANNON",
                         "Hey look! Lots of enemy starlings there, use me to bing bang them all! I am powerful turret for grouped units!",
-                10_000f, 3_000f, 300, 35);
+                10_000f, 3_000f);
                 popup.show(table.getStage());
                 SoundUtil.playSound("other/click.mp3");
                 return super.touchDown(event, x, y, pointer, button);

@@ -6,7 +6,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import me.cocos.savestarlings.hud.node.BuilderHud;
+import me.cocos.savestarlings.hud.impl.BuilderHud;
+import me.cocos.savestarlings.hud.node.Category;
 
 public class BuildingsTable extends Table {
 

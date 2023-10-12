@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FillViewport;
 import me.cocos.savestarlings.controller.CameraController;
 import me.cocos.savestarlings.service.GameService;
 import net.mgsx.gltf.scene3d.scene.Scene;
