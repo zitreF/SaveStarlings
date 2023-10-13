@@ -14,7 +14,9 @@ public class ResourcesHud extends Table {
         TextureRegion textureRegion = new TextureRegion(new Texture("ui/background/resources_background.png"));
         this.setBackground(new TextureRegionDrawable(textureRegion));
         this.setPosition(Gdx.graphics.getWidth() / 2f - this.getWidth() / 2f, Gdx.graphics.getHeight() - this.getHeight());
-        ResourcesTable coins = new ResourcesTable("ui/icons/coins.png", 10_000, 5_000, 100, 25);
+        ResourcesTable coins = new ResourcesTable("ui/icons/coins.png", "yellow", "#FAD46E", "#B7850B", 10_000, 5_000, 100, 25);
+        ResourcesTable minerals = new ResourcesTable("ui/icons/minerals.png", "green", "#65EF72", "#049B00", 10_000, 5_000, 100, 25);
         this.add(coins);
+        this.add(minerals).padLeft(15f);
     }
 }

@@ -25,7 +25,7 @@ public class StatsProgressBar extends Table {
                 .shadowOffsetY(1)
                 .build();
         Label infoLabel = new Label(info, labelStyle);
-        this.progressBar = new GLProgressBar(max, value, width, height);
+        this.progressBar = new GLProgressBar("blue", max, value, width, height);
         Label valueLabel = new Label(FormatUtils.formatNumber(value), labelStyle);
         this.add(image).size(height, height);
         this.add(infoLabel).width(75f).padLeft(5f);

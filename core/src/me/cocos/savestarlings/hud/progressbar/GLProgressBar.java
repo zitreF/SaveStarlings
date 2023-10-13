@@ -12,10 +12,10 @@ import java.util.zip.Deflater;
 
 public class GLProgressBar extends Stack {
 
-    public GLProgressBar(float max, float value, int width, int height) {
+    public GLProgressBar(String color, float max, float value, int width, int height) {
         Image backgroundImage = new Image(new Texture("ui/progressbar/progressbar.png"));
 
-        Pixmap oldTexture = new Pixmap(Gdx.files.internal("ui/progressbar/color/blue.png"));
+        Pixmap oldTexture = new Pixmap(Gdx.files.internal("ui/progressbar/color/"+color+".png"));
         Pixmap newTexture = new Pixmap(width, height, oldTexture.getFormat());
         newTexture.drawPixmap(oldTexture,
                 0, 0, oldTexture.getWidth(), oldTexture.getHeight(),

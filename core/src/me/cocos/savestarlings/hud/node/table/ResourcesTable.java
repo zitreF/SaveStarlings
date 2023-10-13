@@ -5,26 +5,26 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import me.cocos.savestarlings.builder.FontBuilder;
 import me.cocos.savestarlings.hud.progressbar.GLProgressBar;
-import me.cocos.savestarlings.hud.progressbar.impl.ResourcesProgressBar;
 import me.cocos.savestarlings.util.FormatUtils;
 
 public class ResourcesTable extends Table {
 
-    private final ResourcesProgressBar progressBar;
+    private final GLProgressBar progressBar;
 
 
-    public ResourcesTable(String texturePath, float max, float value, int width, int height) {
+    public ResourcesTable(String texturePath, String color, String fontColor, String borderColor, float max, float value, int width, int height) {
         Texture texture = new Texture(texturePath);
+        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         Image image = new Image(texture);
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = FontBuilder.from("ui/font/glfont.ttf")
                 .filter(Texture.TextureFilter.Linear)
                 .size(12)
-                .color(Color.valueOf("#FAD46E"))
-                .borderColor(Color.valueOf("#B7850B"))
+                .color(Color.valueOf(fontColor))
+                .borderColor(Color.valueOf(borderColor))
                 .borderWidth(2f)
                 .build();
-        this.progressBar = new ResourcesProgressBar(max, value, width, height);
+        this.progressBar = new GLProgressBar(color, max, value, width, height);
         Label valueLabel = new Label(FormatUtils.formatNumber(value), labelStyle);
 
         Stack stack = new Stack();
@@ -33,6 +33,6 @@ public class ResourcesTable extends Table {
         stack.add(valueContainer.center());
 
         this.add(image).size(height, height);
-        this.add(stack).padLeft(5f).size(width, height);
+        this.add(stack).size(width, height);
     }
 }
