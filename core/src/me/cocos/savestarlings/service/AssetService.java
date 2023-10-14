@@ -65,6 +65,7 @@ public class AssetService {
         textureParameter.minFilter = Texture.TextureFilter.Linear;
         textureParameter.magFilter = Texture.TextureFilter.Linear;
         ASSET_MANAGER.load("ui/popup/turrets/blast_cannon_popup.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/popup/turrets/sniper_tower_popup.png", Texture.class, textureParameter);
     }
 
     public static <T> T getAsset(String name) {

@@ -11,8 +11,8 @@ import com.badlogic.gdx.math.Vector3;
 public class CameraController implements InputProcessor {
 
     private static final float CAMERA_SPEED = 30f;
+    private static final float ZOOM_SPEED = 1000f;
     private final Camera camera;
-    public static boolean isPressed;
 
     public CameraController(Camera camera) {
         this.camera = camera;
@@ -42,17 +42,11 @@ public class CameraController implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT) {
-            isPressed = true;
-        }
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if (button == Input.Buttons.LEFT) {
-            isPressed = false;
-        }
         return false;
     }
 
@@ -74,9 +68,15 @@ public class CameraController implements InputProcessor {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         if (amountY == -1) {
-            this.camera.translate(0, camera.direction.nor().y, 0);
+            this.camera.translate(0, Gdx.graphics.getDeltaTime() * -ZOOM_SPEED, 0);
+            if (camera.position.y < 5f) {
+                camera.position.y = 5f;
+            }
         } else {
-            this.camera.translate(0, -camera.direction.nor().y, 0);
+            this.camera.translate(0, Gdx.graphics.getDeltaTime() * ZOOM_SPEED, 0);
+            if (camera.position.y > 50f) {
+                camera.position.y = 50f;
+            }
         }
         return false;
     }

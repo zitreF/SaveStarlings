@@ -6,28 +6,29 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import me.cocos.savestarlings.builder.FontBuilder;
+import me.cocos.savestarlings.hud.node.popup.BuildingPopupType;
 import me.cocos.savestarlings.hud.node.popup.Popup;
 import me.cocos.savestarlings.hud.progressbar.impl.StatsProgressBar;
 import me.cocos.savestarlings.service.AssetService;
 
 public class TurretPopup extends Popup {
 
-    public TurretPopup(String name, String text, float max, float min) {
-        super(name);
+    public TurretPopup(BuildingPopupType type, float max, float min) {
+        super(type.getName());
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
 
-        labelStyle.font = FontBuilder.from("ui/font/roboto.ttf")
-                .size(15)
+        labelStyle.font = FontBuilder.from("ui/font/Gabarito-Medium.ttf")
+                .size(20)
                 .color(Color.valueOf("#02A5C8"))
                 .filter(Texture.TextureFilter.Linear)
                 .build();
 
-        Label description = new Label(text, labelStyle);
+        Label description = new Label(type.getDescription(), labelStyle);
         description.setWrap(true);
         this.row();
         Table center = new Table();
-        Image turretImage = new Image(AssetService.getAsset("ui/popup/turrets/blast_cannon_popup.png", Texture.class));
+        Image turretImage = new Image(AssetService.getAsset(type.getTexture(), Texture.class));
         center.add(turretImage).size(250f, 230f).padRight(50f);
 
         Table stats = new Table();

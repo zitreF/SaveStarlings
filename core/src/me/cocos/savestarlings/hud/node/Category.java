@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import me.cocos.savestarlings.entity.building.BuildingType;
+import me.cocos.savestarlings.hud.node.popup.BuildingPopupType;
 import me.cocos.savestarlings.hud.node.popup.Popup;
 import me.cocos.savestarlings.hud.node.popup.impl.TurretPopup;
 import me.cocos.savestarlings.service.GameService;
@@ -21,20 +22,28 @@ public enum Category {
     RESOURCES() {
         @Override
         public void loadTable(Table table) {
-            Category.addBuilding(BuildingType.BANK, table, "ui/buildings/turrets/sniper.png", "ui/buildings/turrets/sniper_pressed.png");
+            Category.addBuilding(BuildingPopupType.BLAST_CANNON, BuildingType.BANK, table,
+                    "ui/buildings/turrets/sniper.png",
+                    "ui/buildings/turrets/sniper_pressed.png");
         }
     },
     ARMY() {
         @Override
         public void loadTable(Table table) {
-            Category.addBuilding(BuildingType.LABORATORY, table, "ui/buildings/turrets/sniper.png", "ui/buildings/turrets/sniper_pressed.png");
+            Category.addBuilding(BuildingPopupType.BLAST_CANNON, BuildingType.LABORATORY, table,
+                    "ui/buildings/turrets/sniper.png",
+                    "ui/buildings/turrets/sniper_pressed.png");
         }
     },
     TURRETS() {
         @Override
         public void loadTable(Table table) {
-            Category.addBuilding(BuildingType.SNIPER, table, "ui/buildings/turrets/sniper.png", "ui/buildings/turrets/sniper_pressed.png");
-            Category.addBuilding(BuildingType.CANNON_BLAST, table, "ui/buildings/turrets/cannon_blast.png", "ui/buildings/turrets/cannon_blast_pressed.png");
+            Category.addBuilding(BuildingPopupType.SNIPER_TOWER, BuildingType.SNIPER_TOWER, table,
+                    "ui/buildings/turrets/sniper.png",
+                    "ui/buildings/turrets/sniper_pressed.png");
+            Category.addBuilding(BuildingPopupType.BLAST_CANNON, BuildingType.CANNON_BLAST, table,
+                    "ui/buildings/turrets/cannon_blast.png",
+                    "ui/buildings/turrets/cannon_blast_pressed.png");
         }
     },
     DEFENSES() {
@@ -51,7 +60,7 @@ public enum Category {
     };
 
     public abstract void loadTable(Table table);
-    private static void addBuilding(BuildingType buildingType, Table table, String texturePath, String pressedPath) {
+    private static void addBuilding(BuildingPopupType buildingPopupType, BuildingType buildingType, Table table, String texturePath, String pressedPath) {
 
         Texture infoTexture = new Texture("ui/buildings/turrets/btn_info.png");
         infoTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -64,9 +73,7 @@ public enum Category {
                 if (Popup.IS_OPENED) {
                     return super.touchDown(event, x, y, pointer, button);
                 }
-                Popup popup = new TurretPopup("BLAST CANNON",
-                        "Hey look! Lots of enemy starlings there, use me to bing bang them all! I am powerful turret for grouped units!",
-                10_000f, 3_000f);
+                Popup popup = new TurretPopup(buildingPopupType, 10_000f, 3_000f);
                 popup.show(table.getStage());
                 SoundUtil.playSound("other/click.mp3");
                 return super.touchDown(event, x, y, pointer, button);

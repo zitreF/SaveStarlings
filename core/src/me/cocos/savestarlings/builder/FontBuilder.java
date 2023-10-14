@@ -24,7 +24,7 @@ public class FontBuilder {
         this.shadowOffsetY = 0;
         this.filter = Texture.TextureFilter.Linear;
         this.color = Color.WHITE;
-        this.borderWidth = 1;
+        this.borderWidth = 0;
         this.borderColor = Color.BLACK;
     }
 
