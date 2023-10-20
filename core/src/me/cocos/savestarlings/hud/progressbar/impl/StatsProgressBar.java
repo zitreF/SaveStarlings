@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import me.cocos.savestarlings.builder.FontBuilder;
 import me.cocos.savestarlings.hud.progressbar.GLProgressBar;
+import me.cocos.savestarlings.service.AssetService;
 import me.cocos.savestarlings.util.FormatUtils;
 
 public class StatsProgressBar extends Table {
@@ -15,7 +16,7 @@ public class StatsProgressBar extends Table {
 
 
     public StatsProgressBar(String texturePath, String info, float max, float value, int width, int height) {
-        Texture texture = new Texture(texturePath);
+        Texture texture = AssetService.getAsset(texturePath);
         Image image = new Image(texture);
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = FontBuilder.from("ui/font/glfont.ttf")

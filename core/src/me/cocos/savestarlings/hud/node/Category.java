@@ -14,6 +14,7 @@ import me.cocos.savestarlings.entity.building.BuildingType;
 import me.cocos.savestarlings.hud.node.popup.BuildingPopupType;
 import me.cocos.savestarlings.hud.node.popup.Popup;
 import me.cocos.savestarlings.hud.node.popup.impl.TurretPopup;
+import me.cocos.savestarlings.service.AssetService;
 import me.cocos.savestarlings.service.GameService;
 import me.cocos.savestarlings.util.SoundUtil;
 
@@ -62,7 +63,7 @@ public enum Category {
     public abstract void loadTable(Table table);
     private static void addBuilding(BuildingPopupType buildingPopupType, BuildingType buildingType, Table table, String texturePath, String pressedPath) {
 
-        Texture infoTexture = new Texture("ui/buildings/turrets/btn_info.png");
+        Texture infoTexture = AssetService.getAsset("ui/buildings/turrets/btn_info.png");
         infoTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         Image infoImage = new Image(infoTexture);
@@ -80,10 +81,10 @@ public enum Category {
             }
         });
 
-        Texture texture = new Texture(texturePath);
+        Texture texture = AssetService.getAsset(texturePath);
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-        Texture pressedTexture = new Texture(pressedPath);
+        Texture pressedTexture = AssetService.getAsset(pressedPath);
         pressedTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         Image image = new Image(texture);

@@ -18,6 +18,13 @@ public class SoundUtil {
         });
     }
 
+    public static void playSound(String name, float volume) {
+        CompletableFuture.runAsync(() -> {
+            Sound sound = AssetService.getAsset(SOUND_PATH+name);
+            sound.play(volume);
+        });
+    }
+
     public static void playMusic(String name) {
         CompletableFuture.runAsync(() -> {
             Music sound = AssetService.getAsset(MUSIC_PATH+name);

@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import me.cocos.savestarlings.builder.FontBuilder;
+import me.cocos.savestarlings.service.AssetService;
 
 public class Popup extends Table {
 
@@ -17,8 +18,6 @@ public class Popup extends Table {
     public Popup(String title) {
         this.setSize(1000f, 600f);
 
-        //this.debugAll();
-
         Label.LabelStyle labelStyle = new Label.LabelStyle();
 
         labelStyle.font = FontBuilder.from("ui/font/glfont.ttf")
@@ -26,7 +25,7 @@ public class Popup extends Table {
                 .shadowOffsetY(3)
                 .build();
 
-        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(new Texture("ui/popup/turret_popup.png")));
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(AssetService.getAsset("ui/popup/turret_popup.png", Texture.class)));
         this.setBackground(backgroundDrawable);
         this.setPosition((1600 - this.getWidth()) / 2f, (900 - this.getHeight()) / 2f + 50f);
 
@@ -42,7 +41,7 @@ public class Popup extends Table {
     }
 
     private ImageButton createCloseButton() {
-        Texture closeButtonTexture = new Texture("ui/buildings/turrets/btn_close.png");
+        Texture closeButtonTexture = AssetService.getAsset("ui/buildings/turrets/btn_close.png");
         ImageButton.ImageButtonStyle closeButtonStyle = new ImageButton.ImageButtonStyle();
         closeButtonStyle.imageUp = new TextureRegionDrawable(new TextureRegion(closeButtonTexture));
         ImageButton closeButton = new ImageButton(closeButtonStyle);

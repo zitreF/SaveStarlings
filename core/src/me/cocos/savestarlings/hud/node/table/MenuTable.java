@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import me.cocos.savestarlings.hud.impl.BuilderHud;
 import me.cocos.savestarlings.hud.node.Category;
+import me.cocos.savestarlings.service.AssetService;
 import me.cocos.savestarlings.util.SoundUtil;
 
 public class MenuTable extends Table {
@@ -61,10 +62,10 @@ public class MenuTable extends Table {
 
         Button.ButtonStyle buttonStyle = new Button.ButtonStyle();
 
-        Texture upTexture = new Texture(texture);
+        Texture upTexture = AssetService.getAsset(texture);
         upTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-        Texture downTexture = new Texture(texture.replace(".png", "_hover.png"));
+        Texture downTexture = AssetService.getAsset(texture.replace(".png", "_hover.png"));
         downTexture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
         TextureRegionDrawable upDrawable = new TextureRegionDrawable(new TextureRegion(upTexture));

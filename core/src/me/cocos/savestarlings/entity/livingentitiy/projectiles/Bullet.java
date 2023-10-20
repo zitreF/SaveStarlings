@@ -10,6 +10,7 @@ import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.service.AssetService;
 import me.cocos.savestarlings.service.GameService;
 import me.cocos.savestarlings.util.AsyncUtil;
+import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
@@ -82,6 +83,7 @@ public final class Bullet implements LivingEntity {
             this.bounding.setPosition(position.x - 0.5f, position.z - 0.5f);
             for (Building building : GameService.getInstance().getEntityService().getBuildings()) {
                 if (this.bounding.overlaps(building.getBounding())) {
+                    SoundUtil.playSound("other/explode.mp3");
                     Gdx.app.postRunnable(() -> {
                         GameService.getInstance().getEntityService().removeEntity(this);
                     });

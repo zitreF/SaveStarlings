@@ -5,7 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.graphics.Texture;
 
 public class AnimatedActor extends Actor {
-    private Texture[] frames;
+    private final Texture[] frames;
     private float stateTime;
     private final float speed;
     private int currentFrame;

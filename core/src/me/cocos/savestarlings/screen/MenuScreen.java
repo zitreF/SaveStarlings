@@ -104,11 +104,11 @@ public class MenuScreen implements Screen {
 
         Label topic = new Label("Coming soon :)", topicStyle);
         this.stage.addActor(topic);
+        AssetService.load();
     }
 
     @Override
     public void show() {
-        AssetService.load();
     }
 
     @Override

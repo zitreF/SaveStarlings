@@ -69,8 +69,8 @@ public class CameraController implements InputProcessor {
     public boolean scrolled(float amountX, float amountY) {
         if (amountY == -1) {
             this.camera.translate(0, Gdx.graphics.getDeltaTime() * -ZOOM_SPEED, 0);
-            if (camera.position.y < 5f) {
-                camera.position.y = 5f;
+            if (camera.position.y < 25f) {
+                camera.position.y = 25f;
             }
         } else {
             this.camera.translate(0, Gdx.graphics.getDeltaTime() * ZOOM_SPEED, 0);
@@ -84,15 +84,28 @@ public class CameraController implements InputProcessor {
     public void update(float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             camera.position.x = MathUtils.lerp(camera.position.x, camera.position.x + 1f, delta * -CAMERA_SPEED);
+            if (camera.position.x < -50) {
+                camera.position.x = -50;
+            }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             camera.position.x = MathUtils.lerp(camera.position.x, camera.position.x - 1f, delta * -CAMERA_SPEED);
+            if (camera.position.x > 50) {
+                camera.position.x = 50;
+            }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            if (camera.position.z > 50) {
+                camera.position.z = 50;
+                return;
+            }
             camera.position.z = MathUtils.lerp(camera.position.z, camera.position.z - 1f, delta * -CAMERA_SPEED);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             camera.position.z = MathUtils.lerp(camera.position.z, camera.position.z + 1f, delta * -CAMERA_SPEED);
+            if (camera.position.z < -50) {
+                camera.position.z = -50;
+            }
         }
         camera.update(true);
     }

@@ -82,7 +82,7 @@ public class EnvironmentService {
 
         ModelBuilder modelBuilder = new ModelBuilder();
 
-        Texture texture = new Texture("grass.jpg");
+        Texture texture = AssetService.getAsset("grass.jpg");
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         PBRTextureAttribute textureAttribute = PBRTextureAttribute.createBaseColorTexture(texture);
@@ -186,7 +186,7 @@ public class EnvironmentService {
         sceneService.update(delta);
         sceneService.renderShadows();
         sceneService.renderColors();
-        particleService.render(sceneService.getBatch(), this.sceneService.camera);
+        particleService.render(sceneService.getBatch());
     }
 
     private boolean isCascaded;

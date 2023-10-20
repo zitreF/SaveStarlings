@@ -51,6 +51,12 @@ public class AssetService {
         ASSET_MANAGER.load("sounds/starling/Body_3.mp3", Sound.class);
         ASSET_MANAGER.load("sounds/starling/Body_4.mp3", Sound.class);
         ASSET_MANAGER.load("sounds/other/click.mp3", Sound.class);
+        ASSET_MANAGER.load("sounds/other/explode.mp3", Sound.class);
+        ASSET_MANAGER.load("sounds/other/explosion2.mp3", Sound.class);
+        ASSET_MANAGER.load("sounds/other/explosion3.mp3", Sound.class);
+        ASSET_MANAGER.load("sounds/other/explosion4.mp3", Sound.class);
+        ASSET_MANAGER.load("sounds/other/explosion5.mp3", Sound.class);
+        ASSET_MANAGER.load("sounds/other/laser.mp3", Sound.class);
         ASSET_MANAGER.load("sounds/building/repair.mp3", Sound.class);
         ASSET_MANAGER.load("sounds/building/build.mp3", Sound.class);
 
@@ -64,8 +70,37 @@ public class AssetService {
         TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();
         textureParameter.minFilter = Texture.TextureFilter.Linear;
         textureParameter.magFilter = Texture.TextureFilter.Linear;
+        ASSET_MANAGER.load("grass.jpg", Texture.class, textureParameter);
+
         ASSET_MANAGER.load("ui/popup/turrets/blast_cannon_popup.png", Texture.class, textureParameter);
         ASSET_MANAGER.load("ui/popup/turrets/sniper_tower_popup.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/buildings/turrets/btn_close.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/icons/minerals.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/icons/coins.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/background/resources_background.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/icons/decorations.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/icons/defenses.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/icons/turrets.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/icons/army.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/icons/resources.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/icons/decorations_hover.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/icons/defenses_hover.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/icons/turrets_hover.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/icons/army_hover.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/icons/resources_hover.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/buildings/turrets/btn_info.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/buildings/turrets/cannon_blast.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/buildings/turrets/cannon_blast_pressed.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/buildings/turrets/sniper.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/buildings/turrets/sniper_pressed.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/popup/turret_popup.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/popup/icons/health_icon.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/popup/icons/damage_icon.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/popup/icons/range_icon.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/popup/icons/accelerate_icon.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/progressbar/progressbar.png", Texture.class, textureParameter);
+
+        ASSET_MANAGER.load("pp.png", Texture.class, textureParameter);
     }
 
     public static <T> T getAsset(String name) {

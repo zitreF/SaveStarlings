@@ -7,13 +7,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import me.cocos.savestarlings.service.AssetService;
 
 import java.util.zip.Deflater;
 
 public class GLProgressBar extends Stack {
 
     public GLProgressBar(String color, float max, float value, int width, int height) {
-        Image backgroundImage = new Image(new Texture("ui/progressbar/progressbar.png"));
+        Image backgroundImage = new Image(AssetService.getAsset("ui/progressbar/progressbar.png", Texture.class));
 
         Pixmap oldTexture = new Pixmap(Gdx.files.internal("ui/progressbar/color/"+color+".png"));
         Pixmap newTexture = new Pixmap(width, height, oldTexture.getFormat());
