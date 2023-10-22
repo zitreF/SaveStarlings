@@ -63,9 +63,6 @@ public class AssetService {
         // MUSIC
         ASSET_MANAGER.load("sounds/music/music_main.mp3", Music.class);
 
-        // PARTICLES
-        ASSET_MANAGER.load("particles/laser_smoke", ParticleEffect.class);
-
         // TEXTURES
         TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();
         textureParameter.minFilter = Texture.TextureFilter.Linear;
@@ -100,7 +97,9 @@ public class AssetService {
         ASSET_MANAGER.load("ui/popup/icons/accelerate_icon.png", Texture.class, textureParameter);
         ASSET_MANAGER.load("ui/progressbar/progressbar.png", Texture.class, textureParameter);
 
-        ASSET_MANAGER.load("pp.png", Texture.class, textureParameter);
+        // PARTICLES
+        ASSET_MANAGER.load("particles/explosion.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("particles/explosion_2.png", Texture.class, textureParameter);
     }
 
     public static <T> T getAsset(String name) {

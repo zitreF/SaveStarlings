@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import me.cocos.savestarlings.builder.FontBuilder;
 import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.util.SoundUtil;
 
 public class Popup extends Table {
 
@@ -49,6 +50,7 @@ public class Popup extends Table {
         closeButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                SoundUtil.playSound("other/click.mp3");
                 remove();
                 IS_OPENED = false;
             }

@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
+import me.cocos.savestarlings.particle.Particle;
+import me.cocos.savestarlings.particle.impl.ExplosionParticle;
 import me.cocos.savestarlings.service.AssetService;
 import me.cocos.savestarlings.service.GameService;
 import me.cocos.savestarlings.util.AsyncUtil;
@@ -85,6 +87,11 @@ public final class Bullet implements LivingEntity {
                 if (this.bounding.overlaps(building.getBounding())) {
                     SoundUtil.playSound("other/explode.mp3");
                     Gdx.app.postRunnable(() -> {
+                        if (direction.x > 0f) {
+                            GameService.getInstance().getParticleService().playParticle(Particle.EXPLOSION, this.position);
+                        } else {
+                            GameService.getInstance().getParticleService().playParticle(Particle.EXPLOSION, this.position.add(direction.scl(building.getBounding().height / 4f)));
+                        }
                         GameService.getInstance().getEntityService().removeEntity(this);
                     });
                     return;

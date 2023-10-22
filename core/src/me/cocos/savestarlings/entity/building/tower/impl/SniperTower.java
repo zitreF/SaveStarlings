@@ -111,6 +111,7 @@ public class SniperTower implements Tower {
                 if (position.epsilonEquals(target.getPosition(), 15f)) {
                     if (attackDelay >= 2f) {
                         this.attackDelay = 0f;
+                        SoundUtil.playSound("other/laser.mp3");
 //                        Vector3 copy = new Vector3(rotationDirection);
 //                        copy.nor();
 //                        Vector3 clone = new Vector3(position);
