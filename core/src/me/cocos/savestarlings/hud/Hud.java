@@ -4,13 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import me.cocos.savestarlings.builder.FontBuilder;
 import me.cocos.savestarlings.hud.impl.BuilderHud;
 import me.cocos.savestarlings.hud.impl.ResourcesHud;
 import me.cocos.savestarlings.service.BuildingService;
+
+import java.awt.Graphics2D;
 
 public class Hud extends Stage {
 
@@ -18,8 +24,7 @@ public class Hud extends Stage {
     private BuildingService buildingService;
 
     public Hud() {
-        super(new ExtendViewport(1600, 900));
-        BuilderHud builderHud = new BuilderHud(this);
+        super(new StretchViewport(1600, 900));
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = FontBuilder.from("ui/font/glfont.ttf")
                 .color(Color.WHITE)
@@ -30,16 +35,19 @@ public class Hud extends Stage {
                 .build();
         this.fpsLabel = new Label("FPS: " + Gdx.graphics.getFramesPerSecond(), labelStyle);
         fpsLabel.setAlignment(Align.left, Align.top);
-        fpsLabel.setPosition(50f, Gdx.graphics.getHeight() - fpsLabel.getHeight());
+        Table root = new Table();
+        root.setFillParent(true);
+        root.setTouchable(Touchable.childrenOnly);
+
+        BuilderHud builderHud = new BuilderHud(this);
         ResourcesHud resourcesHud = new ResourcesHud();
-        this.addActor(builderHud);
-        this.addActor(resourcesHud);
-        this.addActor(fpsLabel);
+        root.add(resourcesHud).size(400f, 50f).top().expandX().row();
+        root.add(builderHud).size(800f, 230f).expandY().bottom().row();
+        this.addActor(root);
     }
 
     public void update(float delta) {
         fpsLabel.setText("FPS: " + Gdx.graphics.getFramesPerSecond());
-        fpsLabel.setPosition(fpsLabel.getWidth() / 2f, Gdx.graphics.getHeight() - fpsLabel.getHeight());
         this.act(delta);
         this.draw();
     }

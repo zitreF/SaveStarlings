@@ -3,6 +3,7 @@ package me.cocos.savestarlings.hud.impl;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import me.cocos.savestarlings.hud.Hud;
@@ -15,7 +16,7 @@ public class BuilderHud extends Table {
 
     public BuilderHud(Hud hud) {
         this.hud = hud;
-
+        this.setTouchable(Touchable.enabled);
         BuildingsTable buildingsTable = new BuildingsTable(this);
 
         MenuTable menuTable = new MenuTable(this, buildingsTable);
@@ -23,10 +24,6 @@ public class BuilderHud extends Table {
         this.add(menuTable).center().row();
 
         this.add(buildingsTable);
-
-        this.setSize(800f, 230f);
-
-        this.setPosition(Gdx.graphics.getWidth() / 2f - this.getWidth() / 2f, this.getY());
     }
 
     public Pixmap createRoundedRectanglePixmap(int width, int height, int cornerRadius, Color color) {

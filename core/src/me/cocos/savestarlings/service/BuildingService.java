@@ -3,32 +3,25 @@ package me.cocos.savestarlings.service;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.math.*;
-import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
-import me.cocos.savestarlings.controller.CameraController;
-import me.cocos.savestarlings.entity.Entity;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.building.BuildingType;
-import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
-import me.cocos.savestarlings.entity.livingentitiy.starling.Citizen;
 import me.cocos.savestarlings.entity.livingentitiy.unit.Colossus;
 import me.cocos.savestarlings.hud.Hud;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
-import net.mgsx.gltf.scene3d.scene.Scene;
 
 import java.util.concurrent.CompletableFuture;
 
 public class BuildingService {
 
     private static final Plane PLANE = new Plane(Vector3.Y, 0);
-    private static final BlendingAttribute OPACITY_ATTRIBUTE = new BlendingAttribute(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA, 0.5f);
+    private static final BlendingAttribute OPACITY_ATTRIBUTE = new BlendingAttribute(GL32.GL_SRC_ALPHA, GL32.GL_ONE_MINUS_SRC_ALPHA, 0.5f);
     private static final ColorAttribute RED_COLOR_ATTRIBUTE = PBRColorAttribute.createBaseColorFactor(new Color(1f, 51f / 255f, 51f / 255f, 0.75f));
     private static final ColorAttribute GREEN_COLOR_ATTRIBUTE = PBRColorAttribute.createBaseColorFactor(new Color(84f / 255f, 189f / 255f, 46f / 255f, 0.75f));
     private final EntityService entityService;
@@ -70,7 +63,7 @@ public class BuildingService {
     private void updateMouseCoords() {
         this.mouseCoords.set(Gdx.input.getX(), Gdx.input.getY());
         this.hud.getViewport().unproject(this.mouseCoords);
-        this.mouseOverHud = this.hud.hit(this.mouseCoords.x, this.mouseCoords.y, false) != null;
+        this.mouseOverHud = this.hud.hit(this.mouseCoords.x, this.mouseCoords.y, true) != null;
     }
 
     public boolean isMouseOverHudElement() {

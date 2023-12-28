@@ -23,7 +23,6 @@ public class ParticleService {
         this.billboardParticleBatch = new BillboardParticleBatch();
         billboardParticleBatch.setUseGpu(true);
         billboardParticleBatch.setCamera(camera);
-
         billboardParticleBatch.setTexture(AssetService.getAsset("particles/explosion_2.png", Texture.class));
     }
 

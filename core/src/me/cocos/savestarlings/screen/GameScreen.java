@@ -2,7 +2,7 @@ package me.cocos.savestarlings.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.GL31;
 import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.PerspectiveCamera;

@@ -25,7 +25,7 @@ allprojects {
         box2DLightsVersion = '1.5'
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.2.1'
-        gltfVersion = 'master-SNAPSHOT'
+        gltfVersion = '-SNAPSHOT'
     }
 
     repositories {
@@ -49,7 +49,6 @@ project(":desktop") {
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
         api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        
     }
 }
 
