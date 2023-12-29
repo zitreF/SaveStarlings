@@ -73,7 +73,6 @@ public class SniperTower implements Tower {
 
         scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
-        scene.modelInstance.materials.clear();
 
         this.delay = 1f;
 

@@ -1,4 +1,4 @@
-package me.cocos.savestarlings.service;
+package me.cocos.savestarlings.service.environment;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
@@ -10,10 +10,14 @@ import com.badlogic.gdx.graphics.g3d.shaders.DepthShader;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.scene.SceneService;
+import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.service.EntityService;
+import me.cocos.savestarlings.service.ParticleService;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
@@ -55,16 +59,14 @@ public class EnvironmentService {
         depthConfig.numBones = config.numBones;
         this.sceneService = new SceneService(PBRShaderProvider.createDefault(config), PBRShaderProvider.createDefaultDepth(depthConfig));
 
-        DirectionalLightEx light = new DirectionalLightEx();
-        light.direction.set(0, -1, 0);
-        light.intensity = 5f;
-        light.color.set(Color.WHITE);
-        sceneService.environment.add(light);
+        this.directionalShadowLight = new DirectionalShadowLight(4096, 4096, Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 4f, 1f, 300f);
 
-        IBLBuilder iblBuilder = IBLBuilder.createOutdoor(light);
+        sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, -0.5f), 5f));
+
+        IBLBuilder iblBuilder = IBLBuilder.createOutdoor(directionalShadowLight);
         this.environmentCubemap = iblBuilder.buildEnvMap(1);
-        this.diffuseCubemap = iblBuilder.buildIrradianceMap(256);
-        this.specularCubemap = iblBuilder.buildRadianceMap(10);
+        this.diffuseCubemap = iblBuilder.buildIrradianceMap(16);
+        this.specularCubemap = iblBuilder.buildRadianceMap(1);
         iblBuilder.dispose();
 
         this.brdfLUT = new Texture(Gdx.files.classpath("net/mgsx/gltf/shaders/brdfLUT.png"));
@@ -76,8 +78,6 @@ public class EnvironmentService {
         sceneService.environment.set(PBRCubemapAttribute.createDiffuseEnv(diffuseCubemap));
         sceneService.environment.set(PBRColorAttribute.createDiffuse(Color.WHITE));
         sceneService.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 1f / 256f));
-        this.directionalShadowLight = new DirectionalShadowLight(4048, 4048, Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 4f, 1f, 300f);
-        sceneService.environment.add(directionalShadowLight.set(Color.BLACK, new Vector3(0.5f, -1f, -0.5f), 0f));
         this.skybox = new SceneSkybox(environmentCubemap);
         sceneService.setSkyBox(skybox);
 
@@ -186,20 +186,20 @@ public class EnvironmentService {
         directionalShadowLight.setCenter(sceneService.camera.position);
         this.updateShadows();
         sceneService.update(delta);
+        particleService.render(sceneService.getBatch());
         sceneService.renderShadows();
         sceneService.renderColors();
-        particleService.render(sceneService.getBatch());
     }
 
     private boolean isCascaded;
 
     private void updateShadows() {
-        if (!isCascaded && sceneService.camera.position.y < 25f) {
+        if (!isCascaded && sceneService.camera.position.y < 40f) {
             this.isCascaded = true;
-            directionalShadowLight.setShadowMapSize(8096, 8096);
-        } else if (isCascaded && sceneService.camera.position.y > 25f) {
+            directionalShadowLight.setShadowMapSize(8192, 8192);
+        } else if (isCascaded && sceneService.camera.position.y > 40f) {
             this.isCascaded = false;
-            directionalShadowLight.setShadowMapSize(4048, 4048);
+            directionalShadowLight.setShadowMapSize(4096, 4096);
         }
     }
 

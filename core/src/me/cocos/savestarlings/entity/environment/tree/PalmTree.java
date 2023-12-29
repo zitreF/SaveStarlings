@@ -1,71 +1,50 @@
-package me.cocos.savestarlings.entity.building.base;
+package me.cocos.savestarlings.entity.environment.tree;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL32;
-import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
-import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
-import me.cocos.savestarlings.entity.building.Building;
+import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.service.AssetService;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
-public class StarBase implements Building {
+public class PalmTree implements Environment {
 
     private final Scene scene;
     private final BoundingBox boundingBox;
     private final Rectangle rectangle;
     private final Vector3 position;
-    private float health;
 
     private static final SceneAsset sceneAsset;
 
     static {
-        sceneAsset = AssetService.getAsset("buildings/starbase/sb-7.glb");
+        sceneAsset = AssetService.getAsset("environment/palm_tree.glb");
     }
 
-    public StarBase(Vector3 position) {
+    public PalmTree(Vector3 position) {
         this.position = position;
         this.scene = new Scene(sceneAsset.scene);
         this.boundingBox = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
-        float scaleX = 10f / boundingBox.getWidth();
-        float scaleY = 10f / boundingBox.getHeight();
-        float scaleZ = 10f / boundingBox.getDepth();
+        float scaleX = 6.5f / boundingBox.getWidth();
+        float scaleY = MathUtils.random(6.5f, 8f) / boundingBox.getHeight();
+        float scaleZ = 6.5f / boundingBox.getDepth();
 
         this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
 
-        float x = MathUtils.round(position.x / 2.5f) * 2.5f;
-        float z = MathUtils.round(position.z / 2.5f) * 2.5f;
+        this.boundingBox.mul(scene.modelInstance.transform);
+        float x = MathUtils.floor(position.x / 2.5f) * 2.5f + 1.25f;
+        float z = MathUtils.floor(position.z / 2.5f) * 2.5f + 1.25f;
         this.position.set(x, position.y, z);
 
         scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
-        this.rectangle = new Rectangle(x - 5f, z - 5f, 10f, 10f);
-    }
+        scene.modelInstance.transform.rotate(Vector3.Y, MathUtils.random(360f));
 
-    @Override
-    public void update(float delta) {
-    }
-
-    @Override
-    public float getHealth() {
-        return this.health;
-    }
-
-    @Override
-    public void setHealth(float amount) {
-        this.health = amount;
+        this.rectangle = new Rectangle(x - 3.75f, z - 3.75f, 7.5f, 7.5f);
     }
 
     @Override
@@ -97,4 +76,9 @@ public class StarBase implements Building {
     public boolean isClicked() {
         return IntersectorUtil.isPressed(this.position, 1.25f);
     }
+
+    public static SceneAsset getSceneAsset() {
+        return sceneAsset;
+    }
 }
+

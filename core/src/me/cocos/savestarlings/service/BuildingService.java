@@ -13,6 +13,7 @@ import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.building.BuildingType;
 import me.cocos.savestarlings.entity.livingentitiy.unit.Colossus;
 import me.cocos.savestarlings.hud.Hud;
+import me.cocos.savestarlings.service.environment.EnvironmentService;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 

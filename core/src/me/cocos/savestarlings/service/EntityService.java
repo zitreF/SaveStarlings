@@ -2,15 +2,11 @@ package me.cocos.savestarlings.service;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Array;
 import me.cocos.savestarlings.entity.Clickable;
 import me.cocos.savestarlings.entity.building.Building;
+import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
-import me.cocos.savestarlings.entity.livingentitiy.projectiles.Bullet;
-import me.cocos.savestarlings.entity.livingentitiy.starling.Citizen;
-import me.cocos.savestarlings.util.IntersectorUtil;
-import me.cocos.savestarlings.util.SoundUtil;
+import me.cocos.savestarlings.service.environment.EnvironmentService;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -19,11 +15,13 @@ public class EntityService {
 
     private final List<LivingEntity> entities;
     private final List<Building> buildings;
+    private final List<Environment> environments;
     private final EnvironmentService environmentService;
 
     public EntityService(EnvironmentService environmentService) {
         this.entities = new CopyOnWriteArrayList<>();
         this.buildings = new CopyOnWriteArrayList<>();
+        this.environments = new CopyOnWriteArrayList<>();
         this.environmentService = environmentService;
     }
 
@@ -57,12 +55,26 @@ public class EntityService {
         environmentService.removeSceneWithoutShadows(entity.getScene());
     }
 
+    public void addEnvironment(Environment environment) {
+        this.environments.add(environment);
+        environmentService.addScene(environment.getScene());
+    }
+
+    public void removeEnvironment(Environment environment) {
+        this.environments.remove(environment);
+        environmentService.removeScene(environment.getScene());
+    }
+
     public List<Building> getBuildings() {
         return this.buildings;
     }
 
     public List<LivingEntity> getEntities() {
         return this.entities;
+    }
+
+    public List<Environment> getEnvironments() {
+        return this.environments;
     }
 
     private boolean found = false;
@@ -86,6 +98,17 @@ public class EntityService {
                     && !GameService.getInstance().getBuildingService().isMouseOverHudElement()) {
                 if (clickable.isClicked()) {
                     clickable.onClick();
+                    this.found = true;
+                }
+            }
+        }
+        for (Environment environment : this.environments) {
+
+            if (!this.found
+                    && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)
+                    && !GameService.getInstance().getBuildingService().isMouseOverHudElement()) {
+                if (environment.isClicked()) {
+                    environment.onClick();
                     this.found = true;
                 }
             }

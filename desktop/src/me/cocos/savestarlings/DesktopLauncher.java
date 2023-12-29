@@ -7,7 +7,7 @@ public class DesktopLauncher {
 
 	public static void main(String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setForegroundFPS(0);
+		config.setForegroundFPS(144);
 		config.setIdleFPS(144);
 		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4);
 		config.useVsync(false);

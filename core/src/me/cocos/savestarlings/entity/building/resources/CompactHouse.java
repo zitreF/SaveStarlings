@@ -40,9 +40,6 @@ public class CompactHouse implements Building {
         position.set(x, position.y, z);
 
         scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
-
-        scene.modelInstance.materials.clear();
-
     }
 
     @Override

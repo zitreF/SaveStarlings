@@ -4,9 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.utils.ScreenUtils;
 import me.cocos.savestarlings.hud.Hud;
 import me.cocos.savestarlings.map.Map;
+import me.cocos.savestarlings.service.environment.EnvironmentService;
 import me.cocos.savestarlings.util.SoundUtil;
 
 public class GameService {
@@ -29,9 +29,7 @@ public class GameService {
         this.buildingService = new BuildingService(entityService, environmentService, hud);
         Map map = new Map(entityService);
         map.generate();
-        map.populate();
         SoundUtil.playMusic("music_main.mp3");
-        Gdx.graphics.setResizable(true);
     }
 
     public void setInputProcessors(InputProcessor cameraController) {
