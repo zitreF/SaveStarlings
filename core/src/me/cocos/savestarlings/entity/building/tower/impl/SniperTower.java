@@ -73,7 +73,6 @@ public class SniperTower implements Tower {
 
         scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
-
         this.delay = 1f;
 
         this.rectangle = new Rectangle(x - 2.5f, z - 2.5f, 5f, 5f);
@@ -111,11 +110,6 @@ public class SniperTower implements Tower {
                     if (attackDelay >= 2f) {
                         this.attackDelay = 0f;
                         SoundUtil.playSound("other/laser.mp3");
-//                        Vector3 copy = new Vector3(rotationDirection);
-//                        copy.nor();
-//                        Vector3 clone = new Vector3(position);
-//                        clone.add(-copy.x * 1.5f, 0f, -copy.z * 1.5f);
-//                        scene.modelInstance.transform.setTranslation(clone);
                     }
                 }
             }

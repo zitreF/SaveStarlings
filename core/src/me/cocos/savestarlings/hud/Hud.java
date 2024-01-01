@@ -8,23 +8,23 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import me.cocos.savestarlings.builder.FontBuilder;
 import me.cocos.savestarlings.hud.impl.BuilderHud;
+import me.cocos.savestarlings.hud.impl.BattleHud;
 import me.cocos.savestarlings.hud.impl.ResourcesHud;
 import me.cocos.savestarlings.service.BuildingService;
 
-import java.awt.Graphics2D;
-
 public class Hud extends Stage {
+
+    private static Hud instance;
 
     private final Label fpsLabel;
     private BuildingService buildingService;
 
     public Hud() {
         super(new StretchViewport(1600, 900));
+        instance = this;
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = FontBuilder.from("ui/font/glfont.ttf")
                 .color(Color.WHITE)
@@ -40,8 +40,10 @@ public class Hud extends Stage {
         root.setTouchable(Touchable.childrenOnly);
 
         BuilderHud builderHud = new BuilderHud(this);
+        BattleHud battleHud = new BattleHud();
         ResourcesHud resourcesHud = new ResourcesHud();
-        root.add(resourcesHud).size(400f, 50f).top().expandX().row();
+        root.add(resourcesHud).size(400f, 50f).expandY().expandX().top().row();
+        //root.add(battleHud).size(300f, 600f).right().row();
         root.add(builderHud).size(800f, 230f).expandY().bottom().row();
         this.addActor(root);
     }
@@ -58,5 +60,9 @@ public class Hud extends Stage {
 
     public BuildingService getBuildingService() {
         return this.buildingService;
+    }
+
+    public static Hud getInstance() {
+        return instance;
     }
 }

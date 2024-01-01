@@ -41,7 +41,7 @@ public class BuilderHud extends Table {
 
         pixmap.fillRectangle(cornerRadius, 0, width - diameter, height);
         pixmap.fillRectangle(0, cornerRadius, width, height - cornerRadius);
-
+        
         return pixmap;
     }
 

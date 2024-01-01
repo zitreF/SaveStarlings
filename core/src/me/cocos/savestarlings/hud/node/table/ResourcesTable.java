@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import me.cocos.savestarlings.builder.FontBuilder;
-import me.cocos.savestarlings.hud.progressbar.GLProgressBar;
+import me.cocos.savestarlings.hud.node.progressbar.GLProgressBar;
 import me.cocos.savestarlings.service.AssetService;
 import me.cocos.savestarlings.util.FormatUtils;
 

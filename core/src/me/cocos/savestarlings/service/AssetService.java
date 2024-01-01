@@ -45,6 +45,7 @@ public class AssetService {
         ASSET_MANAGER.load("entities/units/colossus.glb", SceneAsset.class);
         ASSET_MANAGER.load("entities/projectiles/rocket.glb", SceneAsset.class);
         ASSET_MANAGER.load("environment/palm_tree.glb", SceneAsset.class);
+        ASSET_MANAGER.load("environment/rock.glb", SceneAsset.class);
         // SOUNDS
         ASSET_MANAGER.load("sounds/starling/Body_1.mp3", Sound.class);
         ASSET_MANAGER.load("sounds/starling/Body_2.mp3", Sound.class);
@@ -91,11 +92,14 @@ public class AssetService {
         ASSET_MANAGER.load("ui/buildings/turrets/sniper.png", Texture.class, textureParameter);
         ASSET_MANAGER.load("ui/buildings/turrets/sniper_pressed.png", Texture.class, textureParameter);
         ASSET_MANAGER.load("ui/popup/turret_popup.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/popup/default_popup.png", Texture.class, textureParameter);
         ASSET_MANAGER.load("ui/popup/icons/health_icon.png", Texture.class, textureParameter);
         ASSET_MANAGER.load("ui/popup/icons/damage_icon.png", Texture.class, textureParameter);
         ASSET_MANAGER.load("ui/popup/icons/range_icon.png", Texture.class, textureParameter);
         ASSET_MANAGER.load("ui/popup/icons/accelerate_icon.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/popup/dialog/dialog_background.png", Texture.class, textureParameter);
         ASSET_MANAGER.load("ui/progressbar/progressbar.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("ui/starlings/starling_pointing.png", Texture.class, textureParameter);
 
         // PARTICLES
         ASSET_MANAGER.load("particles/explosion.png", Texture.class, textureParameter);

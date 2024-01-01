@@ -3,10 +3,7 @@ package me.cocos.savestarlings.map;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import me.cocos.savestarlings.entity.building.base.StarBase;
-import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.entity.environment.EnvironmentType;
-import me.cocos.savestarlings.entity.environment.tree.PalmTree;
-import me.cocos.savestarlings.entity.environment.tree.Rock;
 import me.cocos.savestarlings.entity.livingentitiy.starling.Citizen;
 import me.cocos.savestarlings.service.EntityService;
 
@@ -22,7 +19,7 @@ public class Map {
         StarBase starBase = new StarBase(new Vector3(0f, 1f, 0f));
         this.entityService.addBuilding(starBase);
         this.populate(15);
-        this.plants(15);
+        this.plants(50);
     }
 
     private void populate(int amount) {

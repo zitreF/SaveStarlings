@@ -1,4 +1,4 @@
-package me.cocos.savestarlings.service.environment;
+package me.cocos.savestarlings.service;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.*;
@@ -59,7 +59,7 @@ public class EnvironmentService {
         depthConfig.numBones = config.numBones;
         this.sceneService = new SceneService(PBRShaderProvider.createDefault(config), PBRShaderProvider.createDefaultDepth(depthConfig));
 
-        this.directionalShadowLight = new DirectionalShadowLight(4096, 4096, Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 4f, 1f, 300f);
+        this.directionalShadowLight = new DirectionalShadowLight(4096, 4096, 1600f / 4f, 900f / 4f, 1f, 300f);
 
         sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, -0.5f), 5f));
 

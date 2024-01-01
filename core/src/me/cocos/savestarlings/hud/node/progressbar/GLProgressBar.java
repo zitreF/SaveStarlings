@@ -1,4 +1,4 @@
-package me.cocos.savestarlings.hud.progressbar;
+package me.cocos.savestarlings.hud.node.progressbar;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;

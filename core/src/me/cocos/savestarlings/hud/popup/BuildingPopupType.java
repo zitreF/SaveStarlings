@@ -1,4 +1,4 @@
-package me.cocos.savestarlings.hud.node.popup;
+package me.cocos.savestarlings.hud.popup;
 
 public enum BuildingPopupType {
 

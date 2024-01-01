@@ -1,4 +1,4 @@
-package me.cocos.savestarlings.hud.node.popup;
+package me.cocos.savestarlings.hud.popup;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,8 +16,8 @@ public class Popup extends Table {
 
     public static boolean IS_OPENED;
 
-    public Popup(String title) {
-        this.setSize(1000f, 600f);
+    public Popup(String title, float width, float height, BackgroundType backgroundType) {
+        this.setSize(width, height);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
 
@@ -26,7 +26,7 @@ public class Popup extends Table {
                 .shadowOffsetY(3)
                 .build();
 
-        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(AssetService.getAsset("ui/popup/turret_popup.png", Texture.class)));
+        TextureRegionDrawable backgroundDrawable = new TextureRegionDrawable(new TextureRegion(AssetService.getAsset(backgroundType.getAssetPath(), Texture.class)));
         this.setBackground(backgroundDrawable);
         this.setPosition((1600 - this.getWidth()) / 2f, (900 - this.getHeight()) / 2f + 50f);
 
@@ -36,9 +36,9 @@ public class Popup extends Table {
         Label titleLabel = new Label(title, labelStyle);
         titleLabel.setColor(1f, 1f, 1f, 1f);
         topBar.add(titleLabel).expand().padTop(5f).padLeft(titleLabel.getWidth() / 4f).center();
-        topBar.add(this.createCloseButton()).size(32f, 32f).padRight(10f).right();
+        topBar.add(this.createCloseButton()).size(32f, 32f).right().padRight(10f);
 
-        this.add(topBar).growX().expandY().top();
+        this.add(topBar).growX().top();
     }
 
     private ImageButton createCloseButton() {
@@ -61,6 +61,20 @@ public class Popup extends Table {
     public void show(Stage stage) {
         stage.addActor(this);
         IS_OPENED = true;
+    }
 
+    public enum BackgroundType {
+        DEFAULT("ui/popup/default_popup.png"),
+        TURRET("ui/popup/turret_popup.png");
+
+        private final String assetPath;
+
+        BackgroundType(String assetPath) {
+            this.assetPath = assetPath;
+        }
+
+        public String getAssetPath() {
+            return this.assetPath;
+        }
     }
 }

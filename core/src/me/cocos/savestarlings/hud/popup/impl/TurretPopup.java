@@ -1,4 +1,4 @@
-package me.cocos.savestarlings.hud.node.popup.impl;
+package me.cocos.savestarlings.hud.popup.impl;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,15 +6,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import me.cocos.savestarlings.builder.FontBuilder;
-import me.cocos.savestarlings.hud.node.popup.BuildingPopupType;
-import me.cocos.savestarlings.hud.node.popup.Popup;
-import me.cocos.savestarlings.hud.progressbar.impl.StatsProgressBar;
+import me.cocos.savestarlings.hud.popup.BuildingPopupType;
+import me.cocos.savestarlings.hud.popup.Popup;
+import me.cocos.savestarlings.hud.node.progressbar.impl.StatsProgressBar;
 import me.cocos.savestarlings.service.AssetService;
 
 public class TurretPopup extends Popup {
 
     public TurretPopup(BuildingPopupType type, float max, float min) {
-        super(type.getName());
+        super(type.getName(), 1000f, 600f, BackgroundType.TURRET);
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
 
@@ -47,7 +47,7 @@ public class TurretPopup extends Popup {
         stats.add(firerate);
 
         center.add(stats).padLeft(50f);
-        this.add(center).center().padBottom(75f);
+        this.add(center).expandY().center().padBottom(75f);
         this.row();
         this.add(description).size(300f, 100f).left().bottom().padLeft(90f).padBottom(100f);
     }

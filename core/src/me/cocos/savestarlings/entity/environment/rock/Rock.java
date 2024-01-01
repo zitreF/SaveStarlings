@@ -1,4 +1,4 @@
-package me.cocos.savestarlings.entity.environment.tree;
+package me.cocos.savestarlings.entity.environment.rock;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -20,7 +20,7 @@ public class Rock implements Environment {
     private static final SceneAsset sceneAsset;
 
     static {
-        sceneAsset = AssetService.getAsset("environment/palm_tree.glb");
+        sceneAsset = AssetService.getAsset("environment/rock.glb");
     }
 
     public Rock(Vector3 position) {
@@ -29,9 +29,11 @@ public class Rock implements Environment {
         this.boundingBox = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
-        float scaleX = 6.5f / boundingBox.getWidth();
-        float scaleY = 6.5f / boundingBox.getHeight();
-        float scaleZ = 6.5f / boundingBox.getDepth();
+        float randomSize = MathUtils.random(2.5f, 5f);
+
+        float scaleX = randomSize / boundingBox.getWidth();
+        float scaleY = randomSize / boundingBox.getHeight();
+        float scaleZ = randomSize / boundingBox.getDepth();
 
         this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
 
@@ -44,7 +46,7 @@ public class Rock implements Environment {
 
         scene.modelInstance.transform.rotate(Vector3.Y, MathUtils.random(360f));
 
-        this.rectangle = new Rectangle(x - 3.75f, z - 3.75f, 7.5f, 7.5f);
+        this.rectangle = new Rectangle(x - 1.25f, z - 1.25f, 2.5f, 2.5f);
     }
 
     @Override

@@ -44,7 +44,7 @@ public class PalmTree implements Environment {
 
         scene.modelInstance.transform.rotate(Vector3.Y, MathUtils.random(360f));
 
-        this.rectangle = new Rectangle(x - 3.75f, z - 3.75f, 7.5f, 7.5f);
+        this.rectangle = new Rectangle(x - 1.25f, z - 1.25f, 2.5f, 2.5f);
     }
 
     @Override

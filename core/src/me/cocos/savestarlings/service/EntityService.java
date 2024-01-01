@@ -6,7 +6,6 @@ import me.cocos.savestarlings.entity.Clickable;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
-import me.cocos.savestarlings.service.environment.EnvironmentService;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;

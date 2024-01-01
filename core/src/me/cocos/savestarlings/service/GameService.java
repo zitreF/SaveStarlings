@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
 import me.cocos.savestarlings.hud.Hud;
 import me.cocos.savestarlings.map.Map;
-import me.cocos.savestarlings.service.environment.EnvironmentService;
 import me.cocos.savestarlings.util.SoundUtil;
 
 public class GameService {
@@ -17,6 +16,7 @@ public class GameService {
     private final EnvironmentService environmentService;
     private final EntityService entityService;
     private final BuildingService buildingService;
+    private final BattleService battleService;
     private final Hud hud;
 
     public GameService(Camera camera) {
@@ -27,6 +27,7 @@ public class GameService {
         this.entityService = new EntityService(environmentService);
         environmentService.setEntityService(entityService);
         this.buildingService = new BuildingService(entityService, environmentService, hud);
+        this.battleService = new BattleService();
         Map map = new Map(entityService);
         map.generate();
         SoundUtil.playMusic("music_main.mp3");
@@ -62,6 +63,7 @@ public class GameService {
         this.environmentService.update(delta);
         this.buildingService.update();
         this.hud.update(delta);
+        this.battleService.update(delta);
     }
 
     public void dispose() {

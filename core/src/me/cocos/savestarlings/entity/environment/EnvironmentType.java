@@ -2,7 +2,7 @@ package me.cocos.savestarlings.entity.environment;
 
 import me.cocos.savestarlings.callback.Result;
 import me.cocos.savestarlings.entity.environment.tree.PalmTree;
-import me.cocos.savestarlings.entity.environment.tree.Rock;
+import me.cocos.savestarlings.entity.environment.rock.Rock;
 
 public enum EnvironmentType {
     PALM_TREE(PalmTree::new),

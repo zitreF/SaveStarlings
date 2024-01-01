@@ -11,9 +11,9 @@ import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.collision.Ray;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.building.BuildingType;
+import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.entity.livingentitiy.unit.Colossus;
 import me.cocos.savestarlings.hud.Hud;
-import me.cocos.savestarlings.service.environment.EnvironmentService;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 
@@ -42,7 +42,7 @@ public class BuildingService {
         this.intersection = new Vector3();
         this.currentBuilding = null;
         this.hud.setBuildingService(this);
-        this.isPlaceable = true;
+        this.isPlaceable = false;
         this.mouseOverHud = false;
     }
 
@@ -115,17 +115,16 @@ public class BuildingService {
                 currentBuilding.getScene().modelInstance.transform.setTranslation(x, intersection.y, z);
 
                 if (this.isBuildingCollision(x, z)) {
-                    if (isPlaceable) {
-                        for (Material material : currentBuilding.getScene().modelInstance.materials) {
-                            material.set(RED_COLOR_ATTRIBUTE, OPACITY_ATTRIBUTE);
-                        }
-                        this.isPlaceable = false;
+                    for (Material material : currentBuilding.getScene().modelInstance.materials) {
+                        material.set(RED_COLOR_ATTRIBUTE, OPACITY_ATTRIBUTE);
                     }
+                    this.isPlaceable = false;
                 } else {
                     if (isPressed) {
                         Gdx.app.postRunnable(() -> {
                             Building building = this.currentBuilding.getBuildingResult().result(intersection);
                             this.addBuilding(building);
+                            this.isPlaceable = true;
                         });
                         SoundUtil.playSound("building/build.mp3");
                         return;
@@ -146,12 +145,19 @@ public class BuildingService {
     private final Rectangle collision = new Rectangle();
 
     private boolean isBuildingCollision(float x, float z) {
+        BuildingType building = this.currentBuilding;
+        collision.set(x - building.getSize() / 2f, z - building.getSize() / 2f, building.getSize(), building.getSize());
         for (Building existingBuilding : entityService.getBuildings()) {
             Vector3 temp = existingBuilding.getScene().modelInstance.transform.getTranslation(translation);
             otherPosition.set(temp.x, temp.z);
-            BuildingType building = this.currentBuilding;
-            collision.set(x - building.getSize() / 2f, z - building.getSize() / 2f, building.getSize(), building.getSize());
             if (existingBuilding.getBounding().overlaps(collision)) {
+                return true;
+            }
+        }
+        for (Environment environment : entityService.getEnvironments()) {
+            Vector3 temp = environment.getScene().modelInstance.transform.getTranslation(translation);
+            otherPosition.set(temp.x, temp.z);
+            if (environment.getBounding().overlaps(collision)) {
                 return true;
             }
         }

@@ -1,4 +1,4 @@
-package me.cocos.savestarlings.hud.progressbar.impl;
+package me.cocos.savestarlings.hud.node.progressbar.impl;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import me.cocos.savestarlings.builder.FontBuilder;
-import me.cocos.savestarlings.hud.progressbar.GLProgressBar;
+import me.cocos.savestarlings.hud.node.progressbar.GLProgressBar;
 import me.cocos.savestarlings.service.AssetService;
 import me.cocos.savestarlings.util.FormatUtils;
 

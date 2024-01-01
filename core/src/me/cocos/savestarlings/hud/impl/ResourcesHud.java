@@ -12,7 +12,6 @@ import me.cocos.savestarlings.service.AssetService;
 public class ResourcesHud extends Table {
 
     public ResourcesHud() {
-        this.setSize(400, 50);
         this.setTouchable(Touchable.enabled);
         TextureRegion textureRegion = new TextureRegion(AssetService.getAsset("ui/background/resources_background.png", Texture.class));
         this.setBackground(new TextureRegionDrawable(textureRegion));
