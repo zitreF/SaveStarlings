@@ -43,7 +43,7 @@ public class Hud extends Stage {
         BattleHud battleHud = new BattleHud();
         ResourcesHud resourcesHud = new ResourcesHud();
         root.add(resourcesHud).size(400f, 50f).expandY().expandX().top().row();
-        //root.add(battleHud).size(300f, 600f).right().row();
+        root.add(battleHud).size(300f, 600f).right().row();
         root.add(builderHud).size(800f, 230f).expandY().bottom().row();
         this.addActor(root);
     }

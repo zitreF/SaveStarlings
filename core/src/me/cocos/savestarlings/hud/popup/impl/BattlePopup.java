@@ -38,7 +38,7 @@ public class BattlePopup extends Popup {
         TypingLabel message = new TypingLabel(messageText, labelStyle);
         message.setWrap(true);
         message.setAlignment(Align.topLeft);
-        message.setTotalTime(1f);
+        message.setTotalTime(0.75f);
         message.startTypingAnimation();
         Table messageTable = new Table();
         messageTable.add(message).grow().padLeft(500f / 10f + 15f).padTop(5f).padRight(15f).center();
