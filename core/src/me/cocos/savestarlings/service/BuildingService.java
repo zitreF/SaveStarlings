@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class BuildingService {
 
-    private static final Plane PLANE = new Plane(Vector3.Y, 0);
+    private static final Plane PLANE = new Plane(Vector3.Y, 0f);
     private static final BlendingAttribute OPACITY_ATTRIBUTE = new BlendingAttribute(GL32.GL_SRC_ALPHA, GL32.GL_ONE_MINUS_SRC_ALPHA, 0.5f);
     private static final ColorAttribute RED_COLOR_ATTRIBUTE = PBRColorAttribute.createBaseColorFactor(new Color(1f, 51f / 255f, 51f / 255f, 0.75f));
     private static final ColorAttribute GREEN_COLOR_ATTRIBUTE = PBRColorAttribute.createBaseColorFactor(new Color(84f / 255f, 189f / 255f, 46f / 255f, 0.75f));

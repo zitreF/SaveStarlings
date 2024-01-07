@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import me.cocos.savestarlings.SaveStarlings;
 import me.cocos.savestarlings.builder.FontBuilder;
 import me.cocos.savestarlings.hud.node.animated.AnimatedActor;
-import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.asset.AssetService;
 
 public class MenuScreen implements Screen {
 

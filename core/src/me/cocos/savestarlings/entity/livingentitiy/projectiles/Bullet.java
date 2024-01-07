@@ -8,15 +8,12 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.particle.Particle;
-import me.cocos.savestarlings.particle.impl.ExplosionParticle;
-import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.service.GameService;
 import me.cocos.savestarlings.util.AsyncUtil;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
-
-import java.util.Iterator;
 
 public final class Bullet implements LivingEntity {
     private static final float SPEED = 20f;

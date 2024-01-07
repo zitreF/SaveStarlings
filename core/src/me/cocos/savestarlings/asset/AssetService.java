@@ -1,6 +1,5 @@
-package me.cocos.savestarlings.service;
+package me.cocos.savestarlings.asset;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SoundLoader;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
@@ -8,15 +7,10 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
-import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
-import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
+import me.cocos.savestarlings.asset.loader.ShaderLoader;
 import net.mgsx.gltf.loaders.glb.GLBAssetLoader;
-import net.mgsx.gltf.loaders.gltf.GLTFAssetLoader;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 public class AssetService {
@@ -30,6 +24,7 @@ public class AssetService {
         ASSET_MANAGER.setLoader(Sound.class, ".mp3", new SoundLoader(internalFileHandleResolver));
         ASSET_MANAGER.setLoader(ParticleEffect.class, new ParticleEffectLoader(internalFileHandleResolver));
         ASSET_MANAGER.setLoader(Texture.class, new TextureLoader(internalFileHandleResolver));
+        ASSET_MANAGER.setLoader(String.class, new ShaderLoader(internalFileHandleResolver));
     }
 
     public static void load() {
@@ -104,6 +99,11 @@ public class AssetService {
         // PARTICLES
         ASSET_MANAGER.load("particles/explosion.png", Texture.class, textureParameter);
         ASSET_MANAGER.load("particles/explosion_2.png", Texture.class, textureParameter);
+
+        // SHADERS
+
+        ASSET_MANAGER.load("shaders/pbr.fs.glsl", String.class, new ShaderLoader.StringParameter());
+        ASSET_MANAGER.load("shaders/pbr.vs.glsl", String.class, new ShaderLoader.StringParameter());
     }
 
     public static <T> T getAsset(String name) {

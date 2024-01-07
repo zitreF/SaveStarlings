@@ -13,7 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import me.cocos.savestarlings.hud.impl.BuilderHud;
 import me.cocos.savestarlings.hud.node.Category;
-import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.util.SoundUtil;
 
 public class MenuTable extends Table {

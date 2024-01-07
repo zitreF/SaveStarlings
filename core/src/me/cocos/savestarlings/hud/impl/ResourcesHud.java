@@ -1,13 +1,12 @@
 package me.cocos.savestarlings.hud.impl;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import me.cocos.savestarlings.hud.node.table.ResourcesTable;
-import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.asset.AssetService;
 
 public class ResourcesHud extends Table {
 

@@ -1,19 +1,15 @@
 package me.cocos.savestarlings.entity.livingentitiy.starling;
 
-import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.Clickable;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
-import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
-
-import java.util.Random;
 
 public class Citizen implements LivingEntity, Clickable {
 
@@ -45,7 +41,7 @@ public class Citizen implements LivingEntity, Clickable {
 
         this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
 
-        scene.modelInstance.transform.setTranslation(position.x, position.y - 0.5f, position.z);
+        scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
 
         scene.modelInstance.materials.clear();
 
@@ -70,7 +66,7 @@ public class Citizen implements LivingEntity, Clickable {
                 scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
                 this.scene.modelInstance.transform.scale(1.5f / boundingBox.getWidth(), 1.5f / boundingBox.getHeight(), 1.25f / boundingBox.getDepth());
             }
-            this.scene.modelInstance.transform.setTranslation(position.x, position.y - 0.5f, position.z);
+            this.scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
             return;
         }
         if (position.epsilonEquals(targetPosition, ARRIVAL_THRESHOLD)) {
@@ -78,7 +74,7 @@ public class Citizen implements LivingEntity, Clickable {
         }
         this.direction.set(targetPosition).sub(position).nor();
         position.add(direction.scl(SPEED * delta));
-        scene.modelInstance.transform.setTranslation(position.x, position.y - 0.5f, position.z);
+        scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
     }
 
     @Override

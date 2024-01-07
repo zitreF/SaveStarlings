@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import me.cocos.savestarlings.builder.FontBuilder;
 import me.cocos.savestarlings.hud.node.progressbar.GLProgressBar;
-import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.util.FormatUtils;
 
 public class StatsProgressBar extends Table {

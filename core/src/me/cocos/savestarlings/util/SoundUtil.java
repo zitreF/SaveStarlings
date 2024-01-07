@@ -2,7 +2,7 @@ package me.cocos.savestarlings.util;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.asset.AssetService;
 
 import java.util.concurrent.CompletableFuture;
 

@@ -16,7 +16,7 @@ public class Map {
     }
 
     public void generate() {
-        StarBase starBase = new StarBase(new Vector3(0f, 1f, 0f));
+        StarBase starBase = new StarBase(new Vector3(0f, 0f, 0f));
         this.entityService.addBuilding(starBase);
         this.populate(15);
         this.plants(50);

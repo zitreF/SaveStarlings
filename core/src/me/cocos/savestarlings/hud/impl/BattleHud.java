@@ -7,8 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import me.cocos.savestarlings.builder.FontBuilder;
-import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.asset.AssetService;
 
 public class BattleHud extends Table {
 
@@ -35,10 +36,10 @@ public class BattleHud extends Table {
         Label.LabelStyle messageStyle = new Label.LabelStyle();
         messageStyle.font = FontBuilder.from("ui/font/glfont.ttf")
                 .filter(Texture.TextureFilter.Linear)
-                .size(15)
+                .size(12)
                 .color(Color.valueOf("#ffffff"))
                 .borderColor(Color.BLACK)
-                .borderWidth(1f)
+                .borderWidth(0.5f)
                 .build();
         Label title = new Label("WARNING!", titleStyle);
 
@@ -47,6 +48,7 @@ public class BattleHud extends Table {
         Label timer = new Label("5:00", timerStyle);
 
         Label message = new Label("I'm coming for you. Get ready :)", messageStyle);
+        message.setAlignment(Align.center);
         message.setWrap(true);
 
         Table topSide = new Table();

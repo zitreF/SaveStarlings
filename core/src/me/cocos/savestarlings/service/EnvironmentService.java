@@ -9,26 +9,22 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.shaders.DepthShader;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.scene.SceneService;
-import me.cocos.savestarlings.service.AssetService;
-import me.cocos.savestarlings.service.EntityService;
-import me.cocos.savestarlings.service.ParticleService;
+import me.cocos.savestarlings.asset.AssetService;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
-import net.mgsx.gltf.scene3d.lights.DirectionalLightEx;
 import net.mgsx.gltf.scene3d.lights.DirectionalShadowLight;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneSkybox;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderConfig;
 import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
+import net.mgsx.gltf.scene3d.utils.ShaderParser;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -52,15 +48,15 @@ public class EnvironmentService {
 
     public EnvironmentService(ParticleService particleService, Camera camera) {
         PBRShaderConfig config = PBRShaderProvider.createDefaultConfig();
+        config.fragmentShader = AssetService.getAsset("shaders/pbr.fs.glsl");
+        config.vertexShader = AssetService.getAsset("shaders/pbr.vs.glsl");
         config.numBones = 0;
         config.numDirectionalLights = 2;
         config.numPointLights = 0;
         DepthShader.Config depthConfig = new DepthShader.Config();
         depthConfig.numBones = config.numBones;
         this.sceneService = new SceneService(PBRShaderProvider.createDefault(config), PBRShaderProvider.createDefaultDepth(depthConfig));
-
         this.directionalShadowLight = new DirectionalShadowLight(4096, 4096, 1600f / 4f, 900f / 4f, 1f, 300f);
-
         sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, -0.5f), 5f));
 
         IBLBuilder iblBuilder = IBLBuilder.createOutdoor(directionalShadowLight);
@@ -90,13 +86,13 @@ public class EnvironmentService {
         textureAttribute.scaleU = 16f;
         textureAttribute.scaleV = 16f;
         Model greenBoxModel = modelBuilder.createBox(
-                200f, 1f, 200f,
+                200f, 0f, 200f,
                 new Material(textureAttribute),
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates
         );
         ModelInstance greenBoxInstance = new ModelInstance(greenBoxModel);
         greenBoxInstance.transform.setFromEulerAngles(90f, 0f, 0f);
-        greenBoxInstance.transform.setToTranslation(0f, -1f, 0f);
+        greenBoxInstance.transform.setToTranslation(0f, 0f, 0f);
         this.sceneService.addScene(new Scene(greenBoxInstance));
         this.createGrid();
         this.executorService = Executors.newScheduledThreadPool(2);
@@ -143,8 +139,8 @@ public class EnvironmentService {
         Color color = new Color(1f, 1f, 1f, 0.25f);
         builder.setColor(color);
         for (float t = GRID_MIN; t <= GRID_MAX; t += GRID_STEP) {
-            builder.line(t, 1, GRID_MIN, t, 1, GRID_MAX);
-            builder.line(GRID_MIN, 1, t, GRID_MAX, 1, t);
+            builder.line(t, 0, GRID_MIN, t, 0, GRID_MAX);
+            builder.line(GRID_MIN, 0, t, GRID_MAX, 0, t);
         }
         modelBuilder.part("axes", GL32.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material());
 
@@ -152,7 +148,7 @@ public class EnvironmentService {
 
         ModelInstance axesInstance = new ModelInstance(axesModel);
 
-        axesInstance.transform.setToTranslation(0f, -1f, 0f);
+        axesInstance.transform.setToTranslation(0f, 0f, 0f);
 
         this.sceneService.addSceneWithoutShadows(new Scene(axesInstance), false);
     }

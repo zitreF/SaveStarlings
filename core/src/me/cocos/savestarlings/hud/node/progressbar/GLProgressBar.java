@@ -2,14 +2,10 @@ package me.cocos.savestarlings.hud.node.progressbar;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import me.cocos.savestarlings.service.AssetService;
-
-import java.util.zip.Deflater;
+import me.cocos.savestarlings.asset.AssetService;
 
 public class GLProgressBar extends Stack {
 

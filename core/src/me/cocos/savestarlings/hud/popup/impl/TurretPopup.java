@@ -9,7 +9,7 @@ import me.cocos.savestarlings.builder.FontBuilder;
 import me.cocos.savestarlings.hud.popup.BuildingPopupType;
 import me.cocos.savestarlings.hud.popup.Popup;
 import me.cocos.savestarlings.hud.node.progressbar.impl.StatsProgressBar;
-import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.asset.AssetService;
 
 public class TurretPopup extends Popup {
 

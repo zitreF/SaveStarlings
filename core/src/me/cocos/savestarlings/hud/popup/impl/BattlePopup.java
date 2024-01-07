@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Align;
 import me.cocos.savestarlings.builder.FontBuilder;
 import me.cocos.savestarlings.hud.popup.Popup;
 import me.cocos.savestarlings.hud.node.scene2d.TypingLabel;
-import me.cocos.savestarlings.service.AssetService;
+import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.util.SoundUtil;
 
 public class BattlePopup extends Popup {

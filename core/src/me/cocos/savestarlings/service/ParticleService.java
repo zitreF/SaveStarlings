@@ -7,9 +7,8 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleController;
 import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import me.cocos.savestarlings.particle.IParticle;
+import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.particle.Particle;
-import me.cocos.savestarlings.particle.impl.ExplosionParticle;
 
 public class ParticleService {
 
