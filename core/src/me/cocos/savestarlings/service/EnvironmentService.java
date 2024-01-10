@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import me.cocos.savestarlings.entity.building.Building;
+import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.scene.SceneService;
 import me.cocos.savestarlings.asset.AssetService;
@@ -56,8 +57,8 @@ public class EnvironmentService {
         DepthShader.Config depthConfig = new DepthShader.Config();
         depthConfig.numBones = config.numBones;
         this.sceneService = new SceneService(PBRShaderProvider.createDefault(config), PBRShaderProvider.createDefaultDepth(depthConfig));
-        this.directionalShadowLight = new DirectionalShadowLight(4096, 4096, 1600f / 4f, 900f / 4f, 1f, 300f);
-        sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, -0.5f), 5f));
+        this.directionalShadowLight = new DirectionalShadowLight(4096, 4096, 128f, 128f, 1f, 1000f);
+        sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, -0.5f).nor(), 5f));
 
         IBLBuilder iblBuilder = IBLBuilder.createOutdoor(directionalShadowLight);
         this.environmentCubemap = iblBuilder.buildEnvMap(1);
@@ -83,8 +84,8 @@ public class EnvironmentService {
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         PBRTextureAttribute textureAttribute = PBRTextureAttribute.createBaseColorTexture(texture);
-        textureAttribute.scaleU = 16f;
-        textureAttribute.scaleV = 16f;
+        textureAttribute.scaleU = 32f;
+        textureAttribute.scaleV = 32f;
         Model greenBoxModel = modelBuilder.createBox(
                 200f, 0f, 200f,
                 new Material(textureAttribute),
@@ -116,6 +117,16 @@ public class EnvironmentService {
             }
             for (LivingEntity livingEntity : this.entityService.getEntities()) {
                 Scene scene = livingEntity.getScene();
+                boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
+                boolean contains = sceneService.getRenderableProviders().contains(scene, false);
+                if (!contains && isVisible) {
+                    sceneService.addScene(scene);
+                } else if (contains && !isVisible) {
+                    sceneService.removeScene(scene);
+                }
+            }
+            for (Environment environment : this.entityService.getEnvironments()) {
+                Scene scene = environment.getScene();
                 boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
                 boolean contains = sceneService.getRenderableProviders().contains(scene, false);
                 if (!contains && isVisible) {

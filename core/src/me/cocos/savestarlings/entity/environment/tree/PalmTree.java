@@ -9,6 +9,7 @@ import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
+import net.mgsx.gltf.scene3d.utils.MaterialConverter;
 
 public class PalmTree implements Environment {
 
