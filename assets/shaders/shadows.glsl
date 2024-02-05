@@ -24,7 +24,7 @@ float getCSMShadow(sampler2D sampler, vec3 uv, float pcf){
 }
 float getShadow()
 {
-	for(int i=0 ; i<numCSM ; i++){
+	for(int i=0 ; i<numCSM; i++){
 		vec2 pcfClip = u_csmPCFClip[i];
 		float pcf = pcfClip.x;
 		float clip = pcfClip.y;

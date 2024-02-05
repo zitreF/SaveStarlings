@@ -57,7 +57,7 @@ public class EnvironmentService {
         DepthShader.Config depthConfig = new DepthShader.Config();
         depthConfig.numBones = config.numBones;
         this.sceneService = new SceneService(PBRShaderProvider.createDefault(config), PBRShaderProvider.createDefaultDepth(depthConfig));
-        this.directionalShadowLight = new DirectionalShadowLight(4096, 4096, 128f, 128f, 1f, 1000f);
+        this.directionalShadowLight = new DirectionalShadowLight(4048, 4048, Gdx.graphics.getWidth() / 4f, Gdx.graphics.getHeight() / 4f, 1f, 300f);
         sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, -0.5f).nor(), 5f));
 
         IBLBuilder iblBuilder = IBLBuilder.createOutdoor(directionalShadowLight);
