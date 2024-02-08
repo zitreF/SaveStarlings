@@ -144,21 +144,34 @@ public class EnvironmentService {
         Gdx.gl.glLineWidth(2f);
         ModelBuilder modelBuilder = new ModelBuilder();
         modelBuilder.begin();
+
         BlendingAttribute blendingAttribute = new BlendingAttribute();
         blendingAttribute.opacity = 1f;
+
         MeshPartBuilder builder = modelBuilder.part("grid", GL32.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material(blendingAttribute));
-        Color color = new Color(1f, 1f, 1f, 0.25f);
-        builder.setColor(color);
-        for (float t = GRID_MIN; t <= GRID_MAX; t += GRID_STEP) {
-            builder.line(t, 0, GRID_MIN, t, 0, GRID_MAX);
-            builder.line(GRID_MIN, 0, t, GRID_MAX, 0, t);
+
+        float center = (GRID_MAX + GRID_MIN) / 2f; // Calculate the center of the grid
+
+        for (float x = GRID_MIN; x <= GRID_MAX; x += GRID_STEP) {
+            float distanceToCenterX = Math.abs(x - center);
+            float alphaX = 1f - Math.min(1f, distanceToCenterX / (GRID_MAX / 2f));
+
+            for (float z = GRID_MIN; z <= GRID_MAX; z += GRID_STEP) {
+                float distanceToCenterZ = Math.abs(z - center);
+                float alphaZ = 1f - Math.min(1f, distanceToCenterZ / (GRID_MAX / 2f));
+
+                Color color = new Color(1f, 1f, 1f, Math.min(alphaX, alphaZ) * 0.25f);
+                builder.setColor(color);
+
+                builder.line(x, 0, z, x + GRID_STEP, 0, z);
+                builder.line(x, 0, z, x, 0, z + GRID_STEP);
+            }
         }
+
         modelBuilder.part("axes", GL32.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material());
 
         Model axesModel = modelBuilder.end();
-
         ModelInstance axesInstance = new ModelInstance(axesModel);
-
         axesInstance.transform.setToTranslation(0f, 0f, 0f);
 
         this.sceneService.addSceneWithoutShadows(new Scene(axesInstance), false);
