@@ -3,6 +3,7 @@ package me.cocos.savestarlings.entity.building.tower.impl;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.building.tower.Tower;
@@ -12,6 +13,7 @@ import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.service.EntityService;
 import me.cocos.savestarlings.service.GameService;
 import me.cocos.savestarlings.util.AsyncUtil;
+import me.cocos.savestarlings.util.GridUtil;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
@@ -60,6 +62,8 @@ public class SniperTower implements Tower {
         this.delay = 1f;
 
         this.rectangle = new Rectangle(x - 2.5f, z - 2.5f, 5f, 5f);
+
+        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(GridUtil.createGrid(-12f, 12f, new Vector2(this.position.x, this.position.z)), true);
     }
 
     @Override

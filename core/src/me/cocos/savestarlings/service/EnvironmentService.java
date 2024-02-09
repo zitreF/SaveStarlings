@@ -9,12 +9,14 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.shaders.DepthShader;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.scene.SceneService;
 import me.cocos.savestarlings.asset.AssetService;
+import me.cocos.savestarlings.util.GridUtil;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRCubemapAttribute;
 import net.mgsx.gltf.scene3d.attributes.PBRFloatAttribute;
@@ -33,9 +35,6 @@ import java.util.concurrent.TimeUnit;
 
 public class EnvironmentService {
 
-    private static final float GRID_MIN = -100f;
-    private static final float GRID_MAX = 100f;
-    private static final float GRID_STEP = 2.5f;
     private final SceneService sceneService;
     private final Cubemap diffuseCubemap;
     private final Cubemap environmentCubemap;
@@ -95,7 +94,7 @@ public class EnvironmentService {
         greenBoxInstance.transform.setFromEulerAngles(90f, 0f, 0f);
         greenBoxInstance.transform.setToTranslation(0f, 0f, 0f);
         this.sceneService.addScene(new Scene(greenBoxInstance));
-        this.createGrid();
+
         this.executorService = Executors.newScheduledThreadPool(2);
 
         Thread gdxThread = Thread.currentThread();
@@ -135,46 +134,9 @@ public class EnvironmentService {
                     sceneService.removeScene(scene);
                 }
             }
-        }, 300, 300, TimeUnit.MILLISECONDS);
+        }, 150, 150, TimeUnit.MILLISECONDS);
         this.particleService = particleService;
 
-    }
-
-    private void createGrid() {
-        Gdx.gl.glLineWidth(2f);
-        ModelBuilder modelBuilder = new ModelBuilder();
-        modelBuilder.begin();
-
-        BlendingAttribute blendingAttribute = new BlendingAttribute();
-        blendingAttribute.opacity = 1f;
-
-        MeshPartBuilder builder = modelBuilder.part("grid", GL32.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material(blendingAttribute));
-
-        float center = (GRID_MAX + GRID_MIN) / 2f; // Calculate the center of the grid
-
-        for (float x = GRID_MIN; x <= GRID_MAX; x += GRID_STEP) {
-            float distanceToCenterX = Math.abs(x - center);
-            float alphaX = 1f - Math.min(1f, distanceToCenterX / (GRID_MAX / 2f));
-
-            for (float z = GRID_MIN; z <= GRID_MAX; z += GRID_STEP) {
-                float distanceToCenterZ = Math.abs(z - center);
-                float alphaZ = 1f - Math.min(1f, distanceToCenterZ / (GRID_MAX / 2f));
-
-                Color color = new Color(1f, 1f, 1f, Math.min(alphaX, alphaZ) * 0.25f);
-                builder.setColor(color);
-
-                builder.line(x, 0, z, x + GRID_STEP, 0, z);
-                builder.line(x, 0, z, x, 0, z + GRID_STEP);
-            }
-        }
-
-        modelBuilder.part("axes", GL32.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material());
-
-        Model axesModel = modelBuilder.end();
-        ModelInstance axesInstance = new ModelInstance(axesModel);
-        axesInstance.transform.setToTranslation(0f, 0f, 0f);
-
-        this.sceneService.addSceneWithoutShadows(new Scene(axesInstance), false);
     }
 
     public void dispose() {

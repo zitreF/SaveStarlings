@@ -14,8 +14,10 @@ import me.cocos.savestarlings.entity.building.BuildingType;
 import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.entity.livingentitiy.unit.Colossus;
 import me.cocos.savestarlings.hud.Hud;
+import me.cocos.savestarlings.util.GridUtil;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
+import net.mgsx.gltf.scene3d.scene.Scene;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -31,6 +33,7 @@ public class BuildingService {
     private final Vector2 mouseCoords;
     private final Vector3 intersection;
     private BuildingType currentBuilding;
+    private Scene grid;
     private boolean isPlaceable;
     private boolean mouseOverHud;
 
@@ -80,6 +83,8 @@ public class BuildingService {
             material.set(GREEN_COLOR_ATTRIBUTE, OPACITY_ATTRIBUTE);
         }
         this.environmentService.addScene(this.currentBuilding.getScene());
+        this.grid = GridUtil.createGrid(-12f, 12f, new Vector2(0, 0));
+        this.environmentService.addSceneWithoutShadows(grid);
     }
 
     private void handleBuildingPlacement() {
@@ -97,7 +102,8 @@ public class BuildingService {
         }
 
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-            this.environmentService.getSceneService().removeScene(this.currentBuilding.getScene());
+            this.environmentService.removeScene(this.currentBuilding.getScene());
+            this.environmentService.removeSceneWithoutShadows(grid);
             this.currentBuilding = null;
             return;
         }
@@ -113,6 +119,7 @@ public class BuildingService {
                 float z = currentBuilding.getPositionFunction().apply(intersection.z);
 
                 currentBuilding.getScene().modelInstance.transform.setTranslation(x, intersection.y, z);
+                grid.modelInstance.transform.setTranslation(new Vector3(x, 0, z));
 
                 if (this.isBuildingCollision(x, z)) {
                     for (Material material : currentBuilding.getScene().modelInstance.materials) {
@@ -168,7 +175,8 @@ public class BuildingService {
     private void handleHudClick() {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             if (this.currentBuilding != null) {
-                this.environmentService.getSceneService().removeScene(this.currentBuilding.getScene());
+                this.environmentService.removeScene(this.currentBuilding.getScene());
+                this.environmentService.removeSceneWithoutShadows(grid);
                 this.currentBuilding = null;
             }
         }
