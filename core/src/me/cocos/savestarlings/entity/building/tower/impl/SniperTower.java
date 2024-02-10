@@ -89,7 +89,7 @@ public class SniperTower extends Tower {
         GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(greenSquareScene, false);
 
         Model blueCapsuleModel = modelBuilder.createSphere(
-                30f, 10f, 30f, 90, 90,
+                this.getRange(), 10f, this.getRange(), 90, 90,
                 new Material(PBRColorAttribute.createBaseColorFactor(Color.valueOf("#0193bf")), new BlendingAttribute(GL32.GL_SRC_ALPHA, GL32.GL_ONE_MINUS_SRC_ALPHA, 0.5f)),
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 
@@ -148,7 +148,7 @@ public class SniperTower extends Tower {
             this.delay = 0f;
             EntityService entityService = GameService.getInstance().getEntityService();
             entityService.getEntities().stream()
-                    .filter(entity -> entity instanceof Enemy && this.position.dst2(entity.getPosition()) < (15 * 15))
+                    .filter(entity -> entity instanceof Enemy && position.dst2(entity.getPosition()) < Math.pow(getRange() / 2f, 2))
                     .min(Comparator.comparing(enemy -> this.position.dst2(enemy.getPosition())))
                     .ifPresent(this::updateRotationForTarget);
         }
@@ -170,7 +170,7 @@ public class SniperTower extends Tower {
 
     private void checkAttack() {
         if (target != null) {
-            if (position.epsilonEquals(target.getPosition(), 15f)) {
+            if (position.epsilonEquals(target.getPosition(), this.getRange())) {
                 if (attackDelay >= 2f) {
                     this.attackDelay = 0f;
                     SoundUtil.playSound("other/laser.mp3");
