@@ -31,7 +31,7 @@ public class GameScreen implements Screen {
     public GameScreen() {
         this.camera = new PerspectiveCamera(60, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.near = 1f;
-        camera.far = 1000f;
+        camera.far = 100f;
         camera.position.set(10f, 40f, 0f);
         camera.lookAt(0f, 0f, 0f);
 

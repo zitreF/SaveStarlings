@@ -2,10 +2,13 @@ package me.cocos.savestarlings.entity.building.base;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.asset.AssetService;
+import me.cocos.savestarlings.service.GameService;
+import me.cocos.savestarlings.util.GridUtil;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
@@ -43,6 +46,8 @@ public class StarBase implements Building {
         scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
         this.rectangle = new Rectangle(x - 5f, z - 5f, 10f, 10f);
+
+        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(GridUtil.createGrid(-2.5f, 2.5f, new Vector2(0f, 0f)), false);
     }
 
     @Override
@@ -80,12 +85,7 @@ public class StarBase implements Building {
     }
 
     @Override
-    public void onClick() {
-
-    }
-
-    @Override
-    public boolean isClicked() {
+    public boolean isHovered() {
         return IntersectorUtil.isPressed(this.position, 1.25f);
     }
 }

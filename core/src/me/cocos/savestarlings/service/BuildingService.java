@@ -24,9 +24,9 @@ import java.util.concurrent.CompletableFuture;
 public class BuildingService {
 
     private static final Plane PLANE = new Plane(Vector3.Y, 0f);
-    private static final BlendingAttribute OPACITY_ATTRIBUTE = new BlendingAttribute(GL32.GL_SRC_ALPHA, GL32.GL_ONE_MINUS_SRC_ALPHA, 0.5f);
-    private static final ColorAttribute RED_COLOR_ATTRIBUTE = PBRColorAttribute.createBaseColorFactor(new Color(1f, 51f / 255f, 51f / 255f, 0.75f));
-    private static final ColorAttribute GREEN_COLOR_ATTRIBUTE = PBRColorAttribute.createBaseColorFactor(new Color(84f / 255f, 189f / 255f, 46f / 255f, 0.75f));
+    public static final BlendingAttribute OPACITY_ATTRIBUTE = new BlendingAttribute(GL32.GL_SRC_ALPHA, GL32.GL_ONE_MINUS_SRC_ALPHA, 0.5f);
+    public static final ColorAttribute RED_COLOR_ATTRIBUTE = PBRColorAttribute.createBaseColorFactor(new Color(1f, 51f / 255f, 51f / 255f, 0.75f));
+    public static final ColorAttribute GREEN_COLOR_ATTRIBUTE = PBRColorAttribute.createBaseColorFactor(new Color(84f / 255f, 189f / 255f, 46f / 255f, 0.75f));
     private final EntityService entityService;
     private final EnvironmentService environmentService;
     private final Hud hud;
@@ -83,7 +83,7 @@ public class BuildingService {
             material.set(GREEN_COLOR_ATTRIBUTE, OPACITY_ATTRIBUTE);
         }
         this.environmentService.addScene(this.currentBuilding.getScene());
-        this.grid = GridUtil.createGrid(-12f, 12f, new Vector2(0, 0));
+        this.grid = GridUtil.createGrid(-0f, 0f, new Vector2(0, 0));
         this.environmentService.addSceneWithoutShadows(grid);
     }
 

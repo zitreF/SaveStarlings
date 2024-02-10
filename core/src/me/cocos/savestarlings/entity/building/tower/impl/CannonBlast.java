@@ -18,7 +18,7 @@ import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
 import java.util.Comparator;
 
-public class CannonBlast implements Tower {
+public class CannonBlast extends Tower {
 
     private final Scene scene;
     private final BoundingBox boundingBox;
@@ -134,13 +134,10 @@ public class CannonBlast implements Tower {
         return sceneAsset;
     }
 
-    @Override
-    public void onClick() {
 
-    }
 
     @Override
-    public boolean isClicked() {
+    public boolean isHovered() {
         return IntersectorUtil.isPressed(this.position, 1.25f);
     }
 }

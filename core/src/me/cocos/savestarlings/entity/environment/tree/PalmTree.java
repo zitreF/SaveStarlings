@@ -68,6 +68,7 @@ public class PalmTree implements Environment {
         return scene.modelInstance.transform.getTranslation(this.position);
     }
 
+
     @Override
     public void onClick() {
 

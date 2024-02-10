@@ -77,12 +77,7 @@ public class CompactHouse implements Building {
     }
 
     @Override
-    public void onClick() {
-
-    }
-
-    @Override
-    public boolean isClicked() {
+    public boolean isHovered() {
         return IntersectorUtil.isPressed(this.position, 1.25f);
     }
 }

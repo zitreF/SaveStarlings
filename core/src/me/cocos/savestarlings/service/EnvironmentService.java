@@ -136,7 +136,6 @@ public class EnvironmentService {
             }
         }, 150, 150, TimeUnit.MILLISECONDS);
         this.particleService = particleService;
-
     }
 
     public void dispose() {

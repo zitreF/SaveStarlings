@@ -2,9 +2,9 @@ package me.cocos.savestarlings.entity.building.tower;
 
 import me.cocos.savestarlings.entity.building.Building;
 
-public interface Tower extends Building {
+public abstract class Tower implements Building {
 
-    int getRange();
+    public abstract int getRange();
 
-
+    public abstract boolean isHovered();
 }
