@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import com.badlogic.gdx.math.collision.Ray;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.building.BuildingType;
@@ -36,6 +37,8 @@ public class BuildingService {
     private final Vector2 mouseCoords;
     private final Vector3 intersection;
     private final Scene rangeCapsule;
+    private final Scene otherRangeCapsule;
+    private final Scene collisionScene;
     private BuildingType currentBuilding;
     private Scene grid;
     private boolean isPlaceable;
@@ -55,7 +58,7 @@ public class BuildingService {
 
         Model blueCapsuleModel = modelBuilder.createBox(
                 1f, 0.5f, 1f,
-                new Material(),
+                new Material(PBRColorAttribute.createBaseColorFactor(Color.BLUE)),
                 VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
 
 
@@ -63,6 +66,28 @@ public class BuildingService {
         rangeCapsule.modelInstance.transform.setTranslation(0f, 1f, 0f);
 
         GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(rangeCapsule, false);
+
+        Model otherBlueCapsuleModel = modelBuilder.createBox(
+                1f, 0.5f, 1f,
+                new Material(PBRColorAttribute.createBaseColorFactor(Color.RED)),
+                VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
+
+
+        this.otherRangeCapsule = new Scene(otherBlueCapsuleModel);
+        otherRangeCapsule.modelInstance.transform.setTranslation(0f, 1f, 0f);
+
+        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(otherRangeCapsule, false);
+
+        Model collisionModel = modelBuilder.createBox(
+                1f, 0.5f, 1f,
+                new Material(PBRColorAttribute.createBaseColorFactor(Color.YELLOW)),
+                VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
+
+
+        this.collisionScene = new Scene(collisionModel);
+        collisionScene.modelInstance.transform.setTranslation(0f, 1f, 0f);
+
+        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(collisionScene, false);
     }
 
     public void update() {
@@ -169,19 +194,35 @@ public class BuildingService {
         collision.set(x, z, building.getSize(), building.getSize());
         this.rangeCapsule.modelInstance.transform.setToTranslation(collision.x, 1f, collision.y);
         this.rangeCapsule.modelInstance.transform.scale(collision.width, 1f, collision.height);
+
         for (Building existingBuilding : entityService.getBuildings()) {
+            this.otherRangeCapsule.modelInstance.transform.setToTranslation(existingBuilding.getBounding().x, 1f, existingBuilding.getBounding().y);
+            this.otherRangeCapsule.modelInstance.transform.scale(existingBuilding.getBounding().width, 1f, existingBuilding.getBounding().height);
+
             if (existingBuilding.getBounding().overlaps(collision)) {
                 return true;
             }
         }
+
         for (Environment environment : entityService.getEnvironments()) {
             if (environment.getBounding().overlaps(collision)) {
                 return true;
             }
         }
+
         return false;
     }
 
+    private boolean isCapsuleCollision(Vector3 capsule1Position, float capsule1RadiusX, float capsule1RadiusZ,
+                                       Vector3 capsule2Position, float capsule2RadiusX, float capsule2RadiusZ) {
+        float distanceX = capsule1Position.x - capsule2Position.x;
+        float distanceZ = capsule1Position.z - capsule2Position.z;
+
+        float minDistanceX = capsule1RadiusX + capsule2RadiusX;
+        float minDistanceZ = capsule1RadiusZ + capsule2RadiusZ;
+
+        return (Math.abs(distanceX) < minDistanceX) && (Math.abs(distanceZ) < minDistanceZ);
+    }
 
     private void handleHudClick() {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {

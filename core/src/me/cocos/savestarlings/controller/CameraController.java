@@ -69,14 +69,14 @@ public class CameraController implements InputProcessor {
     public boolean scrolled(float amountX, float amountY) {
         if (amountY == -1) {
             this.camera.translate(0, Gdx.graphics.getDeltaTime() * -ZOOM_SPEED, 0);
-            if (camera.position.y < 25f) {
-                camera.position.y = 25f;
-            }
+//            if (camera.position.y < 25f) {
+//                camera.position.y = 25f;
+//            }
         } else {
             this.camera.translate(0, Gdx.graphics.getDeltaTime() * ZOOM_SPEED, 0);
-            if (camera.position.y > 50f) {
-                camera.position.y = 50f;
-            }
+//            if (camera.position.y > 50f) {
+//                camera.position.y = 50f;
+//            }
         }
         return false;
     }

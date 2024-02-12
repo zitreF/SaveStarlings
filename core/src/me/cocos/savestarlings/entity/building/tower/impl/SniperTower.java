@@ -102,7 +102,7 @@ public class SniperTower extends Tower {
 
 
         Scene tess = new Scene(test);
-        tess.modelInstance.transform.setTranslation(rectangle.x, this.position.y, rectangle.y);
+        tess.modelInstance.transform.setTranslation(rectangle.x, 1f, rectangle.y);
 
         GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(tess, false);
     }

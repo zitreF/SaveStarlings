@@ -51,6 +51,10 @@ public class StarBase implements Building {
 
         this.rectangle = new Rectangle(x, z, 10f, 10f);
 
+
+        System.out.println(position.x);
+        System.out.println(rectangle.x);
+
         GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(GridUtil.createGrid(-2.5f, 2.5f, new Vector2(0f, 0f)), false);
 
         ModelBuilder modelBuilder = new ModelBuilder();
@@ -62,7 +66,7 @@ public class StarBase implements Building {
 
 
         Scene tess = new Scene(test);
-        tess.modelInstance.transform.setTranslation(rectangle.x, this.position.y, rectangle.y);
+        tess.modelInstance.transform.setTranslation(rectangle.x, 1f, rectangle.y);
 
         GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(tess, false);
     }

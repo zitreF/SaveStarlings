@@ -1,11 +1,16 @@
 package me.cocos.savestarlings.entity.environment.tree;
 
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.asset.AssetService;
+import me.cocos.savestarlings.service.GameService;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
@@ -45,7 +50,19 @@ public class PalmTree implements Environment {
 
         scene.modelInstance.transform.rotate(Vector3.Y, MathUtils.random(360f));
 
-        this.rectangle = new Rectangle(x - 1.25f, z - 1.25f, 2.5f, 2.5f);
+        this.rectangle = new Rectangle(x, z, 2.5f, 2.5f);
+
+        ModelBuilder modelBuilder = new ModelBuilder();
+        Model test = modelBuilder.createBox(
+                rectangle.width, 0.5f, rectangle.height,
+                new Material(),
+                VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
+
+
+        Scene tess = new Scene(test);
+        tess.modelInstance.transform.setTranslation(rectangle.x, 1f, rectangle.y);
+
+        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(tess, false);
     }
 
     @Override
