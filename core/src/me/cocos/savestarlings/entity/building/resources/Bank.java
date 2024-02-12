@@ -43,7 +43,7 @@ public class Bank implements Building {
 
         scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
-        this.rectangle = new Rectangle(x - 3.75f, z - 3.75f, 7.5f, 7.5f);
+        this.rectangle = new Rectangle(x, z, 7.5f, 7.5f);
     }
 
     @Override

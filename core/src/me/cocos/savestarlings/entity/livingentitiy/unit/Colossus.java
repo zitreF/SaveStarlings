@@ -96,6 +96,7 @@ public class Colossus implements LivingEntity, Enemy {
                 });
             }
             if (target != null) {
+                // TODO: fix it because its squared but has to use `dst2` method from Vector3
                 if (position.epsilonEquals(target.getPosition(), 15f)) {
                     if (attackDelay >= 2f) {
                         this.attackDelay = 0f;

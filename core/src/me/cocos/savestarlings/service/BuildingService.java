@@ -4,9 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL32;
+import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.math.collision.Ray;
 import me.cocos.savestarlings.entity.building.Building;
@@ -32,6 +35,7 @@ public class BuildingService {
     private final Hud hud;
     private final Vector2 mouseCoords;
     private final Vector3 intersection;
+    private final Scene rangeCapsule;
     private BuildingType currentBuilding;
     private Scene grid;
     private boolean isPlaceable;
@@ -47,6 +51,18 @@ public class BuildingService {
         this.hud.setBuildingService(this);
         this.isPlaceable = false;
         this.mouseOverHud = false;
+        ModelBuilder modelBuilder = new ModelBuilder();
+
+        Model blueCapsuleModel = modelBuilder.createBox(
+                1f, 0.5f, 1f,
+                new Material(),
+                VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
+
+
+        this.rangeCapsule = new Scene(blueCapsuleModel);
+        rangeCapsule.modelInstance.transform.setTranslation(0f, 1f, 0f);
+
+        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(rangeCapsule, false);
     }
 
     public void update() {
@@ -147,22 +163,23 @@ public class BuildingService {
         });
     }
 
-    private final Vector3 translation = new Vector3();
     private final Vector2 otherPosition = new Vector2();
     private final Rectangle collision = new Rectangle();
 
     private boolean isBuildingCollision(float x, float z) {
         BuildingType building = this.currentBuilding;
-        collision.set(x - building.getSize() / 2f, z - building.getSize() / 2f, building.getSize(), building.getSize());
+        collision.set(x, z, building.getSize(), building.getSize());
+        this.rangeCapsule.modelInstance.transform.setToTranslation(collision.x, 1f, collision.y);
+        this.rangeCapsule.modelInstance.transform.scale(collision.width, 1f, collision.height);
         for (Building existingBuilding : entityService.getBuildings()) {
-            Vector3 temp = existingBuilding.getScene().modelInstance.transform.getTranslation(translation);
+            Vector3 temp = existingBuilding.getPosition();
             otherPosition.set(temp.x, temp.z);
             if (existingBuilding.getBounding().overlaps(collision)) {
                 return true;
             }
         }
         for (Environment environment : entityService.getEnvironments()) {
-            Vector3 temp = environment.getScene().modelInstance.transform.getTranslation(translation);
+            Vector3 temp = environment.getPosition();
             otherPosition.set(temp.x, temp.z);
             if (environment.getBounding().overlaps(collision)) {
                 return true;

@@ -13,10 +13,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
+import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.entity.building.tower.Tower;
 import me.cocos.savestarlings.entity.livingentitiy.Enemy;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
-import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.service.BuildingService;
 import me.cocos.savestarlings.service.EntityService;
 import me.cocos.savestarlings.service.GameService;
@@ -41,9 +41,6 @@ public class SniperTower extends Tower {
     private float delay;
     private float attackDelay;
     private final Vector3 rotationDirection;
-    private final Scene rangeCapsule;
-
-    private boolean isCapsuleEnabled;
 
     private static final SceneAsset sceneAsset;
 
@@ -73,7 +70,7 @@ public class SniperTower extends Tower {
 
         this.delay = 1f;
 
-        this.rectangle = new Rectangle(x - 2.5f, z - 2.5f, 5f, 5f);
+        this.rectangle = new Rectangle(x, z, 5f, 5f);
 
         GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(GridUtil.createGrid(-0f, 0f, new Vector2(this.position.x, this.position.z)), false);
 
@@ -87,14 +84,27 @@ public class SniperTower extends Tower {
         greenSquareScene.modelInstance.transform.setTranslation(x, this.position.y, z);
 
         GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(greenSquareScene, false);
-
         Model blueCapsuleModel = modelBuilder.createSphere(
-                this.getRange(), 10f, this.getRange(), 90, 90,
-                new Material(PBRColorAttribute.createBaseColorFactor(Color.valueOf("#0193bf")), new BlendingAttribute(GL32.GL_SRC_ALPHA, GL32.GL_ONE_MINUS_SRC_ALPHA, 0.5f)),
+                this.getRange(), 10f, this.getRange(), 45, 45,
+                new Material(
+                        PBRColorAttribute.createBaseColorFactor(Color.valueOf("#0193bf")),
+                        new BlendingAttribute(GL32.GL_SRC_ALPHA, GL32.GL_ONE_MINUS_SRC_ALPHA, 0.5f)
+                ),
                 VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal);
 
         this.rangeCapsule = new Scene(blueCapsuleModel);
         rangeCapsule.modelInstance.transform.setTranslation(x, this.position.y, z);
+
+        Model test = modelBuilder.createBox(
+                rectangle.width, 0.5f, rectangle.height,
+                new Material(),
+                VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
+
+
+        Scene tess = new Scene(test);
+        tess.modelInstance.transform.setTranslation(rectangle.x, this.position.y, rectangle.y);
+
+        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(tess, false);
     }
 
     @Override
@@ -105,33 +115,6 @@ public class SniperTower extends Tower {
             this.updateRotation();
             this.checkAttack();
         });
-    }
-
-    private void handleHover(float delta) {
-        if (this.isHovered()) {
-            if (!isCapsuleEnabled) {
-                this.isCapsuleEnabled = true;
-                rangeCapsule.modelInstance.transform.setToScaling(0f, 0f, 0f);
-                GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(rangeCapsule, false);
-            }
-
-            float maxSize = 1f;
-            float growthRate = 5f;
-
-            float currentSize = rangeCapsule.modelInstance.transform.getScaleX();
-
-            float newSize = Math.min(currentSize + delta * growthRate, maxSize);
-
-            newSize = Math.min(newSize, maxSize);
-
-            rangeCapsule.modelInstance.transform.setToScaling(newSize, newSize, newSize);
-            rangeCapsule.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
-        } else {
-            if (isCapsuleEnabled) {
-                this.isCapsuleEnabled = false;
-                GameService.getInstance().getEnvironmentService().getSceneService().removeSceneWithoutShadows(rangeCapsule);
-            }
-        }
     }
 
     private void updateDelays(float delta) {

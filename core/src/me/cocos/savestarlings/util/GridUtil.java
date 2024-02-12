@@ -2,11 +2,13 @@ package me.cocos.savestarlings.util;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.GL32;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector2;
@@ -28,9 +30,10 @@ public class GridUtil {
         float gridMin = min - GRID_STEP;
         float gridMax = max + GRID_STEP;
 
+        Color color = new Color(1f, 1f, 1f, 1f);
+
         for (float x = gridMin; x <= gridMax; x += GRID_STEP) {
             for (float z = gridMin; z <= gridMax; z += GRID_STEP) {
-                Color color = new Color(1f, 1f, 1f, 1f);
                 builder.setColor(color);
 
                 builder.line(x, 0, z, Math.min(x + GRID_STEP, gridMax), 0, z);

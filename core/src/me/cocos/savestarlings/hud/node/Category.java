@@ -45,6 +45,9 @@ public enum Category {
             Category.addBuilding(BuildingPopupType.BLAST_CANNON, BuildingType.CANNON_BLAST, table,
                     "ui/buildings/turrets/cannon_blast.png",
                     "ui/buildings/turrets/cannon_blast_pressed.png");
+            Category.addBuilding(BuildingPopupType.BLAST_CANNON, BuildingType.WALL, table,
+                    "ui/buildings/turrets/cannon_blast.png",
+                    "ui/buildings/turrets/cannon_blast_pressed.png");
         }
     },
     DEFENSES() {
