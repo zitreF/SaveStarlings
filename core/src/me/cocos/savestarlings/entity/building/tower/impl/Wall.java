@@ -110,8 +110,14 @@ public class Wall implements Defense {
         return sceneAsset;
     }
 
+
     @Override
-    public boolean isHovered() {
-        return IntersectorUtil.isPressed(this.position, 1.25f);
+    public void onClick() {
+
+    }
+
+    @Override
+    public boolean isClicked() {
+        return false;
     }
 }
