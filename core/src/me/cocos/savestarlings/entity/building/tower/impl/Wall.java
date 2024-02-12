@@ -57,19 +57,6 @@ public class Wall implements Defense {
         scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
         this.rectangle = new Rectangle(x, z, 2.5f, 2.5f);
-
-        ModelBuilder modelBuilder = new ModelBuilder();
-
-        Model test = modelBuilder.createBox(
-                rectangle.width, 0.5f, rectangle.height,
-                new Material(),
-                VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
-
-
-        Scene tess = new Scene(test);
-        tess.modelInstance.transform.setTranslation(rectangle.x, this.position.y, rectangle.y);
-
-        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(tess, false);
     }
 
     @Override

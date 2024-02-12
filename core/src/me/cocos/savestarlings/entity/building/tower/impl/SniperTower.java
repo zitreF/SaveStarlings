@@ -62,8 +62,6 @@ public class SniperTower implements Tower {
         this.delay = 1f;
 
         this.rectangle = new Rectangle(x, z, 5f, 5f);
-
-        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(GridUtil.createGrid(-12f, 12f, new Vector2(this.position.x, this.position.z)), true);
     }
 
     @Override

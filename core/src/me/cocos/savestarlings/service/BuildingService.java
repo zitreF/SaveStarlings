@@ -36,9 +36,6 @@ public class BuildingService {
     private final Hud hud;
     private final Vector2 mouseCoords;
     private final Vector3 intersection;
-    private final Scene rangeCapsule;
-    private final Scene otherRangeCapsule;
-    private final Scene collisionScene;
     private BuildingType currentBuilding;
     private Scene grid;
     private boolean isPlaceable;
@@ -54,40 +51,6 @@ public class BuildingService {
         this.hud.setBuildingService(this);
         this.isPlaceable = false;
         this.mouseOverHud = false;
-        ModelBuilder modelBuilder = new ModelBuilder();
-
-        Model blueCapsuleModel = modelBuilder.createBox(
-                1f, 0.5f, 1f,
-                new Material(PBRColorAttribute.createBaseColorFactor(Color.BLUE)),
-                VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
-
-
-        this.rangeCapsule = new Scene(blueCapsuleModel);
-        rangeCapsule.modelInstance.transform.setTranslation(0f, 1f, 0f);
-
-        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(rangeCapsule, false);
-
-        Model otherBlueCapsuleModel = modelBuilder.createBox(
-                1f, 0.5f, 1f,
-                new Material(PBRColorAttribute.createBaseColorFactor(Color.RED)),
-                VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
-
-
-        this.otherRangeCapsule = new Scene(otherBlueCapsuleModel);
-        otherRangeCapsule.modelInstance.transform.setTranslation(0f, 1f, 0f);
-
-        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(otherRangeCapsule, false);
-
-        Model collisionModel = modelBuilder.createBox(
-                1f, 0.5f, 1f,
-                new Material(PBRColorAttribute.createBaseColorFactor(Color.YELLOW)),
-                VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
-
-
-        this.collisionScene = new Scene(collisionModel);
-        collisionScene.modelInstance.transform.setTranslation(0f, 1f, 0f);
-
-        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(collisionScene, false);
     }
 
     public void update() {
@@ -192,14 +155,18 @@ public class BuildingService {
     private boolean isBuildingCollision(float x, float z) {
         BuildingType building = this.currentBuilding;
         collision.set(x, z, building.getSize(), building.getSize());
-        this.rangeCapsule.modelInstance.transform.setToTranslation(collision.x, 1f, collision.y);
-        this.rangeCapsule.modelInstance.transform.scale(collision.width, 1f, collision.height);
-
         for (Building existingBuilding : entityService.getBuildings()) {
-            this.otherRangeCapsule.modelInstance.transform.setToTranslation(existingBuilding.getBounding().x, 1f, existingBuilding.getBounding().y);
-            this.otherRangeCapsule.modelInstance.transform.scale(existingBuilding.getBounding().width, 1f, existingBuilding.getBounding().height);
+            Vector2 rangeCapsulePosition = new Vector2(collision.x, collision.y);
+            Vector2 otherRangeCapsulePosition = new Vector2(existingBuilding.getBounding().x, existingBuilding.getBounding().y);
 
-            if (existingBuilding.getBounding().overlaps(collision)) {
+            float rangeCapsuleRadiusX = collision.width / 2f;
+            float rangeCapsuleRadiusZ = collision.height / 2f;
+
+            float otherRangeCapsuleRadiusX = existingBuilding.getBounding().width / 2f;
+            float otherRangeCapsuleRadiusZ = existingBuilding.getBounding().height / 2f;
+
+            if (this.isColliding(rangeCapsulePosition, rangeCapsuleRadiusX, rangeCapsuleRadiusZ,
+                    otherRangeCapsulePosition, otherRangeCapsuleRadiusX, otherRangeCapsuleRadiusZ)) {
                 return true;
             }
         }
@@ -213,13 +180,13 @@ public class BuildingService {
         return false;
     }
 
-    private boolean isCapsuleCollision(Vector3 capsule1Position, float capsule1RadiusX, float capsule1RadiusZ,
-                                       Vector3 capsule2Position, float capsule2RadiusX, float capsule2RadiusZ) {
-        float distanceX = capsule1Position.x - capsule2Position.x;
-        float distanceZ = capsule1Position.z - capsule2Position.z;
+    private boolean isColliding(Vector2 position1, float radiusX1, float radiusZ1,
+                                       Vector2 position2, float radiusX2, float radiusZ2) {
+        float distanceX = position1.x - position2.x;
+        float distanceZ = position1.y - position2.y;
 
-        float minDistanceX = capsule1RadiusX + capsule2RadiusX;
-        float minDistanceZ = capsule1RadiusZ + capsule2RadiusZ;
+        float minDistanceX = radiusX1 + radiusX2;
+        float minDistanceZ = radiusZ1 + radiusZ2;
 
         return (Math.abs(distanceX) < minDistanceX) && (Math.abs(distanceZ) < minDistanceZ);
     }
