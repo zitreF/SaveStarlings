@@ -55,7 +55,7 @@ public class CannonBlast implements Tower {
 
         scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
 
-        this.rectangle = new Rectangle(x - 2.5f, z - 2.5f, 5f, 5f);
+        this.rectangle = new Rectangle(x, z, 5f, 5f);
     }
 
     @Override
