@@ -1,5 +1,9 @@
 package me.cocos.savestarlings.entity.building.base;
 
+import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -48,6 +52,19 @@ public class StarBase implements Building {
         this.rectangle = new Rectangle(x, z, 10f, 10f);
 
         GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(GridUtil.createGrid(-2.5f, 2.5f, new Vector2(0f, 0f)), false);
+
+        ModelBuilder modelBuilder = new ModelBuilder();
+
+        Model test = modelBuilder.createBox(
+                rectangle.width, 0.5f, rectangle.height,
+                new Material(),
+                VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
+
+
+        Scene tess = new Scene(test);
+        tess.modelInstance.transform.setTranslation(rectangle.x, this.position.y, rectangle.y);
+
+        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(tess, false);
     }
 
     @Override
@@ -81,7 +98,7 @@ public class StarBase implements Building {
 
     @Override
     public Vector3 getPosition() {
-        return scene.modelInstance.transform.getTranslation(this.position);
+        return this.position;
     }
 
     @Override

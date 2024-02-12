@@ -162,8 +162,6 @@ public class BuildingService {
             }
         });
     }
-
-    private final Vector2 otherPosition = new Vector2();
     private final Rectangle collision = new Rectangle();
 
     private boolean isBuildingCollision(float x, float z) {
@@ -172,15 +170,11 @@ public class BuildingService {
         this.rangeCapsule.modelInstance.transform.setToTranslation(collision.x, 1f, collision.y);
         this.rangeCapsule.modelInstance.transform.scale(collision.width, 1f, collision.height);
         for (Building existingBuilding : entityService.getBuildings()) {
-            Vector3 temp = existingBuilding.getPosition();
-            otherPosition.set(temp.x, temp.z);
             if (existingBuilding.getBounding().overlaps(collision)) {
                 return true;
             }
         }
         for (Environment environment : entityService.getEnvironments()) {
-            Vector3 temp = environment.getPosition();
-            otherPosition.set(temp.x, temp.z);
             if (environment.getBounding().overlaps(collision)) {
                 return true;
             }

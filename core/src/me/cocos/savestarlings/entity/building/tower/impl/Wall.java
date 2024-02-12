@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.entity.building.tower.Defense;
+import me.cocos.savestarlings.service.BuildingService;
 import me.cocos.savestarlings.service.GameService;
 import me.cocos.savestarlings.util.GridUtil;
 import me.cocos.savestarlings.util.IntersectorUtil;
@@ -38,6 +39,7 @@ public class Wall implements Defense {
     public Wall(Vector3 position) {
         this.position = new Vector3(position);
         this.scene = new Scene(sceneAsset.scene);
+
         this.boundingBox = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
@@ -58,16 +60,16 @@ public class Wall implements Defense {
 
         ModelBuilder modelBuilder = new ModelBuilder();
 
-        Model blueCapsuleModel = modelBuilder.createBox(
+        Model test = modelBuilder.createBox(
                 rectangle.width, 0.5f, rectangle.height,
                 new Material(),
                 VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
 
 
-        Scene rangeCapsule = new Scene(blueCapsuleModel);
-        rangeCapsule.modelInstance.transform.setTranslation(rectangle.x, this.position.y, rectangle.y);
+        Scene tess = new Scene(test);
+        tess.modelInstance.transform.setTranslation(rectangle.x, this.position.y, rectangle.y);
 
-        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(rangeCapsule, false);
+        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(tess, false);
     }
 
     @Override
