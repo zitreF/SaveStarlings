@@ -69,10 +69,6 @@ public class Rock implements Environment {
         return scene.modelInstance.transform.getTranslation(this.position);
     }
 
-    public static SceneAsset getSceneAsset() {
-        return sceneAsset;
-    }
-
     @Override
     public void onClick() {
 
@@ -81,5 +77,9 @@ public class Rock implements Environment {
     @Override
     public boolean isClicked() {
         return IntersectorUtil.isPressed(this.position, 1.25f);
+    }
+
+    public static SceneAsset getSceneAsset() {
+        return sceneAsset;
     }
 }

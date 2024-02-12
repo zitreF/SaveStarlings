@@ -83,8 +83,9 @@ public class EntityService {
             building.update(delta);
             if (!this.found
                     && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)
-                    && building.isHovered()
+                    && building.isClicked()
                     && !GameService.getInstance().getBuildingService().isMouseOverHudElement()) {
+                building.onClick();
                 this.found = true;
             }
         }

@@ -1,18 +1,11 @@
 package me.cocos.savestarlings.entity.building.base;
 
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.asset.AssetService;
-import me.cocos.savestarlings.service.GameService;
-import me.cocos.savestarlings.util.GridUtil;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
@@ -49,26 +42,7 @@ public class StarBase implements Building {
 
         scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
-        this.rectangle = new Rectangle(x, z, 10f, 10f);
-
-
-        System.out.println(position.x);
-        System.out.println(rectangle.x);
-
-        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(GridUtil.createGrid(-2.5f, 2.5f, new Vector2(0f, 0f)), false);
-
-        ModelBuilder modelBuilder = new ModelBuilder();
-
-        Model test = modelBuilder.createBox(
-                rectangle.width, 0.5f, rectangle.height,
-                new Material(),
-                VertexAttributes.Usage.Normal | VertexAttributes.Usage.Position);
-
-
-        Scene tess = new Scene(test);
-        tess.modelInstance.transform.setTranslation(rectangle.x, 1f, rectangle.y);
-
-        GameService.getInstance().getEnvironmentService().getSceneService().addSceneWithoutShadows(tess, false);
+        this.rectangle = new Rectangle(x - 5f, z - 5f, 10f, 10f);
     }
 
     @Override
@@ -102,11 +76,16 @@ public class StarBase implements Building {
 
     @Override
     public Vector3 getPosition() {
-        return this.position;
+        return scene.modelInstance.transform.getTranslation(this.position);
     }
 
     @Override
-    public boolean isHovered() {
+    public void onClick() {
+
+    }
+
+    @Override
+    public boolean isClicked() {
         return IntersectorUtil.isPressed(this.position, 1.25f);
     }
 }

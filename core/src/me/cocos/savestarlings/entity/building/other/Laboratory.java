@@ -72,12 +72,17 @@ public class Laboratory implements Building {
         return scene.modelInstance.transform.getTranslation(this.position);
     }
 
-    @Override
-    public boolean isHovered() {
-        return IntersectorUtil.isPressed(this.position, 1.25f);
-    }
-
     public static Scene getSceneAsset() {
         return staticScene;
+    }
+
+    @Override
+    public void onClick() {
+
+    }
+
+    @Override
+    public boolean isClicked() {
+        return IntersectorUtil.isPressed(this.position, 1.25f);
     }
 }
