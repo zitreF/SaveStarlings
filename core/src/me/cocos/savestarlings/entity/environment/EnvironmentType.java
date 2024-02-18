@@ -8,7 +8,7 @@ public enum EnvironmentType {
     PALM_TREE(PalmTree::new),
     ROCK(Rock::new);
 
-    Result<Environment> environmentResult;
+    private final Result<Environment> environmentResult;
 
     EnvironmentType(Result<Environment> environmentResult) {
         this.environmentResult = environmentResult;

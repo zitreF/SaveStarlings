@@ -16,27 +16,33 @@ float getCSMShadowness(sampler2D sampler, vec3 uv, vec2 offset){
 }
 
 float getCSMShadow(sampler2D sampler, vec3 uv, float pcf){
-	return (
-			getCSMShadowness(sampler, uv, vec2(pcf,pcf)) +
-			getCSMShadowness(sampler, uv, vec2(-pcf,pcf)) +
-			getCSMShadowness(sampler, uv, vec2(pcf,-pcf)) +
-			getCSMShadowness(sampler, uv, vec2(-pcf,-pcf)) ) * 0.25;
+    float totalShadowness = 0.0;
+    int numSamples = 64; // Increase the number of samples for more blurriness
+
+    for (int i = 0; i < numSamples; i++) {
+        float angle = float(i) * 6.283185 / float(numSamples);
+        vec2 offset = pcf * 5.0 * vec2(cos(angle), sin(angle)); // Increase the sampling radius
+        totalShadowness += getCSMShadowness(sampler, uv, offset);
+    }
+
+    return totalShadowness / float(numSamples);
 }
+
 float getShadow()
 {
-	for(int i=0 ; i<numCSM; i++){
-		vec2 pcfClip = u_csmPCFClip[i];
-		float pcf = pcfClip.x;
-		float clip = pcfClip.y;
-		vec3 uv = v_csmUVs[i];
-		if(uv.x >= clip && uv.x <= 1.0 - clip &&
-			uv.y >= clip && uv.y <= 1.0 - clip &&
-			uv.z >= 0.0 && uv.z <= 1.0){
-			return getCSMShadow(u_csmSamplers[i], uv, pcf);
-		}
-	}
-	// default map
-	return getCSMShadow(u_shadowTexture, v_shadowMapUv, u_shadowPCFOffset);
+    for(int i = 0; i < numCSM; i++){
+        vec2 pcfClip = u_csmPCFClip[i];
+        float pcf = pcfClip.x;
+        float clip = pcfClip.y;
+        vec3 uv = v_csmUVs[i];
+        if(uv.x >= clip && uv.x <= 1.0 - clip &&
+            uv.y >= clip && uv.y <= 1.0 - clip &&
+            uv.z >= 0.0 && uv.z <= 1.0){
+            return getCSMShadow(u_csmSamplers[i], uv, pcf);
+        }
+    }
+    // default map
+    return getCSMShadow(u_shadowTexture, v_shadowMapUv, u_shadowPCFOffset);
 }
 
 #else
@@ -49,11 +55,16 @@ float getShadowness(vec2 offset)
 
 float getShadow()
 {
-	return (//getShadowness(vec2(0,0)) +
-			getShadowness(vec2(u_shadowPCFOffset, u_shadowPCFOffset)) +
-			getShadowness(vec2(-u_shadowPCFOffset, u_shadowPCFOffset)) +
-			getShadowness(vec2(u_shadowPCFOffset, -u_shadowPCFOffset)) +
-			getShadowness(vec2(-u_shadowPCFOffset, -u_shadowPCFOffset))) * 0.25;
+    float totalShadowness = 1.0;
+    int numSamples = 8;
+
+    for (int i = 0; i < numSamples; i++) {
+        float angle = float(i) * 6.283185 / float(numSamples);
+        vec2 offset = u_shadowPCFOffset * 5.0 * vec2(cos(angle), sin(angle));
+        totalShadowness += getShadowness(offset);
+    }
+
+    return totalShadowness / float(numSamples);
 }
 
 #endif

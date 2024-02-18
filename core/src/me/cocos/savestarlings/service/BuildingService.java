@@ -87,7 +87,7 @@ public class BuildingService {
             material.set(GREEN_COLOR_ATTRIBUTE, OPACITY_ATTRIBUTE);
         }
         this.environmentService.addScene(this.currentBuilding.getScene());
-        this.grid = GridUtil.createGrid(-12f, 12f, new Vector2(0, 0));
+        this.grid = GridUtil.createGrid(-0f, 0f, new Vector2(0, 0));
         this.environmentService.addSceneWithoutShadows(grid);
     }
 
@@ -156,17 +156,14 @@ public class BuildingService {
         BuildingType building = this.currentBuilding;
         collision.set(x, z, building.getSize(), building.getSize());
         for (Building existingBuilding : entityService.getBuildings()) {
-            Vector2 rangeCapsulePosition = new Vector2(collision.x, collision.y);
-            Vector2 otherRangeCapsulePosition = new Vector2(existingBuilding.getBounding().x, existingBuilding.getBounding().y);
-
             float rangeCapsuleRadiusX = collision.width / 2f;
             float rangeCapsuleRadiusZ = collision.height / 2f;
 
             float otherRangeCapsuleRadiusX = existingBuilding.getBounding().width / 2f;
             float otherRangeCapsuleRadiusZ = existingBuilding.getBounding().height / 2f;
 
-            if (this.isColliding(rangeCapsulePosition, rangeCapsuleRadiusX, rangeCapsuleRadiusZ,
-                    otherRangeCapsulePosition, otherRangeCapsuleRadiusX, otherRangeCapsuleRadiusZ)) {
+            if (this.isColliding(collision, rangeCapsuleRadiusX, rangeCapsuleRadiusZ,
+                    existingBuilding.getBounding(), otherRangeCapsuleRadiusX, otherRangeCapsuleRadiusZ)) {
                 return true;
             }
         }
@@ -180,8 +177,8 @@ public class BuildingService {
         return false;
     }
 
-    private boolean isColliding(Vector2 position1, float radiusX1, float radiusZ1,
-                                       Vector2 position2, float radiusX2, float radiusZ2) {
+    private boolean isColliding(Rectangle position1, float radiusX1, float radiusZ1,
+                                       Rectangle position2, float radiusX2, float radiusZ2) {
         float distanceX = position1.x - position2.x;
         float distanceZ = position1.y - position2.y;
 

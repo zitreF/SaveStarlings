@@ -17,12 +17,13 @@ public class GridUtil {
 
     public static final float GRID_STEP = 2.5f;
 
-    // Modified method to take a Vector2 position parameter
     public static Scene createGrid(float min, float max, Vector2 position) {
         Gdx.gl.glLineWidth(2f);
         ModelBuilder modelBuilder = new ModelBuilder();
         modelBuilder.begin();
-        MeshPartBuilder builder = modelBuilder.part("grid", GL32.GL_LINES, VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material(new BlendingAttribute()));
+        MeshPartBuilder builder = modelBuilder.part("grid",
+                GL32.GL_LINES,
+                VertexAttributes.Usage.Position | VertexAttributes.Usage.ColorUnpacked, new Material(new BlendingAttribute()));
 
         float center = (max + min) / 2f;
 
