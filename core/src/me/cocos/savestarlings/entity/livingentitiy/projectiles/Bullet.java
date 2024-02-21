@@ -11,6 +11,7 @@ import me.cocos.savestarlings.particle.Particle;
 import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.service.GameService;
 import me.cocos.savestarlings.util.AsyncUtil;
+import me.cocos.savestarlings.util.IntersectorUtil;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
@@ -79,15 +80,15 @@ public final class Bullet implements LivingEntity {
             scene.modelInstance.transform.rotate(Vector3.X, 90f);
             scene.modelInstance.transform.setTranslation(position);
             scene.modelInstance.transform.scale(this.scaling.x, this.scaling.y, this.scaling.z);
-            this.bounding.setPosition(position.x - 0.5f, position.z - 0.5f);
+            this.bounding.setPosition(position.x, position.z);
             for (Building building : GameService.getInstance().getEntityService().getBuildings()) {
-                if (this.bounding.overlaps(building.getBounding())) {
+                if (IntersectorUtil.isColliding(bounding, building.getBounding())) {
                     SoundUtil.playSound("other/explode.mp3");
                     Gdx.app.postRunnable(() -> {
                         if (direction.x > 0f) {
                             GameService.getInstance().getParticleService().playParticle(Particle.EXPLOSION, this.position);
                         } else {
-                            GameService.getInstance().getParticleService().playParticle(Particle.EXPLOSION, this.position.add(direction.scl(building.getBounding().height / 4f)));
+                            GameService.getInstance().getParticleService().playParticle(Particle.EXPLOSION, this.position);
                         }
                         GameService.getInstance().getEntityService().removeEntity(this);
                     });

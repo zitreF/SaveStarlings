@@ -168,9 +168,12 @@ public class EnvironmentService {
         directionalShadowLight.setCenter(sceneService.camera.position);
         this.updateShadows();
         sceneService.update(delta);
-        particleService.render(sceneService.getBatch());
+    }
+
+    public void render() {
         sceneService.renderShadows();
         sceneService.renderColors();
+        particleService.render(sceneService.getBatch());
     }
 
     private boolean isCascaded;

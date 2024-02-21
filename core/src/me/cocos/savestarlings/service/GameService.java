@@ -61,9 +61,15 @@ public class GameService {
     public void update(float delta) {
         this.entityService.update(delta);
         this.environmentService.update(delta);
-        this.buildingService.update();
         this.hud.update(delta);
+        this.buildingService.update();
         this.battleService.update(delta);
+    }
+
+    public void render() {
+        this.environmentService.render();
+        this.hud.update(Gdx.graphics.getDeltaTime());
+        this.hud.render();
     }
 
     public void dispose() {

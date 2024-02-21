@@ -19,6 +19,7 @@ import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.entity.livingentitiy.unit.Colossus;
 import me.cocos.savestarlings.hud.Hud;
 import me.cocos.savestarlings.util.GridUtil;
+import me.cocos.savestarlings.util.IntersectorUtil;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
 import net.mgsx.gltf.scene3d.scene.Scene;
@@ -156,14 +157,7 @@ public class BuildingService {
         BuildingType building = this.currentBuilding;
         collision.set(x, z, building.getSize(), building.getSize());
         for (Building existingBuilding : entityService.getBuildings()) {
-            float rangeCapsuleRadiusX = collision.width / 2f;
-            float rangeCapsuleRadiusZ = collision.height / 2f;
-
-            float otherRangeCapsuleRadiusX = existingBuilding.getBounding().width / 2f;
-            float otherRangeCapsuleRadiusZ = existingBuilding.getBounding().height / 2f;
-
-            if (this.isColliding(collision, rangeCapsuleRadiusX, rangeCapsuleRadiusZ,
-                    existingBuilding.getBounding(), otherRangeCapsuleRadiusX, otherRangeCapsuleRadiusZ)) {
+            if (IntersectorUtil.isColliding(collision,existingBuilding.getBounding())) {
                 return true;
             }
         }
@@ -175,17 +169,6 @@ public class BuildingService {
         }
 
         return false;
-    }
-
-    private boolean isColliding(Rectangle position1, float radiusX1, float radiusZ1,
-                                       Rectangle position2, float radiusX2, float radiusZ2) {
-        float distanceX = position1.x - position2.x;
-        float distanceZ = position1.y - position2.y;
-
-        float minDistanceX = radiusX1 + radiusX2;
-        float minDistanceZ = radiusZ1 + radiusZ2;
-
-        return (Math.abs(distanceX) < minDistanceX) && (Math.abs(distanceZ) < minDistanceZ);
     }
 
     private void handleHudClick() {
