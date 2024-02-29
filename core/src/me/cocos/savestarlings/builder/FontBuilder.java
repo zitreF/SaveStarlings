@@ -9,13 +9,14 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 public class FontBuilder {
 
     private final String path;
+    private Color color;
+    private boolean colorMarkup;
     private int size;
     private float borderWidth;
     private Color borderColor;
     private int shadowOffsetX;
     private int shadowOffsetY;
     private Texture.TextureFilter filter;
-    private Color color;
 
     public FontBuilder(String path) {
         this.path = path;
@@ -30,6 +31,11 @@ public class FontBuilder {
 
     public FontBuilder color(Color color) {
         this.color = color;
+        return this;
+    }
+
+    public FontBuilder colorMarkup(boolean colorMarkup) {
+        this.colorMarkup = colorMarkup;
         return this;
     }
 
@@ -76,6 +82,9 @@ public class FontBuilder {
         parameter.borderWidth = this.borderWidth;
         parameter.borderColor = this.borderColor;
         BitmapFont bitmapFont = freeTypeFontGenerator.generateFont(parameter);
+        if (colorMarkup) {
+            bitmapFont.getData().markupEnabled = colorMarkup;
+        }
         freeTypeFontGenerator.dispose();
         return bitmapFont;
     }

@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import me.cocos.savestarlings.controller.CameraController;
+import me.cocos.savestarlings.hud.impl.DebugHud;
 import me.cocos.savestarlings.service.GameService;
 import net.mgsx.gltf.scene3d.scene.Scene;
 
@@ -43,6 +44,7 @@ public class GameScreen implements Screen {
         this.gameService = new GameService(camera);
 
         this.cameraController = new CameraController(camera);
+        DebugHud.getGlProfiler().enable();
 
     }
 
@@ -61,6 +63,7 @@ public class GameScreen implements Screen {
         gameService.update(delta);
 
         gameService.render();
+        DebugHud.getGlProfiler().reset();
     }
 
     @Override
