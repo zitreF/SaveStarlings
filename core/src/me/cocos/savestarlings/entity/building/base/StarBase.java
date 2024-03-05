@@ -42,7 +42,7 @@ public class StarBase implements Building {
 
         scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
-        this.rectangle = new Rectangle(x, z, 10f, 10f);
+        this.rectangle = new Rectangle(x - 5f, z - 5f, 10f, 10f);
     }
 
     @Override

@@ -56,7 +56,7 @@ public class Wall implements Defense {
 
         scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
 
-        this.rectangle = new Rectangle(x, z, 2.5f, 2.5f);
+        this.rectangle = new Rectangle(x - 1.25f, z - 1.25f, 2.5f, 2.5f);
     }
 
     @Override

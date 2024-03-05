@@ -155,7 +155,7 @@ public class BuildingService {
 
     private boolean isBuildingCollision(float x, float z) {
         BuildingType building = this.currentBuilding;
-        collision.set(x, z, building.getSize(), building.getSize());
+        collision.set(x - building.getSize() / 2f, z - building.getSize() / 2f, building.getSize(), building.getSize());
         for (Building existingBuilding : entityService.getBuildings()) {
             if (IntersectorUtil.isColliding(collision,existingBuilding.getBounding())) {
                 return true;

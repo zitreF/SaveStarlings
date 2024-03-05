@@ -25,18 +25,19 @@ public class IntersectorUtil {
     }
 
     public static boolean isColliding(Rectangle rectangle1, Rectangle rectangle2) {
-        float radiusX1 = rectangle1.width / 2f;
-        float radiusZ1 = rectangle1.height / 2f;
-
-        float radiusX2 = rectangle2.width / 2f;
-        float radiusZ2 = rectangle2.height / 2f;
-
-        float distanceX = rectangle1.x - rectangle2.x;
-        float distanceZ = rectangle1.y - rectangle2.y;
-
-        float minDistanceX = radiusX1 + radiusX2;
-        float minDistanceZ = radiusZ1 + radiusZ2;
-
-        return (Math.abs(distanceX) < minDistanceX) && (Math.abs(distanceZ) < minDistanceZ);
+        return Intersector.overlaps(rectangle1, rectangle2);
+//        float radiusX1 = rectangle1.width / 2f;
+//        float radiusZ1 = rectangle1.height / 2f;
+//
+//        float radiusX2 = rectangle2.width / 2f;
+//        float radiusZ2 = rectangle2.height / 2f;
+//
+//        float distanceX = rectangle1.x - rectangle2.x;
+//        float distanceZ = rectangle1.y - rectangle2.y;
+//
+//        float minDistanceX = radiusX1 + radiusX2;
+//        float minDistanceZ = radiusZ1 + radiusZ2;
+//
+//        return (Math.abs(distanceX) < minDistanceX) && (Math.abs(distanceZ) < minDistanceZ);
     }
 }

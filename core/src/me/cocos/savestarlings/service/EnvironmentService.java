@@ -166,7 +166,6 @@ public class EnvironmentService {
 
     public void update(float delta) {
         directionalShadowLight.setCenter(sceneService.camera.position);
-        this.updateShadows();
         sceneService.update(delta);
     }
 
@@ -177,16 +176,6 @@ public class EnvironmentService {
     }
 
     private boolean isCascaded;
-
-    private void updateShadows() {
-        if (!isCascaded && sceneService.camera.position.y < 40f) {
-            this.isCascaded = true;
-            directionalShadowLight.setShadowMapSize(8192, 8192);
-        } else if (isCascaded && sceneService.camera.position.y > 40f) {
-            this.isCascaded = false;
-            directionalShadowLight.setShadowMapSize(4096, 4096);
-        }
-    }
 
     private final Vector3 position = new Vector3();
 

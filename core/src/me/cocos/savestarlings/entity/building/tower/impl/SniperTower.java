@@ -61,7 +61,7 @@ public class SniperTower implements Tower {
 
         this.delay = 1f;
 
-        this.rectangle = new Rectangle(x, z, 5f, 5f);
+        this.rectangle = new Rectangle(x - 2.5f, z - 2.5f, 5f, 5f);
     }
 
     @Override

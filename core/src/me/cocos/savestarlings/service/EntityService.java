@@ -6,8 +6,10 @@ import me.cocos.savestarlings.entity.Clickable;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
+import me.cocos.savestarlings.util.AsyncUtil;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class EntityService {
@@ -79,39 +81,40 @@ public class EntityService {
     private boolean found = false;
 
     public void update(float delta) {
-        for (Building building : this.buildings) {
-            building.update(delta);
-            if (!this.found
-                    && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)
-                    && building.isClicked()
-                    && !GameService.getInstance().getBuildingService().isMouseOverHudElement()) {
-                building.onClick();
-                this.found = true;
-            }
-        }
-        for (LivingEntity livingEntity : this.entities) {
-            livingEntity.update(delta);
-            if (!this.found
-                    && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)
-                    && livingEntity instanceof Clickable clickable
-                    && !GameService.getInstance().getBuildingService().isMouseOverHudElement()) {
-                if (clickable.isClicked()) {
-                    clickable.onClick();
+        AsyncUtil.runAsync(() -> {
+            for (Building building : this.buildings) {
+                building.update(delta);
+                if (!this.found
+                        && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)
+                        && building.isClicked()
+                        && !GameService.getInstance().getBuildingService().isMouseOverHudElement()) {
+                    building.onClick();
                     this.found = true;
                 }
             }
-        }
-        for (Environment environment : this.environments) {
-
-            if (!this.found
-                    && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)
-                    && !GameService.getInstance().getBuildingService().isMouseOverHudElement()) {
-                if (environment.isClicked()) {
-                    environment.onClick();
-                    this.found = true;
+            for (LivingEntity livingEntity : this.entities) {
+                livingEntity.update(delta);
+                if (!this.found
+                        && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)
+                        && livingEntity instanceof Clickable clickable
+                        && !GameService.getInstance().getBuildingService().isMouseOverHudElement()) {
+                    if (clickable.isClicked()) {
+                        clickable.onClick();
+                        this.found = true;
+                    }
                 }
             }
-        }
-        this.found = false;
+            for (Environment environment : this.environments) {
+                if (!this.found
+                        && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)
+                        && !GameService.getInstance().getBuildingService().isMouseOverHudElement()) {
+                    if (environment.isClicked()) {
+                        environment.onClick();
+                        this.found = true;
+                    }
+                }
+            }
+            this.found = false;
+        });
     }
 }
