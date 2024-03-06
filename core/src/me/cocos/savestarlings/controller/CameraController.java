@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class CameraController implements InputProcessor {
 
-    private static final float CAMERA_SPEED = 30f;
+    private static final float CAMERA_SPEED = 5f;
     private static final float ZOOM_SPEED = 1000f;
     private final Camera camera;
 
@@ -81,32 +81,17 @@ public class CameraController implements InputProcessor {
         return false;
     }
 
+    private final Vector3 velocity = new Vector3();
+
     public void update(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            camera.position.x = MathUtils.lerp(camera.position.x, camera.position.x + 1f, delta * -CAMERA_SPEED);
-            if (camera.position.x < -50) {
-                camera.position.x = -50;
-            }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            camera.position.x = MathUtils.lerp(camera.position.x, camera.position.x - 1f, delta * -CAMERA_SPEED);
-            if (camera.position.x > 50) {
-                camera.position.x = 50;
-            }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if (camera.position.z > 50) {
-                camera.position.z = 50;
-                return;
-            }
-            camera.position.z = MathUtils.lerp(camera.position.z, camera.position.z - 1f, delta * -CAMERA_SPEED);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            camera.position.z = MathUtils.lerp(camera.position.z, camera.position.z + 1f, delta * -CAMERA_SPEED);
-            if (camera.position.z < -50) {
-                camera.position.z = -50;
-            }
-        }
+        velocity.x += (Gdx.input.isKeyPressed(Input.Keys.W) ? -1 : Gdx.input.isKeyPressed(Input.Keys.S) ? 1 : 0) * delta * CAMERA_SPEED;
+        velocity.z += (Gdx.input.isKeyPressed(Input.Keys.D) ? -1 : Gdx.input.isKeyPressed(Input.Keys.A) ? 1 : 0) * delta * CAMERA_SPEED;
+        velocity.scl(0.8f);
+
+        float clampedX = MathUtils.clamp(camera.position.x + velocity.x, -50f, 50f);
+        float clampedZ = MathUtils.clamp(camera.position.z + velocity.z, -50f, 50f);
+
+        camera.position.set(clampedX, camera.position.y, clampedZ);
         camera.update(true);
     }
 }

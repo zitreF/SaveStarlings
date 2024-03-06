@@ -38,7 +38,7 @@ public class Hud extends Stage {
         this.wrapTableAndAddToStage(battleHud).size(300f, 600f).top().right().expand();
         this.wrapTableAndAddToStage(builderHud).size(800f, 230f).bottom().expand();
 
-        this.setDebugAll(true);
+        //this.setDebugAll(true);
     }
 
     private Cell<Table> wrapTableAndAddToStage(Table table) {
