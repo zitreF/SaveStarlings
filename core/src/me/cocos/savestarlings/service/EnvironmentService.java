@@ -175,8 +175,6 @@ public class EnvironmentService {
         particleService.render(sceneService.getBatch());
     }
 
-    private boolean isCascaded;
-
     private final Vector3 position = new Vector3();
 
     private boolean isVisible(Camera cam, ModelInstance instance) {

@@ -79,4 +79,9 @@ public class GameService {
     public static GameService getInstance() {
         return instance;
     }
+
+    public void resize(int width, int height) {
+        environmentService.getSceneService().updateViewport(width, height);
+        hud.getViewport().update(width, height);
+    }
 }
