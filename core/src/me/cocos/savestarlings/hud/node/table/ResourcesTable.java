@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import me.cocos.savestarlings.builder.FontBuilder;
 import me.cocos.savestarlings.hud.node.progressbar.GLProgressBar;
 import me.cocos.savestarlings.asset.AssetService;
-import me.cocos.savestarlings.util.FormatUtils;
+import me.cocos.savestarlings.util.FormatUtil;
 
 public class ResourcesTable extends Table {
 
@@ -25,7 +25,7 @@ public class ResourcesTable extends Table {
                 .borderWidth(2f)
                 .build();
         this.progressBar = new GLProgressBar(color, max, value, width, height);
-        Label valueLabel = new Label(FormatUtils.formatNumber(value), labelStyle);
+        Label valueLabel = new Label(FormatUtil.formatNumber(value), labelStyle);
 
         Stack stack = new Stack();
         stack.add(progressBar);

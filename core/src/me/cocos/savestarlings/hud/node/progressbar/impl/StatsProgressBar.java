@@ -8,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import me.cocos.savestarlings.builder.FontBuilder;
 import me.cocos.savestarlings.hud.node.progressbar.GLProgressBar;
 import me.cocos.savestarlings.asset.AssetService;
-import me.cocos.savestarlings.util.FormatUtils;
+import me.cocos.savestarlings.util.FormatUtil;
 
 public class StatsProgressBar extends Table {
 
@@ -27,7 +27,7 @@ public class StatsProgressBar extends Table {
                 .build();
         Label infoLabel = new Label(info, labelStyle);
         this.progressBar = new GLProgressBar("blue", max, value, width, height);
-        Label valueLabel = new Label(FormatUtils.formatNumber(value), labelStyle);
+        Label valueLabel = new Label(FormatUtil.formatNumber(value), labelStyle);
         this.add(image).size(height, height);
         this.add(infoLabel).width(75f).padLeft(5f);
         this.add(progressBar).padLeft(20f).size(width, height);

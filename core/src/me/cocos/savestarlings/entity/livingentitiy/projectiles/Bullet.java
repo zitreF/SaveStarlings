@@ -11,6 +11,7 @@ import me.cocos.savestarlings.particle.Particle;
 import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.service.GameService;
 import me.cocos.savestarlings.util.AsyncUtil;
+import me.cocos.savestarlings.util.CameraUtil;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
@@ -92,6 +93,7 @@ public final class Bullet implements LivingEntity {
                         }
                         GameService.getInstance().getEntityService().removeEntity(this);
                     });
+                    CameraUtil.shake(0.5f, 0.3f);
                     return;
                 }
             }

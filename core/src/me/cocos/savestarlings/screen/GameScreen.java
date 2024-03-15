@@ -54,30 +54,14 @@ public class GameScreen implements Screen {
 
         gameService.render();
 
-//        spriteBatch.setShader(raindropShader);
-//
-//        raindropShader.bind();
-//        raindropShader.setUniformf("u_amount", 10);
-//        raindropShader.setUniformf("u_speed", 0.5f);
-//        raindropShader.setUniformf("u_time", time);
-//
-//        spriteBatch.begin();
-//
-//        spriteBatch.setColor(Color.WHITE);
-//        //drawRaindrops(100); // Adjust the number of raindrops as needed
-//        spriteBatch.draw(texture, 0, 200, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//
-//        spriteBatch.end();
-//
-//        spriteBatch.setShader(null);
-
         DebugHud.getGlProfiler().reset();
     }
 
     @Override
     public void resize(int width, int height) {
         gameViewport.update(width, height);
-        this.gameService.resize(width, height);
+        gameService.resize(width, height);
+
     }
 
     @Override

@@ -103,8 +103,8 @@ public class AssetService {
 
         // SHADERS
 
-        ASSET_MANAGER.load("shaders/pbr.fs.glsl", String.class, new ShaderLoader.StringParameter());
-        ASSET_MANAGER.load("shaders/pbr.vs.glsl", String.class, new ShaderLoader.StringParameter());
+        ASSET_MANAGER.load("shaders/pbr/pbr.fs.glsl", String.class, new ShaderLoader.StringParameter());
+        ASSET_MANAGER.load("shaders/pbr/pbr.vs.glsl", String.class, new ShaderLoader.StringParameter());
     }
 
     public static <T> T getAsset(String name) {

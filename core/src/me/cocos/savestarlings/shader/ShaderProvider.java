@@ -14,13 +14,20 @@ public class ShaderProvider {
         this.shaders = Array.with(
                 new CloudShader(spriteBatch)
         );
+        shaders.forEach(shader -> shader.setEnabled(true));
     }
 
-    public void render() {
+    public void render(float delta) {
         for (Shader shader : this.shaders) {
             if (!shader.isEnabled()) {
                 continue;
             }
+            shader.bind(delta);
+            shader.render();
         }
+    }
+
+    public void updateViewport(int width, int height) {
+        this.spriteBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
     }
 }

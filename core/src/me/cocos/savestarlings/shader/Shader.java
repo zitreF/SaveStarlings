@@ -5,17 +5,22 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
 public abstract class Shader {
 
-    protected final ShaderProgram shaderProgram;
+    protected final ShaderProgram shader;
     private boolean enabled;
 
     public Shader(ShaderProgram shaderProgram) {
-        this.shaderProgram = shaderProgram;
+        this.shader = shaderProgram;
+        if (!shaderProgram.isCompiled()) {
+            String errorLog = shaderProgram.getLog();
+            System.out.println("Shader compilation error: " + errorLog);
+        }
         this.enabled = false;
     }
 
-    protected abstract void bind();
+    public abstract void bind(float delta);
 
     public abstract void render();
+
 
     public boolean isEnabled() {
         return this.enabled;
@@ -26,6 +31,6 @@ public abstract class Shader {
     }
 
     public ShaderProgram getShaderProgram() {
-        return this.shaderProgram;
+        return this.shader;
     }
 }

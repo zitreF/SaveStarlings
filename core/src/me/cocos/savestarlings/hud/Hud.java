@@ -23,7 +23,7 @@ import me.cocos.savestarlings.util.BinaryUtil;
 public class Hud extends Stage {
 
     private static Hud instance;
-    private DebugHud debugHud;
+    private final DebugHud debugHud;
     private BuildingService buildingService;
 
     public Hud() {

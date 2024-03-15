@@ -15,5 +15,8 @@ void main() {
 
     vec4 tex_color = texture2D(u_texture, uv);
 
-    gl_FragColor = tex_color;
+    float rX = fract(sin((uv.y * 10.0 + u_time) * 0.1)) * u_amount;
+    float rY = fract(cos((uv.x * 10.0 + u_time) * 0.1)) * u_amount;
+
+    gl_FragColor = tex_color * vec4(1.0, 1.0, 1.0, 1.0);
 }

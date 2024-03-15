@@ -48,8 +48,8 @@ public class EnvironmentService {
 
     public EnvironmentService(ParticleService particleService, Camera camera) {
         PBRShaderConfig config = PBRShaderProvider.createDefaultConfig();
-        config.fragmentShader = AssetService.getAsset("shaders/pbr.fs.glsl");
-        config.vertexShader = AssetService.getAsset("shaders/pbr.vs.glsl");
+        config.fragmentShader = AssetService.getAsset("shaders/pbr/pbr.fs.glsl");
+        config.vertexShader = AssetService.getAsset("shaders/pbr/pbr.vs.glsl");
         config.numBones = 0;
         config.numDirectionalLights = 2;
         config.numPointLights = 0;

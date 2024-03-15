@@ -15,23 +15,23 @@ import java.awt.TrayIcon;
 public class DesktopLauncher {
 
 	public static void main(String[] arg) {
-		JFrame frame = new JFrame("FPS Limit");
-		frame.setIconImage(null);
-		frame.setUndecorated(true);
-		frame.setVisible(true);
-		frame.setLocationRelativeTo(null);
-		String fps = JOptionPane.showInputDialog(
-				frame,
-				"Select max FPS (0 = unlimited)",
-				"FPS Limit",
-                JOptionPane.PLAIN_MESSAGE);
-		frame.dispose();
-		if (fps == null || fps.isBlank() || !fps.chars().allMatch(Character::isDigit)) {
-			System.exit(0);
-			return;
-		}
+//		JFrame frame = new JFrame("FPS Limit");
+//		frame.setIconImage(null);
+//		frame.setUndecorated(true);
+//		frame.setVisible(true);
+//		frame.setLocationRelativeTo(null);
+//		String fps = JOptionPane.showInputDialog(
+//				frame,
+//				"Select max FPS (0 = unlimited)",
+//				"FPS Limit",
+//                JOptionPane.PLAIN_MESSAGE);
+//		frame.dispose();
+//		if (fps == null || fps.isBlank() || !fps.chars().allMatch(Character::isDigit)) {
+//			System.exit(0);
+//			return;
+//		}
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setForegroundFPS(Integer.parseInt(fps));
+		config.setForegroundFPS(144);
 		config.setIdleFPS(144);
 		config.setBackBufferConfig(8, 8, 8, 8, 16, 0, 4);
 		config.useVsync(false);
