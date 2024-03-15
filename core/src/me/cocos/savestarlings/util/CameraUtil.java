@@ -33,14 +33,4 @@ public class CameraUtil {
         shakeTimer -= deltaTime;
         camera.update();
     }
-
-
-    public static boolean needUpdate() {
-        return shakeTimer > 0;
-    }
-
-    public static void reset(PerspectiveCamera camera) {
-        camera.position.set(initialPosition);
-        camera.update();
-    }
 }
