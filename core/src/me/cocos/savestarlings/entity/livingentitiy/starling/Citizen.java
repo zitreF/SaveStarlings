@@ -19,6 +19,7 @@ public class Citizen implements LivingEntity, Clickable {
     private static final float ARRIVAL_THRESHOLD = 0.1f;
     private final Scene scene;
     private final BoundingBox boundingBox;
+    private final Vector3 scaling;
     private final Vector3 position;
     private static final SceneAsset sceneAsset;
     private final Vector3 targetPosition;
@@ -37,11 +38,13 @@ public class Citizen implements LivingEntity, Clickable {
 
         float scaleX = 1.5f / boundingBox.getWidth();
         float scaleY = 1.5f / boundingBox.getHeight();
-        float scaleZ = 1f / boundingBox.getDepth();
+        float scaleZ = MathUtils.random(1f, 1.25f) / boundingBox.getDepth();
 
-        this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
+        this.scaling = new Vector3(scaleX, scaleY, scaleZ);
 
         scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
+
+        this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
 
         scene.modelInstance.materials.clear();
 
@@ -64,7 +67,7 @@ public class Citizen implements LivingEntity, Clickable {
                 position.y = initialPosition.y;
                 float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
                 scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
-                this.scene.modelInstance.transform.scale(1.5f / boundingBox.getWidth(), 1.5f / boundingBox.getHeight(), 1.25f / boundingBox.getDepth());
+                this.scene.modelInstance.transform.scale(scaling.x, scaling.y, scaling.z);
             }
             this.scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
             return;
@@ -107,7 +110,7 @@ public class Citizen implements LivingEntity, Clickable {
         float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
 
         scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
-        this.scene.modelInstance.transform.scale(1.5f / boundingBox.getWidth(), 1.5f / boundingBox.getHeight(), 1f / boundingBox.getDepth());
+        this.scene.modelInstance.transform.scale(scaling.x, scaling.y, scaling.z);
     }
 
 
@@ -126,7 +129,7 @@ public class Citizen implements LivingEntity, Clickable {
             this.jumpTimer = 0.0f;
             this.initialPosition.set(position);
             this.scene.modelInstance.transform.setToRotation(Vector3.Y, 90f);
-            this.scene.modelInstance.transform.scale(1.5f / boundingBox.getWidth(), 1.5f / boundingBox.getHeight(), 1f / boundingBox.getDepth());
+            this.scene.modelInstance.transform.scale(scaling.x, scaling.y, scaling.z);
             SoundUtil.playSound(MathUtils.randomBoolean() ? "starling/Body_2.mp3" : "starling/Body_3.mp3");
         }
     }

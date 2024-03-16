@@ -38,6 +38,7 @@ public class AssetService {
         ASSET_MANAGER.load("buildings/resources/bank.glb", SceneAsset.class);
         ASSET_MANAGER.load("buildings/other/laboratory.glb", SceneAsset.class);
         ASSET_MANAGER.load("entities/starlings/starling.glb", SceneAsset.class);
+        ASSET_MANAGER.load("entities/starlings/nick.glb", SceneAsset.class);
         ASSET_MANAGER.load("entities/units/colossus.glb", SceneAsset.class);
         ASSET_MANAGER.load("entities/projectiles/rocket.glb", SceneAsset.class);
         ASSET_MANAGER.load("environment/palm_tree.glb", SceneAsset.class);
