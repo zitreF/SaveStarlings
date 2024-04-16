@@ -4,13 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import me.cocos.savestarlings.util.CameraUtil;
 
 public class CameraController implements InputProcessor {
 
-    private static final float CAMERA_SPEED = 5f;
+    private static final float CAMERA_SPEED = 20f;
     private static final float ZOOM_SPEED = 1000f;
     private final Camera camera;
 
@@ -83,15 +85,25 @@ public class CameraController implements InputProcessor {
 
     private final Vector3 velocity = new Vector3();
 
+    private final Vector3 movement = new Vector3();
+
     public void update(float delta) {
-        velocity.x += (Gdx.input.isKeyPressed(Input.Keys.W) ? -1 : Gdx.input.isKeyPressed(Input.Keys.S) ? 1 : 0) * delta * CAMERA_SPEED;
-        velocity.z += (Gdx.input.isKeyPressed(Input.Keys.D) ? -1 : Gdx.input.isKeyPressed(Input.Keys.A) ? 1 : 0) * delta * CAMERA_SPEED;
-        velocity.scl(0.8f);
+        velocity.x = (Gdx.input.isKeyPressed(Input.Keys.W) ? -1 : Gdx.input.isKeyPressed(Input.Keys.S) ? 1 : 0) * delta * CAMERA_SPEED;
+        velocity.z = (Gdx.input.isKeyPressed(Input.Keys.D) ? -1 : Gdx.input.isKeyPressed(Input.Keys.A) ? 1 : 0) * delta * CAMERA_SPEED;
 
         float clampedX = MathUtils.clamp(camera.position.x + velocity.x, -50f, 50f);
         float clampedZ = MathUtils.clamp(camera.position.z + velocity.z, -50f, 50f);
 
+        if (CameraUtil.getShakeTimer() > 0f) {
+            movement.set(velocity.x, 0f, velocity.z);
+
+            CameraUtil.update((PerspectiveCamera) camera, movement, delta);
+            camera.update(true);
+            return;
+        }
+
         camera.position.set(clampedX, camera.position.y, clampedZ);
+
         camera.update(true);
     }
 }

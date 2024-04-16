@@ -74,7 +74,6 @@ public class GameService {
         this.hud.update(delta);
         this.buildingService.update();
         this.battleService.update(delta);
-        CameraUtil.update(camera, delta);
     }
 
 
