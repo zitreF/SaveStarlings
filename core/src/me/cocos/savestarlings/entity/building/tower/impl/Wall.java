@@ -1,28 +1,15 @@
 package me.cocos.savestarlings.entity.building.tower.impl;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL32;
-import com.badlogic.gdx.graphics.VertexAttributes;
-import com.badlogic.gdx.graphics.g3d.Material;
-import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
-import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.asset.AssetService;
-import me.cocos.savestarlings.entity.building.tower.Defense;
-import me.cocos.savestarlings.service.BuildingService;
-import me.cocos.savestarlings.service.GameService;
-import me.cocos.savestarlings.util.GridUtil;
-import me.cocos.savestarlings.util.IntersectorUtil;
-import net.mgsx.gltf.scene3d.attributes.PBRColorAttribute;
+import me.cocos.savestarlings.entity.building.tower.DefenseTower;
 import net.mgsx.gltf.scene3d.scene.Scene;
 import net.mgsx.gltf.scene3d.scene.SceneAsset;
 
-public class Wall implements Defense {
+public class Wall implements DefenseTower {
 
     private final Scene scene;
     private final BoundingBox boundingBox;

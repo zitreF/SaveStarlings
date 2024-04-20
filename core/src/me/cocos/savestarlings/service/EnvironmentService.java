@@ -9,11 +9,13 @@ import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.shaders.DepthShader;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
+import me.cocos.savestarlings.map.noise.PerlinNoise;
 import me.cocos.savestarlings.scene.SceneService;
 import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.util.GridUtil;
@@ -46,7 +48,10 @@ public class EnvironmentService {
     private final ScheduledExecutorService executorService;
     private final ParticleService particleService;
 
+    private final PerlinNoise perlinNoise;
+
     public EnvironmentService(ParticleService particleService, Camera camera) {
+        this.perlinNoise = new PerlinNoise();
         PBRShaderConfig config = PBRShaderProvider.createDefaultConfig();
         config.fragmentShader = AssetService.getAsset("shaders/pbr/pbr.fs.glsl");
         config.vertexShader = AssetService.getAsset("shaders/pbr/pbr.vs.glsl");
@@ -57,7 +62,7 @@ public class EnvironmentService {
         depthConfig.numBones = config.numBones;
         this.sceneService = new SceneService(PBRShaderProvider.createDefault(config), PBRShaderProvider.createDefaultDepth(depthConfig));
         this.directionalShadowLight = new DirectionalShadowLight(4048, 4048, 256f, 256f, 1f, 256f);
-        sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(0.5f, -1f, -0.5f).nor(), 5f));
+        sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(-0.5f, -1f, 0.5f).nor(), 5f));
 
         IBLBuilder iblBuilder = IBLBuilder.createOutdoor(directionalShadowLight);
         this.environmentCubemap = iblBuilder.buildEnvMap(1);
@@ -76,24 +81,6 @@ public class EnvironmentService {
         sceneService.environment.set(new PBRFloatAttribute(PBRFloatAttribute.ShadowBias, 1f / 256f));
         this.skybox = new SceneSkybox(environmentCubemap);
         sceneService.setSkyBox(skybox);
-
-        ModelBuilder modelBuilder = new ModelBuilder();
-
-        Texture texture = AssetService.getAsset("grass.jpg");
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        PBRTextureAttribute textureAttribute = PBRTextureAttribute.createBaseColorTexture(texture);
-        textureAttribute.scaleU = 32f;
-        textureAttribute.scaleV = 32f;
-        Model greenBoxModel = modelBuilder.createBox(
-                200f, 0f, 200f,
-                new Material(textureAttribute),
-                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates
-        );
-        ModelInstance greenBoxInstance = new ModelInstance(greenBoxModel);
-        greenBoxInstance.transform.setFromEulerAngles(90f, 0f, 0f);
-        greenBoxInstance.transform.setToTranslation(0f, 0f, 0f);
-        this.sceneService.addScene(new Scene(greenBoxInstance));
 
         this.executorService = Executors.newScheduledThreadPool(2);
 
@@ -165,6 +152,7 @@ public class EnvironmentService {
     }
 
     public void update(float delta) {
+        sceneService.update(delta);
         directionalShadowLight.setCenter(sceneService.camera.position);
         sceneService.update(delta);
     }

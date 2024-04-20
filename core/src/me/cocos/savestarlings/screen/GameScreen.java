@@ -36,6 +36,13 @@ public class GameScreen implements Screen {
 
         this.cameraController = new CameraController(camera);
         DebugHud.getGlProfiler().enable();
+
+        this.setupGL();
+    }
+
+    private void setupGL() {
+        Gdx.gl32.glEnable(GL32.GL_BLEND);
+        Gdx.gl32.glCullFace(GL32.GL_FRONT_AND_BACK);
     }
 
     @Override

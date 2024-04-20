@@ -35,7 +35,7 @@ public class CloudShader extends Shader {
     public void render() {
         batch.setShader(this.shader);
         batch.begin();
-        batch.draw(texture, 0, 250, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.draw(texture, 0, 300, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
         batch.setShader(null);
     }

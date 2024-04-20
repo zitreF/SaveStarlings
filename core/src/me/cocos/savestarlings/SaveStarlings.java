@@ -1,6 +1,8 @@
 package me.cocos.savestarlings;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL32;
 import me.cocos.savestarlings.screen.MenuScreen;
 
 public class SaveStarlings extends Game {
