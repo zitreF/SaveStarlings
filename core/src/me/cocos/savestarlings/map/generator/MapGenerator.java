@@ -1,7 +1,9 @@
 package me.cocos.savestarlings.map.generator;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Material;
@@ -9,6 +11,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.MathUtils;
+import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.map.noise.PerlinNoise;
 import me.cocos.savestarlings.scene.SceneService;
 import me.cocos.savestarlings.service.GameService;
@@ -28,10 +31,15 @@ public class MapGenerator {
     public void generateMap() {
         ModelBuilder modelBuilder = new ModelBuilder();
 
-        Texture texture = this.generateHeightmapTexture();
+        Texture texture = AssetService.getAsset("map/terrain/textures/meadow.png");
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+
         PBRTextureAttribute textureAttribute = PBRTextureAttribute.createBaseColorTexture(texture);
+        textureAttribute.scaleV = 7.5f;
+        textureAttribute.scaleU = 7.5f;
+        textureAttribute.rotationUV = MathUtils.random(360f);
+
         Model greenBoxModel = modelBuilder.createBox(
                 200f, 0f, 200f,
                 new Material(textureAttribute),
@@ -54,16 +62,16 @@ public class MapGenerator {
                 pixmap.drawPixel(x, y);
             }
         }
-
+        PixmapIO.writePNG(Gdx.files.local("noise.png"), pixmap);
         Texture texture = new Texture(pixmap);
         pixmap.dispose();
         return texture;
     }
 
     private int interpolateColors(float noiseValue) {
-        float r = MathUtils.lerp(0.2f, 0.4f, noiseValue);
-        float g = MathUtils.lerp(0.4f, 1f, noiseValue);
-        float b = MathUtils.lerp(0.2f, 0.4f, noiseValue);
+        float r = MathUtils.lerp(0f, 1f, noiseValue);
+        float g = MathUtils.lerp(0f, 1f, noiseValue);
+        float b = MathUtils.lerp(0f, 1f, noiseValue);
 
         return ((int) (r * 255) << 24) | ((int) (g * 255) << 16) | ((int) (b * 255) << 8) | 255;
     }

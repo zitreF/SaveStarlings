@@ -65,7 +65,10 @@ public class AssetService {
         TextureLoader.TextureParameter textureParameter = new TextureLoader.TextureParameter();
         textureParameter.minFilter = Texture.TextureFilter.Linear;
         textureParameter.magFilter = Texture.TextureFilter.Linear;
-        ASSET_MANAGER.load("grass.jpg", Texture.class, textureParameter);
+
+        ASSET_MANAGER.load("map/terrain/textures/meadow.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("map/terrain/textures/swamp.png", Texture.class, textureParameter);
+        ASSET_MANAGER.load("map/terrain/textures/winter.png", Texture.class, textureParameter);
 
         ASSET_MANAGER.load("ui/popup/turrets/blast_cannon_popup.png", Texture.class, textureParameter);
         ASSET_MANAGER.load("ui/popup/turrets/sniper_tower_popup.png", Texture.class, textureParameter);
