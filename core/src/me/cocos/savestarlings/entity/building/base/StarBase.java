@@ -30,9 +30,9 @@ public class StarBase implements Building {
         this.boundingBox = new BoundingBox();
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
-        float scaleX = 10f / boundingBox.getWidth();
-        float scaleY = 10f / boundingBox.getHeight();
-        float scaleZ = 10f / boundingBox.getDepth();
+        float scaleX = 20f / boundingBox.getWidth();
+        float scaleY = 20f / boundingBox.getHeight();
+        float scaleZ = 20f / boundingBox.getDepth();
 
         this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
 
@@ -40,9 +40,9 @@ public class StarBase implements Building {
         float z = MathUtils.round(position.z / 2.5f) * 2.5f;
         this.position.set(x, position.y, z);
 
-        scene.modelInstance.transform.setTranslation(this.position.x, this.position.y, this.position.z);
+        scene.modelInstance.transform.setTranslation(this.position.x + 1f, this.position.y, this.position.z);
 
-        this.rectangle = new Rectangle(x - 5f, z - 5f, 10f, 10f);
+        this.rectangle = new Rectangle(x - 7.5f, z - 7.5f, 15f, 15f);
     }
 
     @Override
