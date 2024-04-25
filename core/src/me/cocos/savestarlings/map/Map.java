@@ -32,7 +32,7 @@ public class Map {
     }
 
     public void generate() {
-        this.mapGenerator.generateMap();
+        this.mapGenerator.createTerrain();
         StarBase starBase = new StarBase(new Vector3(0f, 0f, 0f));
         this.entityService.addBuilding(starBase);
         this.populate(15);

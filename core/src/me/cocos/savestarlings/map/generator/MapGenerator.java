@@ -2,6 +2,7 @@ package me.cocos.savestarlings.map.generator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,8 +12,12 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.asset.AssetService;
 import me.cocos.savestarlings.map.noise.PerlinNoise;
+import me.cocos.savestarlings.map.terrain.HeightField;
+import me.cocos.savestarlings.map.terrain.HeightMapTerrain;
+import me.cocos.savestarlings.map.terrain.Terrain;
 import me.cocos.savestarlings.scene.SceneService;
 import me.cocos.savestarlings.service.GameService;
 import net.mgsx.gltf.scene3d.attributes.PBRTextureAttribute;
@@ -22,36 +27,26 @@ public class MapGenerator {
 
     private final PerlinNoise perlinNoise;
     private final SceneService sceneService;
+    private Terrain terrain;
+    private Scene terrainScene;
 
     public MapGenerator() {
         this.perlinNoise = new PerlinNoise();
         this.sceneService = GameService.getInstance().getEnvironmentService().getSceneService();
     }
 
-    public void generateMap() {
-        ModelBuilder modelBuilder = new ModelBuilder();
-
-        Texture texture = AssetService.getAsset("map/terrain/textures/meadow.png");
-        texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-
-        PBRTextureAttribute textureAttribute = PBRTextureAttribute.createBaseColorTexture(texture);
-        textureAttribute.scaleV = 7.5f;
-        textureAttribute.scaleU = 7.5f;
-        textureAttribute.rotationUV = MathUtils.random(360f);
-
-        Model greenBoxModel = modelBuilder.createBox(
-                200f, 0f, 200f,
-                new Material(textureAttribute),
-                VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates
-        );
-        ModelInstance greenBoxInstance = new ModelInstance(greenBoxModel);
-        greenBoxInstance.transform.setFromEulerAngles(90f, 0f, 0f);
-        greenBoxInstance.transform.setToTranslation(0f, 0f, 0f);
-        this.sceneService.addScene(new Scene(greenBoxInstance));
+    public void createTerrain() {
+        if (terrain != null) {
+            terrain.dispose();
+            sceneService.removeScene(terrainScene);
+        }
+        this.terrain = new HeightMapTerrain(this.generateHeightmapPixmap(), 200, 0f);
+        this.terrainScene = new Scene(terrain.getModelInstance());
+        terrainScene.modelInstance.transform.setToTranslation(0f, 0f, 0f);
+        sceneService.addScene(terrainScene);
     }
 
-    private Texture generateHeightmapTexture() {
+    private Pixmap generateHeightmapPixmap() {
         Pixmap pixmap = new Pixmap(200, 200, Pixmap.Format.RGB888);
 
         for (int y = 0; y < 200; y++) {
@@ -63,9 +58,7 @@ public class MapGenerator {
             }
         }
         PixmapIO.writePNG(Gdx.files.local("noise.png"), pixmap);
-        Texture texture = new Texture(pixmap);
-        pixmap.dispose();
-        return texture;
+        return pixmap;
     }
 
     private int interpolateColors(float noiseValue) {
