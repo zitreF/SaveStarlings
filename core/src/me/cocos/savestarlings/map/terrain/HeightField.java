@@ -148,7 +148,7 @@ public class HeightField implements Disposable {
         setIndices();
     }
 
-    private void setIndices () {
+    private void setIndices() {
         final int w = width - 1;
         final int h = height - 1;
         short[] indices = new short[w * h * 6];
@@ -170,7 +170,7 @@ public class HeightField implements Disposable {
         mesh.setIndices(indices);
     }
 
-    public void update () {
+    public void update() {
         if (smooth) {
             if (norPos < 0)
                 updateSimple();
@@ -180,7 +180,26 @@ public class HeightField implements Disposable {
             updateSharp();
     }
 
-    protected void updateSmooth () {
+    public void normalizeHeightField() {
+        float minHeight = Float.MAX_VALUE;
+
+        // Find the minimum height
+        for (float height : data) {
+            if (height < minHeight) {
+                minHeight = height;
+            }
+        }
+
+        // Adjust all height values to ensure the minimum is 0
+        if (minHeight < 0) {
+            for (int i = 0; i < data.length; i++) {
+                data[i] -= minHeight; // Shift all heights by the minimum
+            }
+            update(); // Update the mesh with the new height values
+        }
+    }
+
+    protected void updateSmooth() {
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
                 VertexInfo v = getVertexAt(vertex00, x, y);
@@ -191,7 +210,7 @@ public class HeightField implements Disposable {
         mesh.setVertices(vertices);
     }
 
-    private void updateSimple () {
+    private void updateSimple() {
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {
                 setVertex(y * width + x, getVertexAt(vertex00, x, y));
@@ -200,7 +219,7 @@ public class HeightField implements Disposable {
         mesh.setVertices(vertices);
     }
 
-    protected void updateSharp () {
+    protected void updateSharp() {
         final int w = width - 1;
         final int h = height - 1;
         for (int y = 0; y < h; ++y) {
@@ -228,7 +247,7 @@ public class HeightField implements Disposable {
     }
 
     /** Does not set the normal member! */
-    protected VertexInfo getVertexAt (final VertexInfo out, int x, int y) {
+    protected VertexInfo getVertexAt(final VertexInfo out, int x, int y) {
         final float dx = (float)x / (float)(width - 1);
         final float dy = (float)y / (float)(height - 1);
         final float a = data[y * width + x];
@@ -239,7 +258,7 @@ public class HeightField implements Disposable {
         return out;
     }
 
-    public Vector3 getPositionAt (Vector3 out, int x, int y) {
+    public Vector3 getPositionAt(Vector3 out, int x, int y) {
         final float dx = (float)x / (float)(width - 1);
         final float dy = (float)y / (float)(height - 1);
         final float a = data[y * width + x];
@@ -248,7 +267,7 @@ public class HeightField implements Disposable {
         return out;
     }
 
-    public Vector3 getWeightedNormalAt (Vector3 out, int x, int y) {
+    public Vector3 getWeightedNormalAt(Vector3 out, int x, int y) {
 // This commented code is based on http://www.flipcode.com/archives/Calculating_Vertex_Normals_for_Height_Maps.shtml
 // Note that this approach only works for a heightfield on the XZ plane with a magnitude on the y axis
 // float sx = data[(x < width - 1 ? x + 1 : x) + y * width] + data[(x > 0 ? x-1 : x) + y * width];
@@ -296,7 +315,7 @@ public class HeightField implements Disposable {
         return out;
     }
 
-    protected void setVertex (int index, VertexInfo info) {
+    protected void setVertex(int index, VertexInfo info) {
         index *= stride;
         if (posPos >= 0) {
             vertices[index + posPos + 0] = info.position.x;
@@ -320,20 +339,20 @@ public class HeightField implements Disposable {
         }
     }
 
-    public void set (final Pixmap map) {
+    public void set(final Pixmap map) {
         if (map.getWidth() != width || map.getHeight() != height) throw new GdxRuntimeException("Incorrect map size");
         set(map.getPixels(), map.getFormat());
     }
 
-    public void set (final ByteBuffer colorData, final Format format) {
+    public void set(final ByteBuffer colorData, final Format format) {
         set(heightColorsToMap(colorData, format, width, height));
     }
 
-    public void set (float[] data) {
+    public void set(float[] data) {
         set(data, 0);
     }
 
-    public void set (float[] data, int offset) {
+    public void set(float[] data, int offset) {
         if (this.data.length > (data.length - offset)) throw new GdxRuntimeException("Incorrect data size");
         System.arraycopy(data, offset, this.data, 0, this.data.length);
         update();
@@ -345,13 +364,13 @@ public class HeightField implements Disposable {
     }
 
     /** Simply creates an array containing only all the red components of the data. */
-    public static float[] heightColorsToMap (final ByteBuffer data, final Format format, int width, int height) {
+    public static float[] heightColorsToMap(final ByteBuffer data, final Format format, int width, int height) {
         final int bytesPerColor = (format == Format.RGB888 ? 3 : (format == Format.RGBA8888 ? 4 : 0));
         if (bytesPerColor == 0) throw new GdxRuntimeException("Unsupported format, should be either RGB8 or RGBA8");
         if (data.remaining() < (width * height * bytesPerColor)) throw new GdxRuntimeException("Incorrect map size");
 
         final int startPos = data.position();
-        byte[] source = null;
+        byte[] source;
         int sourceOffset = 0;
         if (data.hasArray() && !data.isReadOnly()) {
             source = data.array();
@@ -371,4 +390,5 @@ public class HeightField implements Disposable {
 
         return dest;
     }
+
 }

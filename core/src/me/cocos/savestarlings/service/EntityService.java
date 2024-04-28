@@ -2,10 +2,13 @@ package me.cocos.savestarlings.service;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector3;
 import me.cocos.savestarlings.entity.Clickable;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
+import me.cocos.savestarlings.entity.livingentitiy.starling.Citizen;
+import me.cocos.savestarlings.map.generator.MapGenerator;
 import me.cocos.savestarlings.util.AsyncUtil;
 
 import java.util.*;

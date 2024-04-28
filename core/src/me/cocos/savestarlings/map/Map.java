@@ -23,10 +23,12 @@ import net.mgsx.gltf.scene3d.scene.Scene;
 
 public class Map {
 
+    private static Map instance;
     private final EntityService entityService;
     private final MapGenerator mapGenerator;
 
     public Map(EntityService entityService) {
+        instance = this;
         this.entityService = entityService;
         this.mapGenerator = new MapGenerator();
     }
@@ -59,5 +61,13 @@ public class Map {
             EnvironmentType randomType = EnvironmentType.values()[MathUtils.random(EnvironmentType.values().length - 1)];
             this.entityService.addEnvironment(randomType.getEnvironmentResult().result(position));
         }
+    }
+
+    public MapGenerator getMapGenerator() {
+        return this.mapGenerator;
+    }
+
+    public static Map getInstance() {
+        return instance;
     }
 }

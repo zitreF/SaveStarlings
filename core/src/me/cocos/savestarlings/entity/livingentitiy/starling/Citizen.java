@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
 import me.cocos.savestarlings.entity.Clickable;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
 import me.cocos.savestarlings.asset.AssetService;
+import me.cocos.savestarlings.map.generator.MapGenerator;
 import me.cocos.savestarlings.util.IntersectorUtil;
 import me.cocos.savestarlings.util.SoundUtil;
 import net.mgsx.gltf.scene3d.scene.Scene;
@@ -16,7 +17,7 @@ public class Citizen implements LivingEntity, Clickable {
     private static final float JUMP_HEIGHT = 1.0f;
     private static final float JUMP_DURATION = 0.5f;
     private static final float SPEED = 2.0f;
-    private static final float ARRIVAL_THRESHOLD = 0.1f;
+    private static final float ARRIVAL_THRESHOLD = 0.5f;
     private final Scene scene;
     private final BoundingBox boundingBox;
     private final Vector3 scaling;
@@ -44,7 +45,7 @@ public class Citizen implements LivingEntity, Clickable {
 
         scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
 
-        this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
+        scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
 
         scene.modelInstance.materials.clear();
 
@@ -76,8 +77,11 @@ public class Citizen implements LivingEntity, Clickable {
             this.generateRandomTargetPosition();
         }
         this.direction.set(targetPosition).sub(position).nor();
-        position.add(direction.scl(SPEED * delta));
-        scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
+        this.position.add(direction.scl(SPEED * delta));
+
+        position.y = MapGenerator.getInstance().getTerrain().getHeightAt(position.x, position.z);
+
+        this.setPosition(position);
     }
 
     @Override
@@ -95,6 +99,12 @@ public class Citizen implements LivingEntity, Clickable {
         return this.position;
     }
 
+    public void setPosition(Vector3 position) {
+        this.position.set(position);
+
+        scene.modelInstance.transform.setTranslation(position.x, position.y, position.z);
+    }
+
     private void generateRandomTargetPosition() {
         float maxX = Math.min(position.x + 50f, 50f);
         float minX = Math.max(position.x - 50f, -50f);
@@ -104,13 +114,13 @@ public class Citizen implements LivingEntity, Clickable {
         float randomX = MathUtils.random(minX + 10f, maxX - 10f);
         float randomZ = MathUtils.random(minZ + 10f, maxZ - 10f);
 
-        targetPosition.set(randomX, position.y, randomZ);
-        this.rotationDirection.set(targetPosition).sub(position).nor();
+        targetPosition.set(randomX, MapGenerator.getInstance().getTerrain().getHeightAt(randomX, randomZ), randomZ);
+        rotationDirection.set(targetPosition).sub(position).nor();
 
         float rotationAngleDeg = MathUtils.atan2(rotationDirection.x, rotationDirection.z) * MathUtils.radiansToDegrees;
 
         scene.modelInstance.transform.setToRotation(Vector3.Y, rotationAngleDeg);
-        this.scene.modelInstance.transform.scale(scaling.x, scaling.y, scaling.z);
+        scene.modelInstance.transform.scale(scaling.x, scaling.y, scaling.z);
     }
 
 

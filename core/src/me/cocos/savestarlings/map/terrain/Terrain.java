@@ -1,6 +1,7 @@
 package me.cocos.savestarlings.map.terrain;
 
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 
 public abstract class Terrain implements Disposable {
@@ -16,4 +17,6 @@ public abstract class Terrain implements Disposable {
     public ModelInstance getModelInstance() {
         return modelInstance;
     }
+
+    public abstract float getHeightAt(float x, float y);
 }
