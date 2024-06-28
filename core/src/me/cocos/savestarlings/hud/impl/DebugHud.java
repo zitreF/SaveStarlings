@@ -15,7 +15,7 @@ public class DebugHud extends Table {
     private static GLProfiler glProfiler;
 
     public DebugHud() {
-        glProfiler = new GLProfiler(Gdx.graphics);
+//        glProfiler = new GLProfiler(Gdx.graphics);
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = FontBuilder.from("ui/font/Gabarito-Medium.ttf")
                 .color(Color.WHITE)
@@ -38,8 +38,10 @@ public class DebugHud extends Table {
                 .append(BinaryUtil.bytesToGigabytes(Runtime.getRuntime().maxMemory()))
                 .append("GB\n");
         statsBuilder.append("[WHITE]Available CPU Cores: [GREEN]").append(Runtime.getRuntime().availableProcessors()).append("\n");
-        statsBuilder.append("[WHITE]Draw Calls: [GREEN]").append(glProfiler.getDrawCalls()).append("\n");
-        statsBuilder.append("[WHITE]Total Vertex Count: [GREEN]").append(glProfiler.getVertexCount().total);
+        if (glProfiler != null) {
+            statsBuilder.append("[WHITE]Draw Calls: [GREEN]").append(glProfiler.getDrawCalls()).append("\n");
+            statsBuilder.append("[WHITE]Total Vertex Count: [GREEN]").append(glProfiler.getVertexCount().total);
+        }
         this.debug.setText(statsBuilder.toString());
     }
 

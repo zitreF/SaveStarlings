@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import me.cocos.savestarlings.entity.Entity;
 import me.cocos.savestarlings.entity.building.Building;
 import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.entity.livingentitiy.LivingEntity;
@@ -31,6 +32,7 @@ import net.mgsx.gltf.scene3d.shaders.PBRShaderProvider;
 import net.mgsx.gltf.scene3d.utils.IBLBuilder;
 import net.mgsx.gltf.scene3d.utils.ShaderParser;
 
+import java.util.Collection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -52,6 +54,7 @@ public class EnvironmentService {
 
     public EnvironmentService(ParticleService particleService, Camera camera) {
         this.perlinNoise = new PerlinNoise();
+        this.particleService = particleService;
         PBRShaderConfig config = PBRShaderProvider.createDefaultConfig();
         config.fragmentShader = AssetService.getAsset("shaders/pbr/pbr.fs.glsl");
         config.vertexShader = AssetService.getAsset("shaders/pbr/pbr.vs.glsl");
@@ -91,39 +94,23 @@ public class EnvironmentService {
                 executorService.shutdown();
                 return;
             }
-            for (Building building : entityService.getBuildings()) {
-                Scene scene = building.getScene();
-                boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
-                boolean contains = sceneService.getRenderableProviders().contains(scene, false);
-                if (!contains && isVisible) {
-                    sceneService.addScene(scene);
-                } else if (contains && !isVisible) {
-                    sceneService.removeScene(scene);
-                }
-            }
-            for (LivingEntity livingEntity : this.entityService.getEntities()) {
-                Scene scene = livingEntity.getScene();
-                boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
-                boolean contains = sceneService.getRenderableProviders().contains(scene, false);
-                if (!contains && isVisible) {
-                    sceneService.addScene(scene);
-                } else if (contains && !isVisible) {
-                    sceneService.removeScene(scene);
-                }
-            }
-            for (Environment environment : this.entityService.getEnvironments()) {
-                Scene scene = environment.getScene();
-                boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
-                boolean contains = sceneService.getRenderableProviders().contains(scene, false);
-                if (!contains && isVisible) {
-                    sceneService.addScene(scene);
-                } else if (contains && !isVisible) {
-                    sceneService.removeScene(scene);
-                }
-            }
+            this.updateScenes(this.entityService.getBuildings());
+            this.updateScenes(this.entityService.getEntities());
+            this.updateScenes(this.entityService.getEnvironments());
         }, 150, 150, TimeUnit.MILLISECONDS);
-        this.particleService = particleService;
+    }
 
+    private void updateScenes(Collection<? extends Entity> entities) {
+        for (Entity entity : entities) {
+            Scene scene = entity.getScene();
+            boolean isVisible = this.isVisible(sceneService.camera, scene.modelInstance);
+            boolean contains = sceneService.getRenderableProviders().contains(scene, false);
+            if (!contains && isVisible) {
+                sceneService.addScene(scene);
+            } else if (contains && !isVisible) {
+                sceneService.removeScene(scene);
+            }
+        }
     }
 
     public void dispose() {
