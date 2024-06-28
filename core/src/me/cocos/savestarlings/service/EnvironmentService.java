@@ -35,6 +35,7 @@ import net.mgsx.gltf.scene3d.utils.ShaderParser;
 import java.util.Collection;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 public class EnvironmentService {
@@ -85,7 +86,7 @@ public class EnvironmentService {
         this.skybox = new SceneSkybox(environmentCubemap);
         sceneService.setSkyBox(skybox);
 
-        this.executorService = Executors.newScheduledThreadPool(2);
+        this.executorService = Executors.newScheduledThreadPool(3);
 
         Thread gdxThread = Thread.currentThread();
 
