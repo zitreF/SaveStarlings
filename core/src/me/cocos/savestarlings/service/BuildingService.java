@@ -14,6 +14,7 @@ import me.cocos.savestarlings.entity.building.BuildingType;
 import me.cocos.savestarlings.entity.environment.Environment;
 import me.cocos.savestarlings.entity.livingentitiy.unit.Colossus;
 import me.cocos.savestarlings.hud.Hud;
+import me.cocos.savestarlings.map.generator.MapGenerator;
 import me.cocos.savestarlings.util.CameraUtil;
 import me.cocos.savestarlings.util.GridUtil;
 import me.cocos.savestarlings.util.IntersectorUtil;

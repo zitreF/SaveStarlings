@@ -21,14 +21,14 @@ float getShadowness(vec2 offset)
 float getShadow()
 {
     float totalShadowness = 1.0;
-    int numSamples = 16;
+    int numSamples = 9;
 
     float offsetStep = 1.0 / 1.0;
     float offsetScale = u_shadowPCFOffset * 2.0;
 
     for (int i = 0; i < numSamples; i++) {
         float angle = float(i) * 6.283185 / float(numSamples);
-        vec2 offset = u_shadowPCFOffset * 4.0 * vec2(cos(angle), sin(angle));
+        vec2 offset = u_shadowPCFOffset * 3.0 * vec2(cos(angle), sin(angle));
         totalShadowness += getShadowness(offset);
     }
 

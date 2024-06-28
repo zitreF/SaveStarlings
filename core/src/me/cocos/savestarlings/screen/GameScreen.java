@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -35,14 +36,6 @@ public class GameScreen implements Screen {
         this.gameService = new GameService(camera);
 
         this.cameraController = new CameraController(camera);
-        DebugHud.getGlProfiler().enable();
-
-        this.setupGL();
-    }
-
-    private void setupGL() {
-        Gdx.gl32.glEnable(GL32.GL_BLEND);
-        Gdx.gl32.glCullFace(GL32.GL_FRONT_AND_BACK);
     }
 
     @Override
@@ -61,7 +54,6 @@ public class GameScreen implements Screen {
 
         gameService.render();
 
-        DebugHud.getGlProfiler().reset();
     }
 
     @Override

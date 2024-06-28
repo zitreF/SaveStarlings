@@ -6,5 +6,4 @@ public interface Tower extends Building {
 
     int getRange();
 
-
 }

@@ -39,6 +39,9 @@ public enum Category {
     TURRETS() {
         @Override
         public void loadTable(Table table) {
+            Category.addBuilding(BuildingPopupType.SNIPER_TOWER, BuildingType.MORTAR, table,
+                    "ui/buildings/turrets/sniper.png",
+                    "ui/buildings/turrets/sniper_pressed.png");
             Category.addBuilding(BuildingPopupType.SNIPER_TOWER, BuildingType.SNIPER_TOWER, table,
                     "ui/buildings/turrets/sniper.png",
                     "ui/buildings/turrets/sniper_pressed.png");

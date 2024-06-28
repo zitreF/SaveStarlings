@@ -30,6 +30,7 @@ public class AssetService {
     public static void load() {
 
         // MODELS
+        ASSET_MANAGER.load("buildings/turrets/mortar.glb", SceneAsset.class);
         ASSET_MANAGER.load("buildings/turrets/sniper_tower.glb", SceneAsset.class);
         ASSET_MANAGER.load("buildings/turrets/cannon_blast.glb", SceneAsset.class);
         ASSET_MANAGER.load("buildings/turrets/wall.glb", SceneAsset.class);

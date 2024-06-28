@@ -31,7 +31,7 @@ public class Wall implements DefenseTower {
         scene.modelInstance.calculateBoundingBox(boundingBox);
 
         float scaleX = 2.5f / boundingBox.getWidth();
-        float scaleY = 2.5f / boundingBox.getHeight();
+        float scaleY = 2f / boundingBox.getHeight();
         float scaleZ = 2.5f / boundingBox.getDepth();
 
         this.scene.modelInstance.transform.scale(scaleX, scaleY, scaleZ);
