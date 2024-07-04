@@ -51,21 +51,26 @@ public class EnvironmentService {
     private final ScheduledExecutorService executorService;
     private final ParticleService particleService;
 
-    private final PerlinNoise perlinNoise;
-
     public EnvironmentService(ParticleService particleService, Camera camera) {
-        this.perlinNoise = new PerlinNoise();
         this.particleService = particleService;
+
         PBRShaderConfig config = PBRShaderProvider.createDefaultConfig();
         config.fragmentShader = AssetService.getAsset("shaders/pbr/pbr.fs.glsl");
         config.vertexShader = AssetService.getAsset("shaders/pbr/pbr.vs.glsl");
         config.numBones = 0;
-        config.numDirectionalLights = 2;
+        config.numDirectionalLights = 1;
         config.numPointLights = 0;
+        config.numSpotLights = 0;
+        config.manualGammaCorrection = true;
+        config.manualSRGB = PBRShaderConfig.SRGB.FAST;
+        config.defaultCullFace = GL32.GL_BACK;
+
         DepthShader.Config depthConfig = new DepthShader.Config();
         depthConfig.numBones = config.numBones;
+        depthConfig.defaultCullFace = GL32.GL_BACK;
+
         this.sceneService = new SceneService(PBRShaderProvider.createDefault(config), PBRShaderProvider.createDefaultDepth(depthConfig));
-        this.directionalShadowLight = new DirectionalShadowLight(4048, 4048, 256f, 256f, 1f, 256f);
+        this.directionalShadowLight = new DirectionalShadowLight(2024, 2024, 256f, 256f, 1f, 256f);
         sceneService.environment.add(directionalShadowLight.set(Color.WHITE, new Vector3(-0.5f, -1f, 0.5f).nor(), 5f));
 
         IBLBuilder iblBuilder = IBLBuilder.createOutdoor(directionalShadowLight);

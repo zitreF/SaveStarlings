@@ -23,6 +23,8 @@ public class GameScreen implements Screen {
     private final CameraController cameraController;
     private final GameService gameService;
 
+    int maxFps = 0;
+
     public GameScreen() {
         this.camera = new PerspectiveCamera(60f, 16f, 9f);
         this.gameViewport = new FillViewport(16f, 9f, camera);
@@ -53,6 +55,10 @@ public class GameScreen implements Screen {
         gameService.update(delta);
 
         gameService.render();
+
+        this.maxFps = Math.max(Gdx.graphics.getFramesPerSecond(), maxFps);
+
+        System.out.println(maxFps);
 
     }
 
